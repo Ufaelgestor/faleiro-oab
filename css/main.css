@@ -1,33 +1,40 @@
 /* ==========================================================================
-   FALEIRO OAB - Sistema de Design Oficial do Professor Faleiro
-   Paleta: Deep Navy Militar (#0a192f), Dourado Ocre Oficial (#c89b3c / #d4af37),
-   Branco Puro (#ffffff) e Vidro Fume
-   Tipografia Oficial: Montserrat + Inter
+   FALEIRO OAB - Paleta Oficial Cinema 3D
+   Cores: Deep Midnight Obsidian (#060a12), Ouro Champagne Metálico (#dfb76c),
+   Platina Cromada (#ffffff / #e2e8f0) e Linhas de Luz Dourada
+   Tipografia Oficial: Montserrat (Heavy/Black) + Inter
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800;900&display=swap');
 
 :root {
-  /* Paleta Oficial Faleiro Concursos / OAB */
-  --faleiro-navy-darkest: #07101e;
-  --faleiro-navy-dark: #0a192f;
-  --faleiro-navy-card: #112240;
-  --faleiro-navy-card-hover: #162b50;
-  --faleiro-navy-surface: #0e1e38;
+  /* Fundo e Superfícies Cinema Noturno */
+  --bg-obsidian: #060a12;
+  --bg-surface: #0a0f1d;
+  --bg-card: #0e1626;
+  --bg-card-hover: #141f36;
+  --bg-card-elevated: #111a2d;
 
-  /* Dourado Oficial Faleiro (Ocre Nobre) */
-  --gold-primary: #c89b3c;
-  --gold-light: #e5b858;
-  --gold-hover: #b0852e;
-  --gold-subtle: rgba(200, 155, 60, 0.12);
-  --gold-gradient: linear-gradient(135deg, #e5b858 0%, #c89b3c 50%, #9e7523 100%);
-  --gold-glow: 0 0 20px rgba(200, 155, 60, 0.28);
+  /* Ouro Champagne Metálico (Inspirado no letreiro 3D "CRONOGRAMA") */
+  --gold-primary: #dfb76c;
+  --gold-light: #f5d796;
+  --gold-hover: #c49847;
+  --gold-dark: #9a7228;
+  --gold-subtle: rgba(223, 183, 108, 0.12);
+  --gold-gradient: linear-gradient(135deg, #f5d796 0%, #dfb76c 40%, #c49847 80%, #9a7228 100%);
+  --gold-glow: 0 0 20px rgba(223, 183, 108, 0.4);
+  --gold-laser: linear-gradient(90deg, transparent 0%, rgba(223, 183, 108, 0.8) 50%, transparent 100%);
 
-  /* Bordas */
-  --border-color: rgba(255, 255, 255, 0.09);
-  --border-color-gold: rgba(200, 155, 60, 0.38);
+  /* Platina Cromada (Inspirado no letreiro 3D "OAB" e no Cavalo Cromado) */
+  --platinum-pure: #ffffff;
+  --platinum-muted: #e2e8f0;
+  --platinum-gradient: linear-gradient(180deg, #ffffff 0%, #e2e8f0 60%, #cbd5e1 100%);
 
-  /* Grupos OAB */
+  /* Bordas e Linhas de Precisão */
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-gold: rgba(223, 183, 108, 0.35);
+
+  /* Grupos OAB com Paleta Harmônica */
   --group-a-color: #38bdf8;
   --group-a-bg: rgba(56, 189, 248, 0.12);
   --group-b-color: #f59e0b;
@@ -40,9 +47,9 @@
   --success-glow: 0 0 16px rgba(16, 185, 129, 0.3);
   --warning: #f59e0b;
   --danger: #ef4444;
-  --excellent: #8b5cf6;
+  --excellent: #a855f7;
 
-  /* Tipografia Executiva */
+  /* Tipografia */
   --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -51,34 +58,34 @@
   --text-muted: #cbd5e1;
   --text-dim: #94a3b8;
 
-  /* Efeitos e Linhas de Precisão */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  /* Efeitos e Elevação */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 16px 44px rgba(0, 0, 0, 0.75);
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --radius-full: 9999px;
-  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Tema Claro (Inspirado no Miolo das Apostilas Faleiro) */
+/* Tema Claro (Inspirado no Papel Nobre das Apostilas Faleiro) */
 body.theme-light {
-  --faleiro-navy-darkest: #f8fafc;
-  --faleiro-navy-dark: #f1f5f9;
-  --faleiro-navy-card: #ffffff;
-  --faleiro-navy-card-hover: #ffffff;
-  --faleiro-navy-surface: #f1f5f9;
+  --bg-obsidian: #f8fafc;
+  --bg-surface: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-card-elevated: #ffffff;
   --border-color: rgba(15, 23, 42, 0.1);
   --border-color-gold: rgba(200, 155, 60, 0.45);
-  --text-main: #0f172a;
+  --text-main: #0a0f1d;
   --text-muted: #334155;
   --text-dim: #64748b;
-  --shadow-md: 0 4px 14px rgba(15, 23, 42, 0.05);
-  --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.1);
 }
 
-/* Reset e Base - Limpo, Executivo e Sem Poluição Visual */
+/* Reset e Base - Limpo, Sofisticado e sem Ruído */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -86,10 +93,10 @@ body.theme-light {
 }
 
 body {
-  background-color: #07101e;
+  background-color: var(--bg-obsidian);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(200, 155, 60, 0.03) 0px, transparent 40%),
-    radial-gradient(at 100% 100%, rgba(30, 58, 138, 0.04) 0px, transparent 40%);
+    radial-gradient(at 0% 0%, rgba(223, 183, 108, 0.05) 0px, transparent 40%),
+    radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.03) 0px, transparent 40%);
   background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-body);
@@ -101,10 +108,10 @@ body {
 
 body.theme-light {
   background-color: #f8fafc;
-  background-image: radial-gradient(at 0% 0%, rgba(200, 155, 60, 0.04) 0px, transparent 40%);
+  background-image: radial-gradient(at 0% 0%, rgba(223, 183, 108, 0.05) 0px, transparent 40%);
 }
 
-/* Faixa lateral discreta Faleiro */
+/* Faixa lateral dourada nobre */
 .app-left-stripe {
   position: fixed;
   top: 0;
@@ -113,6 +120,15 @@ body.theme-light {
   height: 100%;
   background: var(--gold-gradient);
   z-index: 999;
+}
+
+/* Linha de laser dourada decorativa */
+.gold-laser-divider {
+  width: 100%;
+  height: 2px;
+  background: var(--gold-laser);
+  margin: 18px 0;
+  opacity: 0.7;
 }
 
 /* Container Principal */
@@ -125,11 +141,11 @@ body.theme-light {
 }
 
 /* ==========================================================================
-   HEADER OFICIAL PROFESSOR FALEIRO
+   HEADER OFICIAL (Inspirado no Lettering 3D "CRONOGRAMA OAB")
    ========================================================================== */
 
 .app-header {
-  padding: 22px 0 18px 0;
+  padding: 24px 0 20px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -142,27 +158,28 @@ body.theme-light {
 .brand-area {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
 .brand-logo-wrap {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-sm);
-  background: rgba(200, 155, 60, 0.08);
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: rgba(223, 183, 108, 0.08);
   border: 1px solid var(--border-color-gold);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 6px;
   flex-shrink: 0;
+  box-shadow: var(--gold-glow);
 }
 
 .brand-logo-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 0 4px rgba(200, 155, 60, 0.3));
+  filter: drop-shadow(0 0 6px rgba(223, 183, 108, 0.4));
 }
 
 .brand-text-col {
@@ -174,28 +191,44 @@ body.theme-light {
   font-family: var(--font-heading);
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   color: var(--gold-primary);
   text-transform: uppercase;
   margin-bottom: 2px;
 }
 
+/* Tipografia de Destaque 3D: "CRONOGRAMA" em Ouro e "OAB" em Platina */
 .brand-title {
   font-family: var(--font-heading);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 900;
   letter-spacing: 0.5px;
-  color: #ffffff;
   line-height: 1.1;
   text-transform: uppercase;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
-body.theme-light .brand-title {
-  color: var(--faleiro-navy-dark);
-}
-
-.brand-title span {
+.brand-title-cronograma {
   color: var(--gold-primary);
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(223, 183, 108, 0.3);
+}
+
+.brand-title-oab {
+  color: var(--platinum-pure);
+  background: var(--platinum-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+body.theme-light .brand-title-oab {
+  color: var(--bg-obsidian);
+  -webkit-text-fill-color: var(--bg-obsidian);
 }
 
 .brand-subtitle {
@@ -209,13 +242,13 @@ body.theme-light .brand-title {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: var(--radius-full);
   background: var(--gold-subtle);
   border: 1px solid var(--border-color-gold);
   font-family: var(--font-heading);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--gold-primary);
   letter-spacing: 0.5px;
 }
@@ -231,42 +264,42 @@ body.theme-light .brand-title {
   align-items: center;
   gap: 8px;
   padding: 9px 16px;
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-main);
   font-family: var(--font-heading);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
   transition: var(--transition);
 }
 
 .btn-header:hover {
-  background: var(--faleiro-navy-card-hover);
+  background: var(--bg-card-hover);
   border-color: var(--gold-primary);
   color: var(--gold-primary);
 }
 
 .btn-header.btn-primary-gold {
   background: var(--gold-gradient);
-  color: #07101e;
+  color: #060a12;
   border: none;
   font-weight: 800;
-  box-shadow: 0 4px 14px rgba(200, 155, 60, 0.35);
+  box-shadow: 0 4px 14px rgba(223, 183, 108, 0.4);
 }
 
 .btn-header.btn-primary-gold:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(200, 155, 60, 0.5);
+  box-shadow: 0 6px 20px rgba(223, 183, 108, 0.55);
 }
 
 /* ==========================================================================
-   BANNER DE GUERRA & SLOGAN OFICIAL
+   BANNER DE GUERRA & SLOGAN DE ELITE
    ========================================================================== */
 
 .faleiro-battle-banner {
-  background: linear-gradient(135deg, rgba(200, 155, 60, 0.12) 0%, rgba(10, 25, 47, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.1) 0%, rgba(10, 15, 29, 0.95) 100%);
   border: 1px solid var(--border-color-gold);
   border-left: 4px solid var(--gold-primary);
   border-radius: var(--radius-md);
@@ -276,11 +309,12 @@ body.theme-light .brand-title {
   justify-content: space-between;
   align-items: center;
   gap: 14px;
+  box-shadow: var(--shadow-sm);
 }
 
 .faleiro-battle-slogan {
   font-family: var(--font-heading);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--gold-primary);
   letter-spacing: 0.5px;
@@ -296,7 +330,7 @@ body.theme-light .brand-title {
 }
 
 /* ==========================================================================
-   PAINEL DE MÉTRICAS (DASHBOARD TOP)
+   HERO DASHBOARD: PROGRESSO GERAL, CONTAGEM & POMODORO
    ========================================================================== */
 
 .hero-dashboard-grid {
@@ -307,7 +341,7 @@ body.theme-light .brand-title {
 }
 
 .dashboard-card {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -333,7 +367,7 @@ body.theme-light .brand-title {
 
 .card-title-muted {
   font-family: var(--font-heading);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -368,7 +402,7 @@ body.theme-light .brand-title {
   border: 1px solid var(--border-color);
   color: var(--text-muted);
   font-family: var(--font-heading);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.5px;
   transition: var(--transition);
@@ -376,9 +410,9 @@ body.theme-light .brand-title {
 
 .btn-plan-toggle.active {
   background: var(--gold-gradient);
-  color: #07101e;
+  color: #060a12;
   border-color: var(--gold-primary);
-  box-shadow: 0 0 12px rgba(200, 155, 60, 0.3);
+  box-shadow: var(--gold-glow);
 }
 
 .overall-progress-bar-wrap {
@@ -430,15 +464,15 @@ body.theme-light .brand-title {
 
 .countdown-label-unit {
   font-family: var(--font-heading);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
 }
 
 .countdown-subtext {
-  font-size: 12.5px;
-  color: var(--text-muted);
+  font-size: 12px;
+  color: var(--text-dim);
 }
 
 /* Card 3: Pomodoro */
@@ -470,7 +504,7 @@ body.theme-light .brand-title {
   padding: 7px 12px;
   border-radius: var(--radius-sm);
   font-family: var(--font-heading);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   transition: var(--transition);
   border: 1px solid var(--border-color);
@@ -478,7 +512,7 @@ body.theme-light .brand-title {
 
 .btn-pomodoro-start {
   background: var(--gold-gradient);
-  color: #07101e;
+  color: #060a12;
   border-color: var(--gold-primary);
 }
 
@@ -504,7 +538,7 @@ body.theme-light .brand-title {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 18px;
+  padding: 10px 18px;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid transparent;
@@ -523,16 +557,16 @@ body.theme-light .brand-title {
 }
 
 .nav-tab-btn.active {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border-color: var(--border-color-gold);
   color: var(--gold-primary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Conteúdo das Abas */
 .tab-content-section {
   display: none;
-  animation: fadeIn 0.25s ease-in-out;
+  animation: fadeIn 0.22s ease-in-out;
 }
 
 .tab-content-section.active {
@@ -554,7 +588,7 @@ body.theme-light .brand-title {
   align-items: center;
   flex-wrap: wrap;
   gap: 14px;
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 14px 18px;
@@ -597,7 +631,7 @@ body.theme-light .brand-title {
 
 .btn-group-filter.active, .btn-status-filter.active {
   background: var(--gold-gradient);
-  color: #07101e;
+  color: #060a12;
   border-color: var(--gold-primary);
   font-weight: 800;
 }
@@ -605,7 +639,7 @@ body.theme-light .brand-title {
 .select-week-filter {
   padding: 6px 12px;
   border-radius: var(--radius-sm);
-  background: var(--faleiro-navy-surface);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-main);
   font-family: var(--font-heading);
@@ -615,9 +649,9 @@ body.theme-light .brand-title {
   cursor: pointer;
 }
 
-/* Card de Semana - Estilo Militar Oficial Faleiro */
+/* Card de Semana */
 .schedule-week-card {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   margin-bottom: 28px;
@@ -696,7 +730,7 @@ body.theme-light .brand-title {
   transition: width 0.3s ease;
 }
 
-/* Grid de Dias / Missões */
+/* Grid de Missões */
 .week-days-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -717,7 +751,7 @@ body.theme-light .brand-title {
 
 .day-card:hover {
   border-color: var(--border-color-gold);
-  background: var(--faleiro-navy-card-hover);
+  background: var(--bg-card-hover);
   transform: translateY(-2px);
 }
 
@@ -738,7 +772,7 @@ body.theme-light .brand-title {
   padding: 2px 8px;
   border-radius: 4px;
   background: var(--success);
-  color: #07101e;
+  color: #060a12;
 }
 
 .day-card-header {
@@ -750,7 +784,7 @@ body.theme-light .brand-title {
 
 .day-number-badge {
   font-family: var(--font-heading);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 900;
   color: var(--gold-primary);
   background: var(--gold-subtle);
@@ -849,7 +883,7 @@ body.theme-light .brand-title {
   top: 3px;
   width: 6px;
   height: 11px;
-  border: solid #07101e;
+  border: solid #060a12;
   border-width: 0 2.5px 2.5px 0;
   transform: rotate(45deg);
 }
@@ -864,7 +898,7 @@ body.theme-light .brand-title {
 }
 
 .day-task-block {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.3);
   border-left: 3px solid var(--gold-primary);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   padding: 10px 12px;
@@ -943,7 +977,7 @@ body.theme-light .brand-title {
 .day-notes-input {
   width: 100%;
   height: 60px;
-  background: var(--faleiro-navy-surface);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 8px;
@@ -963,7 +997,7 @@ body.theme-light .brand-title {
    ========================================================================== */
 
 .sim-intro-box {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color-gold);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -1011,7 +1045,7 @@ body.theme-light .brand-title {
 .preset-title {
   display: block;
   font-family: var(--font-heading);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 800;
   color: var(--text-main);
 }
@@ -1027,7 +1061,7 @@ body.theme-light .brand-title {
   position: sticky;
   top: 16px;
   z-index: 10;
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card-elevated);
   border: 2px solid var(--border-color-gold);
   border-radius: var(--radius-md);
   padding: 22px;
@@ -1056,6 +1090,7 @@ body.theme-light .brand-title {
   font-weight: 900;
   color: var(--gold-primary);
   line-height: 1;
+  text-shadow: 0 2px 10px rgba(223, 183, 108, 0.3);
 }
 
 .sim-total-meta {
@@ -1085,7 +1120,7 @@ body.theme-light .brand-title {
 }
 
 .status-excellent {
-  background: rgba(139, 92, 246, 0.2);
+  background: rgba(168, 85, 247, 0.2);
   color: #c084fc;
   border: 1px solid #c084fc;
 }
@@ -1176,7 +1211,7 @@ body.theme-light .brand-title {
 }
 
 .sim-discipline-row {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 14px 18px;
@@ -1189,7 +1224,7 @@ body.theme-light .brand-title {
 
 .sim-discipline-row:hover {
   border-color: var(--border-color-gold);
-  background: var(--faleiro-navy-card-hover);
+  background: var(--bg-card-hover);
 }
 
 .sim-row-left {
@@ -1252,7 +1287,7 @@ body.theme-light .brand-title {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: var(--faleiro-navy-surface);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 3px 8px;
@@ -1273,7 +1308,7 @@ body.theme-light .brand-title {
 
 .btn-step:hover {
   background: var(--gold-primary);
-  color: #07101e;
+  color: #060a12;
 }
 
 .sim-score-val {
@@ -1302,7 +1337,7 @@ body.theme-light .brand-title {
 }
 
 .raiox-card {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -1422,7 +1457,7 @@ body.theme-light .brand-title {
 }
 
 .stat-metric-card {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 18px;
@@ -1460,7 +1495,7 @@ body.theme-light .brand-title {
 }
 
 .simulado-item-card {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 16px 20px;
@@ -1564,7 +1599,7 @@ body.theme-light .brand-title {
 }
 
 .guide-hero-banner {
-  background: linear-gradient(135deg, rgba(200, 155, 60, 0.12) 0%, rgba(10, 25, 47, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.12) 0%, rgba(10, 15, 29, 0.95) 100%);
   border: 1px solid var(--border-color-gold);
   border-radius: var(--radius-md);
   padding: 28px;
@@ -1592,7 +1627,7 @@ body.theme-light .brand-title {
 }
 
 .guide-group-box {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 22px;
@@ -1645,9 +1680,9 @@ body.theme-light .brand-title {
   gap: 6px;
 }
 
-/* Caixa de Compromisso Faleiro (Página 26 do PDF) */
+/* Caixa de Compromisso Faleiro */
 .faleiro-quote-box {
-  background: rgba(200, 155, 60, 0.08);
+  background: rgba(223, 183, 108, 0.08);
   border: 1px solid var(--border-color-gold);
   border-radius: var(--radius-md);
   padding: 24px;
@@ -1682,7 +1717,7 @@ body.theme-light .brand-title {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(7, 16, 30, 0.85);
+  background: rgba(6, 10, 18, 0.85);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -1699,7 +1734,7 @@ body.theme-light .brand-title {
 }
 
 .modal-card {
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card-elevated);
   border: 1px solid var(--border-color-gold);
   border-radius: var(--radius-md);
   width: 90%;
@@ -1755,7 +1790,7 @@ body.theme-light .brand-title {
 
 .form-input {
   width: 100%;
-  background: var(--faleiro-navy-surface);
+  background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
@@ -1774,7 +1809,7 @@ body.theme-light .brand-title {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: var(--faleiro-navy-card);
+  background: var(--bg-card-elevated);
   border: 1px solid var(--border-color-gold);
   border-radius: var(--radius-sm);
   padding: 12px 20px;
@@ -1795,7 +1830,7 @@ body.theme-light .brand-title {
 }
 
 /* ==========================================================================
-   RESPONSIVIDADE (MOBILE & ÁREA DE MEMBROS)
+   RESPONSIVIDADE
    ========================================================================== */
 
 @media (max-width: 900px) {

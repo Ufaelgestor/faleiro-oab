@@ -642,16 +642,12 @@ class FaleiroOABApp {
             <span class="vitrine-status-badge ${statusBadgeClass}">${statusText}</span>
           </div>
 
-          <!-- Centro da Capa: Emblema Temático + Título da Semana -->
+          <!-- Centro da Capa: Apenas Ícone/Emblema e Título da Semana -->
           <div class="module-cover-center">
             <div class="module-cover-emblem">
               ${this.getWeekEmblemSvg(weekData.week)}
             </div>
             <h3 class="module-cover-title">${cleanTitle}</h3>
-            <p class="module-cover-focus">${weekData.focus}</p>
-            <div class="module-cover-disciplines">
-              ${uniqueDisciplines.map(d => `<span class="cover-disc-tag">${d}</span>`).join("")}
-            </div>
           </div>
 
           <!-- Base da Capa: Progresso e Ação de Entrada -->

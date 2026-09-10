@@ -3638,14 +3638,24 @@ body {
 .auth-lock-backdrop {
   position: fixed !important;
   inset: 0 !important;
-  background: rgba(4, 7, 13, 0.96) !important;
+  background: rgba(4, 7, 13, 0.97) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
-  z-index: 99999 !important;
-  display: flex;
+  z-index: 999999 !important;
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
   align-items: center;
   justify-content: center;
   padding: 16px;
+}
+
+.auth-lock-backdrop.auth-hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .auth-lock-card {

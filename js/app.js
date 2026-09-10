@@ -1671,10 +1671,16 @@ class FaleiroOABApp {
     const lockModal = document.getElementById("modalAuthLock");
 
     if (!isAuth) {
-      if (lockModal) lockModal.style.display = "flex";
+      if (lockModal) {
+        lockModal.classList.remove("auth-hidden");
+        lockModal.classList.add("open");
+      }
       document.body.style.overflow = "hidden";
     } else {
-      if (lockModal) lockModal.style.display = "none";
+      if (lockModal) {
+        lockModal.classList.add("auth-hidden");
+        lockModal.classList.remove("open");
+      }
       document.body.style.overflow = "";
     }
   }
@@ -1690,7 +1696,10 @@ class FaleiroOABApp {
     if (VALID_AUTH_KEYS.includes(val)) {
       localStorage.setItem("faleiro_oab_authenticated", "true");
       const lockModal = document.getElementById("modalAuthLock");
-      if (lockModal) lockModal.style.display = "none";
+      if (lockModal) {
+        lockModal.classList.add("auth-hidden");
+        lockModal.classList.remove("open");
+      }
       if (errorEl) errorEl.style.display = "none";
       document.body.style.overflow = "";
       window.showToast("🔓 Acesso liberado com sucesso! Bons estudos, guerreiro(a)!");

@@ -181,9 +181,22 @@
       <!-- Spotlight: Missão de Hoje / Onde Você Parou -->
       <div class="mission-today-spotlight" id="missionTodaySpotlight"></div>
 
-      <!-- Barra de Filtros -->
+      <!-- Barra de Filtros e Modo de Visualização -->
       <div class="schedule-filters-toolbar">
         <div class="filters-left">
+          <div class="view-mode-toggle-group">
+            <button type="button" class="btn-view-toggle active" id="btnViewVitrine" onclick="window.app.setViewMode('vitrine')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              Vitrine de Semanas
+            </button>
+            <button type="button" class="btn-view-toggle" id="btnViewAll" onclick="window.app.setViewMode('all')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              Todas Expandidas
+            </button>
+          </div>
+
+          <div class="filter-group-sep"></div>
+
           <span class="filter-label">Grupos:</span>
           <button type="button" class="btn-group-filter active" data-group="ALL" onclick="window.app.filterByGroup('ALL')">Todos</button>
           <button type="button" class="btn-group-filter" data-group="A" onclick="window.app.filterByGroup('A')">Grupo A (53q)</button>
@@ -197,8 +210,8 @@
           <button type="button" class="btn-status-filter" data-status="PENDING" onclick="window.app.filterByStatus('PENDING')">Pendentes</button>
           <button type="button" class="btn-status-filter" data-status="DONE" onclick="window.app.filterByStatus('DONE')">Concluídos</button>
 
-          <select class="select-week-filter" id="weekFilterSelect" onchange="window.app.filterByWeek(this.value)">
-            <option value="ALL">Todas as Semanas</option>
+          <select class="select-week-filter" id="weekFilterSelect" onchange="window.app.onWeekSelectChange(this.value)">
+            <option value="ALL">Ir para Semana...</option>
           </select>
         </div>
       </div>

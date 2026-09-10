@@ -917,15 +917,60 @@ body.theme-light .brand-title-oab {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 12px 18px;
-  margin-bottom: 24px;
+  padding: 10px 16px;
+  margin-bottom: 22px;
 }
 
 .filters-left, .filters-right {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
+}
+
+/* Alternância de Modo de Visualização (Vitrine vs Todas) */
+.view-mode-toggle-group {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  gap: 2px;
+}
+
+.btn-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-view-toggle:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.btn-view-toggle.active {
+  background: var(--gold-gradient);
+  color: #060a12;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(223, 183, 108, 0.25);
+}
+
+.filter-group-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  margin: 0 4px;
 }
 
 .filter-label {
@@ -971,6 +1016,274 @@ body.theme-light .brand-title-oab {
   font-weight: 600;
   outline: none;
   cursor: pointer;
+}
+
+/* ==========================================================================
+   ESTILO VITRINE DE SEMANAS (BLOCOS LIMPOS & VISUAIS)
+   ========================================================================== */
+
+.vitrine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.vitrine-week-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(17, 26, 46, 0.95) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.vitrine-week-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: var(--transition);
+}
+
+.vitrine-week-card:hover {
+  border-color: var(--border-color-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 18px rgba(223, 183, 108, 0.15);
+  background: linear-gradient(145deg, rgba(223, 183, 108, 0.05) 0%, rgba(20, 31, 54, 0.95) 100%);
+}
+
+.vitrine-week-card:hover::before {
+  background: var(--gold-laser);
+}
+
+.vitrine-week-card.status-done {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.vitrine-week-card.status-in-progress {
+  border-color: rgba(223, 183, 108, 0.3);
+}
+
+.vitrine-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.vitrine-week-number {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--gold-primary);
+  background: var(--gold-subtle);
+  padding: 3px 9px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color-gold);
+}
+
+.vitrine-status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+.vitrine-status-badge.done {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.vitrine-status-badge.in-progress {
+  color: var(--gold-primary);
+  background: var(--gold-subtle);
+  border: 1px solid var(--border-color-gold);
+}
+
+.vitrine-status-badge.pending {
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.vitrine-week-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+}
+
+.vitrine-focus-text {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.45;
+  flex: 1;
+}
+
+.vitrine-disciplines-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.vitrine-progress-wrap {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.vitrine-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.vitrine-progress-labels strong {
+  color: var(--text-main);
+}
+
+.vitrine-progress-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.vitrine-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.vitrine-progress-fill.done {
+  background: #34d399;
+}
+
+.vitrine-progress-fill.in-progress {
+  background: var(--gold-gradient);
+}
+
+.vitrine-progress-fill.empty {
+  background: transparent;
+}
+
+.vitrine-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--gold-primary);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  gap: 4px;
+  transition: var(--transition);
+}
+
+.vitrine-week-card:hover .vitrine-card-footer {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   NAVEGAÇÃO SUPERIOR DO DETALHE DA SEMANA (MODO FOCO LIMPO)
+   ========================================================================== */
+
+.week-detail-top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 12px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.btn-back-to-vitrine {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-back-to-vitrine:hover {
+  background: var(--gold-subtle);
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+.week-detail-pager {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pager-current-label {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.btn-pager-prev, .btn-pager-next {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: var(--font-heading);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-pager-prev:hover:not(:disabled), .btn-pager-next:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold-primary);
+}
+
+.btn-pager-prev:disabled, .btn-pager-next:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+@keyframes slideInWeek {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.single-week-view-wrapper {
+  animation: slideInWeek 0.22s ease-out;
 }
 
 /* ==========================================================================

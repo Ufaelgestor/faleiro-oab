@@ -15,6 +15,8 @@ class FaleiroOABApp {
     this.selectedGroupFilter = "ALL";
     this.selectedWeekFilter = "ALL";
     this.selectedStatusFilter = "ALL";
+    this.viewMode = "vitrine"; // "vitrine" (padrão blocos), "week_detail" (semana aberta), "all" (todas)
+    this.activeWeekNumber = 1;
     this.examDate = "2026-11-22"; // Data aproximada do próximo exame FGV
     this.startDate = ""; // Data de início dos estudos
     this.pomodoroInterval = null;
@@ -426,14 +428,82 @@ class FaleiroOABApp {
     `;
   }
 
+  // --- MODO DE VISUALIZAÇÃO (VITRINE VS TODAS AS SEMANAS) ---
+  setViewMode(mode) {
+    this.viewMode = mode;
+    this.updateViewModeButtons();
+    this.renderSchedule();
+    const container = document.getElementById("scheduleWeeksContainer");
+    if (container) container.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  updateViewModeButtons() {
+    const btnVitrine = document.getElementById("btnViewVitrine");
+    const btnAll = document.getElementById("btnViewAll");
+    if (btnVitrine && btnAll) {
+      btnVitrine.classList.toggle("active", this.viewMode === "vitrine");
+      btnAll.classList.toggle("active", this.viewMode === "all");
+    }
+  }
+
+  openWeek(weekNum) {
+    this.viewMode = "week_detail";
+    this.activeWeekNumber = parseInt(weekNum, 10);
+    this.updateViewModeButtons();
+    this.renderSchedule();
+    const container = document.getElementById("scheduleWeeksContainer");
+    if (container) container.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  backToVitrine() {
+    this.viewMode = "vitrine";
+    this.updateViewModeButtons();
+    this.renderSchedule();
+    const container = document.getElementById("scheduleWeeksContainer");
+    if (container) container.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  prevWeek() {
+    if (this.activeWeekNumber > 1) {
+      this.openWeek(this.activeWeekNumber - 1);
+    }
+  }
+
+  nextWeek() {
+    const totalWeeks = this.getCurrentScheduleData().length;
+    if (this.activeWeekNumber < totalWeeks) {
+      this.openWeek(this.activeWeekNumber + 1);
+    }
+  }
+
+  onWeekSelectChange(val) {
+    if (val === "ALL") {
+      this.setViewMode("vitrine");
+    } else {
+      this.openWeek(parseInt(val, 10));
+    }
+  }
+
   scrollToMission(dayNumber) {
-    // Se estiver filtrado de forma que o card não apareça, resetar filtros
+    const schedule = this.getCurrentScheduleData();
+    const targetWeek = schedule.find(w => w.days.some(d => d.day === dayNumber));
+    
+    // Se encontrou a semana, abre no modo detalhe focado
+    if (targetWeek) {
+      this.viewMode = "week_detail";
+      this.activeWeekNumber = targetWeek.week;
+      this.updateViewModeButtons();
+    }
+
+    // Resetar filtros de status/grupo se necessário para o card aparecer
     if (this.selectedStatusFilter === "DONE") {
-      this.filterByStatus("ALL");
+      this.selectedStatusFilter = "ALL";
     }
     if (this.selectedGroupFilter !== "ALL") {
-      this.filterByGroup("ALL");
+      this.selectedGroupFilter = "ALL";
     }
+
+    this.renderSchedule();
 
     setTimeout(() => {
       const el = document.getElementById(`day-card-${dayNumber}`);
@@ -456,151 +526,263 @@ class FaleiroOABApp {
     // Atualizar seletor de semanas
     const weekSelect = document.getElementById("weekFilterSelect");
     if (weekSelect) {
-      weekSelect.innerHTML = `<option value="ALL">Todas as Semanas (${schedule.length} Semanas)</option>`;
+      weekSelect.innerHTML = `<option value="ALL">▦ Vitrine de Semanas (${schedule.length} Semanas)</option>`;
       schedule.forEach(w => {
         const opt = document.createElement("option");
         opt.value = w.week.toString();
         opt.textContent = `Semana ${w.week}: ${w.title.split(":")[1] || w.title}`;
-        if (this.selectedWeekFilter === w.week.toString()) opt.selected = true;
+        if (this.viewMode === "week_detail" && this.activeWeekNumber === w.week) {
+          opt.selected = true;
+        }
         weekSelect.appendChild(opt);
       });
     }
 
+    if (this.viewMode === "vitrine") {
+      this.renderVitrineGrid(container, schedule);
+    } else if (this.viewMode === "week_detail") {
+      const currentWeekData = schedule.find(w => w.week === this.activeWeekNumber) || schedule[0];
+      this.renderSingleWeekDetail(container, schedule, currentWeekData);
+    } else {
+      this.renderAllWeeks(container, schedule);
+    }
+  }
+
+  // Renderizar Grade Vitrine (Blocos de Semanas)
+  renderVitrineGrid(container, schedule) {
+    const grid = document.createElement("div");
+    grid.className = "vitrine-grid";
+
     schedule.forEach(weekData => {
-      // Filtro de semana
-      if (this.selectedWeekFilter !== "ALL" && this.selectedWeekFilter !== weekData.week.toString()) {
-        return;
-      }
-
-      // Filtrar dias dentro da semana
-      const visibleDays = weekData.days.filter(d => {
-        // Filtro de Grupo
-        if (this.selectedGroupFilter !== "ALL") {
-          if (d.group !== "ALL" && d.group !== this.selectedGroupFilter) {
-            return false;
-          }
-        }
-        // Filtro de Status
-        const isDone = this.completedDays.has(d.day);
-        if (this.selectedStatusFilter === "DONE" && !isDone) return false;
-        if (this.selectedStatusFilter === "PENDING" && isDone) return false;
-        return true;
-      });
-
-      if (visibleDays.length === 0 && this.selectedWeekFilter === "ALL") {
-        return;
-      }
-
-      const weekCard = document.createElement("div");
-      weekCard.className = "schedule-week-card";
-      weekCard.id = `week-${weekData.week}`;
-
-      // Calcular progresso da semana
       const weekDoneCount = weekData.days.filter(d => this.completedDays.has(d.day)).length;
-      const weekTotalCount = weekData.days.length;
-      const weekPct = Math.round((weekDoneCount / weekTotalCount) * 100);
+      const totalDays = weekData.days.length;
+      const pct = Math.round((weekDoneCount / totalDays) * 100);
 
-      weekCard.innerHTML = `
-        <div class="week-header">
-          <div class="week-title-area">
-            <div class="week-pill-row">
-              <span class="week-pill">Semana ${weekData.week}</span>
-              <span class="week-done-badge">${weekDoneCount}/${weekTotalCount} concluídos (${weekPct}%)</span>
-            </div>
-            <h3 class="week-title">${weekData.title}</h3>
-            <p class="week-focus-desc"><span class="focus-label">Foco Estratégico:</span> ${weekData.focus}</p>
+      let statusBadgeClass = "pending";
+      let statusText = "Pendente";
+      let statusCardClass = "";
+      let fillClass = "empty";
+
+      if (pct === 100) {
+        statusBadgeClass = "done";
+        statusText = "✓ Concluída";
+        statusCardClass = "status-done";
+        fillClass = "done";
+      } else if (pct > 0) {
+        statusBadgeClass = "in-progress";
+        statusText = `🔥 Em Curso (${pct}%)`;
+        statusCardClass = "status-in-progress";
+        fillClass = "in-progress";
+      }
+
+      // Disciplinas únicas da semana
+      const disciplinesSet = new Set();
+      weekData.days.forEach(d => d.disciplines.forEach(disc => disciplinesSet.add(disc)));
+      const uniqueDisciplines = Array.from(disciplinesSet).slice(0, 3);
+
+      const card = document.createElement("div");
+      card.className = `vitrine-week-card ${statusCardClass}`;
+      card.onclick = () => window.app.openWeek(weekData.week);
+
+      card.innerHTML = `
+        <div class="vitrine-card-top">
+          <span class="vitrine-week-number">SEMANA ${String(weekData.week).padStart(2, "0")}</span>
+          <span class="vitrine-status-badge ${statusBadgeClass}">${statusText}</span>
+        </div>
+        <h3 class="vitrine-week-title">${weekData.title}</h3>
+        <p class="vitrine-focus-text">${weekData.focus}</p>
+        <div class="vitrine-disciplines-row">
+          ${uniqueDisciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
+        </div>
+        <div class="vitrine-progress-wrap">
+          <div class="vitrine-progress-labels">
+            <span>Progresso da Semana</span>
+            <span><strong>${weekDoneCount}/${totalDays}</strong> missões</span>
           </div>
-          <div class="week-progress-area">
-            <div class="week-progress-bar">
-              <div class="week-progress-fill" style="width: ${weekPct}%"></div>
-            </div>
+          <div class="vitrine-progress-track">
+            <div class="vitrine-progress-fill ${fillClass}" style="width: ${pct}%"></div>
+          </div>
+          <div class="vitrine-card-footer">
+            <span>Acessar Missões</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </div>
         </div>
-        <div class="week-days-grid" id="week-grid-${weekData.week}"></div>
       `;
 
-      const grid = weekCard.querySelector(`#week-grid-${weekData.week}`);
+      grid.appendChild(card);
+    });
 
-      weekData.days.forEach(dayItem => {
-        if (!visibleDays.includes(dayItem)) return;
+    container.appendChild(grid);
+  }
 
-        const isDone = this.completedDays.has(dayItem.day);
-        const dayNote = this.dayNotes[dayItem.day] || "";
-        const subtasks = this.daySubtasks[dayItem.day] || { law: isDone, questions: isDone };
-        const groupBadgeClass = `badge-group-${dayItem.group.toLowerCase()}`;
+  // Renderizar Semana Focada Individual (com botão de voltar para a vitrine)
+  renderSingleWeekDetail(container, schedule, weekData) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "single-week-view-wrapper";
 
-        const dayCard = document.createElement("div");
-        dayCard.className = `day-card ${isDone ? "completed" : ""}`;
-        dayCard.id = `day-card-${dayItem.day}`;
+    // Barra Superior de Navegação
+    const navBar = document.createElement("div");
+    navBar.className = "week-detail-top-nav";
+    navBar.innerHTML = `
+      <button type="button" class="btn-back-to-vitrine" onclick="window.app.backToVitrine()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Voltar para a Vitrine de Semanas
+      </button>
 
-        dayCard.innerHTML = `
-          <div class="day-card-header">
-            <div class="day-header-left">
-              <span class="day-number-badge">Missão ${String(dayItem.day).padStart(2, "0")}</span>
-              <div class="day-disciplines-tags">
-                ${dayItem.disciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
-                <span class="day-group-tag ${groupBadgeClass}">Grupo ${dayItem.group}</span>
-              </div>
-            </div>
-            
-            <div class="day-header-right">
-              ${isDone ? '<span class="status-done-pill">✓ Concluída</span>' : ''}
-              <button type="button" 
-                      class="btn-toggle-mission ${isDone ? 'active' : ''}" 
-                      onclick="window.app.toggleDay(${dayItem.day})"
-                      title="${isDone ? 'Desmarcar missão' : 'Marcar missão como cumprida'}">
-                ${isDone ? '✓ Cumprida' : 'Concluir'}
-              </button>
+      <div class="week-detail-pager">
+        <button type="button" class="btn-pager-prev" onclick="window.app.prevWeek()" ${weekData.week <= 1 ? "disabled" : ""}>
+          ‹ Semana Anterior
+        </button>
+        <span class="pager-current-label">Semana ${weekData.week} de ${schedule.length}</span>
+        <button type="button" class="btn-pager-next" onclick="window.app.nextWeek()" ${weekData.week >= schedule.length ? "disabled" : ""}>
+          Próxima Semana ›
+        </button>
+      </div>
+    `;
+    wrapper.appendChild(navBar);
+
+    // Card da semana selecionada
+    const weekCard = this.createWeekCardElement(weekData);
+    if (weekCard) wrapper.appendChild(weekCard);
+
+    container.appendChild(wrapper);
+  }
+
+  // Renderizar Todas as Semanas (Visão Expandida)
+  renderAllWeeks(container, schedule) {
+    schedule.forEach(weekData => {
+      const weekCard = this.createWeekCardElement(weekData);
+      if (weekCard) container.appendChild(weekCard);
+    });
+  }
+
+  // Construtor do Card de Semana com suas Missões
+  createWeekCardElement(weekData) {
+    // Filtrar dias dentro da semana
+    const visibleDays = weekData.days.filter(d => {
+      if (this.selectedGroupFilter !== "ALL") {
+        if (d.group !== "ALL" && d.group !== this.selectedGroupFilter) {
+          return false;
+        }
+      }
+      const isDone = this.completedDays.has(d.day);
+      if (this.selectedStatusFilter === "DONE" && !isDone) return false;
+      if (this.selectedStatusFilter === "PENDING" && isDone) return false;
+      return true;
+    });
+
+    if (visibleDays.length === 0 && this.selectedStatusFilter !== "ALL") {
+      return null;
+    }
+
+    const weekCard = document.createElement("div");
+    weekCard.className = "schedule-week-card";
+    weekCard.id = `week-${weekData.week}`;
+
+    const weekDoneCount = weekData.days.filter(d => this.completedDays.has(d.day)).length;
+    const weekTotalCount = weekData.days.length;
+    const weekPct = Math.round((weekDoneCount / weekTotalCount) * 100);
+
+    weekCard.innerHTML = `
+      <div class="week-header">
+        <div class="week-title-area">
+          <div class="week-pill-row">
+            <span class="week-pill">Semana ${weekData.week}</span>
+            <span class="week-done-badge">${weekDoneCount}/${weekTotalCount} concluídos (${weekPct}%)</span>
+          </div>
+          <h3 class="week-title">${weekData.title}</h3>
+          <p class="week-focus-desc"><span class="focus-label">Foco Estratégico:</span> ${weekData.focus}</p>
+        </div>
+        <div class="week-progress-area">
+          <div class="week-progress-bar">
+            <div class="week-progress-fill" style="width: ${weekPct}%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="week-days-grid" id="week-grid-${weekData.week}"></div>
+    `;
+
+    const grid = weekCard.querySelector(`#week-grid-${weekData.week}`);
+
+    weekData.days.forEach(dayItem => {
+      if (!visibleDays.includes(dayItem)) return;
+
+      const isDone = this.completedDays.has(dayItem.day);
+      const dayNote = this.dayNotes[dayItem.day] || "";
+      const subtasks = this.daySubtasks[dayItem.day] || { law: isDone, questions: isDone };
+      const groupBadgeClass = `badge-group-${dayItem.group.toLowerCase()}`;
+
+      const dayCard = document.createElement("div");
+      dayCard.className = `day-card ${isDone ? "completed" : ""}`;
+      dayCard.id = `day-card-${dayItem.day}`;
+
+      dayCard.innerHTML = `
+        <div class="day-card-header">
+          <div class="day-header-left">
+            <span class="day-number-badge">Missão ${String(dayItem.day).padStart(2, "0")}</span>
+            <div class="day-disciplines-tags">
+              ${dayItem.disciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
+              <span class="day-group-tag ${groupBadgeClass}">Grupo ${dayItem.group}</span>
             </div>
           </div>
-
-          <h4 class="day-theme-title">${dayItem.theme}</h4>
-
-          <!-- Checklist de Ação Objetiva (Micro-tarefas) -->
-          <div class="day-checklist-block">
-            <label class="checklist-item ${subtasks.law ? 'checked' : ''}">
-              <input type="checkbox" 
-                     ${subtasks.law ? 'checked' : ''} 
-                     onchange="window.app.toggleSubtask(${dayItem.day}, 'law', this.checked)">
-              <span class="checklist-custom-check"></span>
-              <span class="checklist-label-text">
-                <strong>📖 Legislação:</strong> ${dayItem.lawReading}
-              </span>
-            </label>
-
-            <label class="checklist-item ${subtasks.questions ? 'checked' : ''}">
-              <input type="checkbox" 
-                     ${subtasks.questions ? 'checked' : ''} 
-                     onchange="window.app.toggleSubtask(${dayItem.day}, 'questions', this.checked)">
-              <span class="checklist-custom-check"></span>
-              <span class="checklist-label-text">
-                <strong>🎯 Meta Prática:</strong> Resolver ${dayItem.questionsGoal} questões FGV comentadas
-              </span>
-            </label>
-          </div>
-
-          <div class="day-card-footer">
-            <div class="day-note-preview">
-              ${dayItem.reviewNotes ? `<span class="day-tip-text">💡 ${dayItem.reviewNotes}</span>` : ''}
-            </div>
-            <button type="button" class="btn-toggle-notes" onclick="window.app.toggleNotesArea(${dayItem.day})">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-              ${dayNote ? 'Editar Nota' : 'Anotações'}
+          
+          <div class="day-header-right">
+            ${isDone ? '<span class="status-done-pill">✓ Concluída</span>' : ''}
+            <button type="button" 
+                    class="btn-toggle-mission ${isDone ? 'active' : ''}" 
+                    onclick="window.app.toggleDay(${dayItem.day})"
+                    title="${isDone ? 'Desmarcar missão' : 'Marcar missão como cumprida'}">
+              ${isDone ? '✓ Cumprida' : 'Concluir'}
             </button>
           </div>
+        </div>
 
-          <div class="day-notes-area ${dayNote ? 'visible' : ''}" id="notes-area-${dayItem.day}">
-            <textarea placeholder="Suas anotações, artigos que mais errou ou pontos de atenção desta missão..." 
-                      class="day-notes-input" 
-                      onblur="window.app.saveDayNote(${dayItem.day}, this.value)">${dayNote}</textarea>
+        <h4 class="day-theme-title">${dayItem.theme}</h4>
+
+        <!-- Checklist de Ação Objetiva (Micro-tarefas) -->
+        <div class="day-checklist-block">
+          <label class="checklist-item ${subtasks.law ? 'checked' : ''}">
+            <input type="checkbox" 
+                   ${subtasks.law ? 'checked' : ''} 
+                   onchange="window.app.toggleSubtask(${dayItem.day}, 'law', this.checked)">
+            <span class="checklist-custom-check"></span>
+            <span class="checklist-label-text">
+              <strong>📖 Legislação:</strong> ${dayItem.lawReading}
+            </span>
+          </label>
+
+          <label class="checklist-item ${subtasks.questions ? 'checked' : ''}">
+            <input type="checkbox" 
+                   ${subtasks.questions ? 'checked' : ''} 
+                   onchange="window.app.toggleSubtask(${dayItem.day}, 'questions', this.checked)">
+            <span class="checklist-custom-check"></span>
+            <span class="checklist-label-text">
+              <strong>🎯 Meta Prática:</strong> Resolver ${dayItem.questionsGoal} questões FGV comentadas
+            </span>
+          </label>
+        </div>
+
+        <div class="day-card-footer">
+          <div class="day-note-preview">
+            ${dayItem.reviewNotes ? `<span class="day-tip-text">💡 ${dayItem.reviewNotes}</span>` : ''}
           </div>
-        `;
+          <button type="button" class="btn-toggle-notes" onclick="window.app.toggleNotesArea(${dayItem.day})">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            ${dayNote ? 'Editar Nota' : 'Anotações'}
+          </button>
+        </div>
 
-        grid.appendChild(dayCard);
-      });
+        <div class="day-notes-area ${dayNote ? 'visible' : ''}" id="notes-area-${dayItem.day}">
+          <textarea placeholder="Suas anotações, artigos que mais errou ou pontos de atenção desta missão..." 
+                    class="day-notes-input" 
+                    onblur="window.app.saveDayNote(${dayItem.day}, this.value)">${dayNote}</textarea>
+        </div>
+      `;
 
-      container.appendChild(weekCard);
+      grid.appendChild(dayCard);
     });
+
+    return weekCard;
   }
 
   // Alternar micro-tarefa individual (Lei Seca ou Questões)

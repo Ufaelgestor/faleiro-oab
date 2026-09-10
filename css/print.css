@@ -1,0 +1,282 @@
+/* ==========================================================================
+   FALEIRO OAB - Estilos Oficiais de Impressão e PDF (Padrão Apostila Faleiro)
+   Baseado na diagramação oficial dos materiais do Professor Faleiro
+   ========================================================================== */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm 10mm 14mm 14mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #0f172a !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 10.5pt !important;
+    line-height: 1.4 !important;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  /* Faixa Amarela/Dourada no canto esquerdo da página (Idêntica ao PDF do Professor) */
+  .app-left-stripe {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 6mm !important;
+    height: 100% !important;
+    background: #c89b3c !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    z-index: 1000 !important;
+  }
+
+  /* Esconder elementos de tela / interativos */
+  .header-actions,
+  .hero-dashboard-grid,
+  .faleiro-battle-banner,
+  .main-navigation-tabs,
+  .schedule-filters-toolbar,
+  .day-checkbox-label,
+  .btn-toggle-notes,
+  .day-notes-area,
+  .sim-presets-group,
+  .sim-slider-wrap,
+  .btn-step,
+  .simulados-action-bar,
+  .btn-delete-sim,
+  .modal-backdrop,
+  .app-toast {
+    display: none !important;
+  }
+
+  /* Header Oficial da Apostila */
+  .app-header {
+    border-bottom: 2.5pt solid #0a192f !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 16px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .brand-logo-img {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .brand-eyebrow {
+    color: #c89b3c !important;
+    font-size: 8.5pt !important;
+    font-weight: 800 !important;
+    letter-spacing: 1.5px !important;
+  }
+
+  .brand-title {
+    font-size: 16pt !important;
+    color: #0a192f !important;
+    font-weight: 900 !important;
+  }
+
+  .brand-title span {
+    color: #c89b3c !important;
+  }
+
+  .brand-subtitle {
+    color: #475569 !important;
+    font-size: 9pt !important;
+  }
+
+  /* Exibição das Seções */
+  .tab-content-section {
+    display: block !important;
+  }
+
+  /* Cards de Semana com quebra de página limpa */
+  .schedule-week-card {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    padding: 12px !important;
+    margin-bottom: 18px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .week-header {
+    border-bottom: 1.5pt solid #0a192f !important;
+    padding-bottom: 6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .week-pill {
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1px solid #fde68a !important;
+    font-size: 8pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .week-title {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 12pt !important;
+    color: #0a192f !important;
+    font-weight: 800 !important;
+  }
+
+  .week-focus-desc {
+    font-size: 8.5pt !important;
+    color: #334155 !important;
+  }
+
+  .focus-label {
+    color: #b45309 !important;
+  }
+
+  .week-progress-area {
+    display: none !important;
+  }
+
+  /* Grid de Missões / Dias */
+  .week-days-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .day-card {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    padding: 9px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .day-number-badge {
+    font-size: 9.5pt !important;
+    background: #fef3c7 !important;
+    color: #92400e !important;
+    border: 1px solid #fde68a !important;
+    font-weight: 900 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .disc-tag {
+    font-size: 7.5pt !important;
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .day-theme-title {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 9.5pt !important;
+    font-weight: 800 !important;
+    color: #0a192f !important;
+    margin: 5px 0 !important;
+  }
+
+  .day-task-block {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 3px solid #c89b3c !important;
+    padding: 5px 7px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .task-title {
+    font-size: 8pt !important;
+    color: #92400e !important;
+    font-weight: 800 !important;
+  }
+
+  .task-content {
+    font-size: 8.5pt !important;
+    color: #1e293b !important;
+  }
+
+  .day-footer-meta {
+    font-size: 8pt !important;
+    color: #475569 !important;
+    border-top: 1px solid #e2e8f0 !important;
+    padding-top: 5px !important;
+  }
+
+  /* Simulador de Notas na Impressão */
+  .sim-score-board {
+    position: static !important;
+    background: #ffffff !important;
+    border: 2px solid #c89b3c !important;
+    box-shadow: none !important;
+    padding: 12px !important;
+    margin-bottom: 16px !important;
+    page-break-inside: avoid;
+  }
+
+  .sim-score-huge {
+    color: #c89b3c !important;
+    font-size: 32pt !important;
+  }
+
+  .sim-discipline-row {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 6px 10px !important;
+    page-break-inside: avoid;
+  }
+
+  .sim-discipline-name {
+    font-size: 10pt !important;
+    color: #0a192f !important;
+  }
+
+  .sim-score-control {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .sim-score-val {
+    font-size: 11pt !important;
+    color: #0a192f !important;
+    font-weight: 800 !important;
+  }
+
+  /* Raio-X das 20 Matérias */
+  .raiox-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .raiox-card {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    padding: 10px !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .raiox-title {
+    color: #0a192f !important;
+    font-size: 11pt !important;
+  }
+
+  .raiox-list {
+    color: #334155 !important;
+    font-size: 8.5pt !important;
+  }
+}

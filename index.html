@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faleiro OAB • Cronograma Estratégico 1ª Fase (80 Questões FGV)</title>
+  <meta name="description" content="Cronograma tático e simulador de pontuação para a 1ª Fase da OAB com matriz de 80 questões, grupos de relevância (Pareto 80/20) e artigos de ouro da FGV.">
+  
+  <!-- Estilos da Aplicação -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  
+  <link rel="icon" type="image/png" href="assets/logo-faleiro.png">
+</head>
+<body>
+
+  <!-- Faixa lateral amarela icônica Faleiro -->
+  <div class="app-left-stripe"></div>
+
+  <div class="app-wrapper">
+
+    <!-- ==========================================================================
+         CABEÇALHO PRINCIPAL COM LOGO OFICIAL FALEIRO
+         ========================================================================== -->
+    <header class="app-header">
+      <div class="brand-area">
+        <div class="brand-logo-wrap">
+          <img src="assets/logo-faleiro-gold.png" alt="Logo Oficial Faleiro" class="brand-logo-img">
+        </div>
+        <div class="brand-text-col">
+          <span class="brand-eyebrow">FALEIRO CONCURSOS & OAB • EDIÇÃO 2026</span>
+          <h1 class="brand-title">FALEIRO <span>OAB</span></h1>
+          <p class="brand-subtitle">Cronograma Oficial 1ª Fase • Rumo à aprovação, missão por missão</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <span class="header-badge-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          80 Questões • Meta 40+
+        </span>
+
+        <button type="button" class="btn-header" onclick="window.app.toggleTheme()" title="Alternar Modo Claro / Escuro">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          Tema
+        </button>
+
+        <button type="button" class="btn-header" onclick="window.app.resetAllProgress()" title="Zerar progresso e checklist">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          Resetar
+        </button>
+
+        <button type="button" class="btn-header btn-primary-gold" onclick="window.app.printPDF()" title="Imprimir ou Salvar em PDF (Formato A4)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Imprimir / Salvar PDF
+        </button>
+      </div>
+    </header>
+
+    <!-- Banner Oficial Faleiro: Slogan de Batalha -->
+    <div class="faleiro-battle-banner">
+      <div class="faleiro-battle-slogan">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        PREPAREM OS CAVALOS PARA O DIA DA BATALHA
+      </div>
+      <div class="faleiro-battle-subtext">
+        Disciplina vence cansaço e desculpa. Cada missão cumprida garante sua vaga na 2ª fase.
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         HERO DASHBOARD: PROGRESSO GERAL, CONTAGEM REGRESSIVA & POMODORO
+         ========================================================================== -->
+    <section class="hero-dashboard-grid">
+      <!-- Card 1: Duração e Progresso Geral -->
+      <div class="dashboard-card">
+        <div class="card-accent-border"></div>
+        <div class="card-title-muted">
+          <span><span class="gold-square-mark"></span>Duração do Cronograma</span>
+          <span class="progress-pct-bold" id="overallProgressPct">0%</span>
+        </div>
+
+        <div class="plan-switch-group">
+          <button type="button" id="btnPlan60" class="btn-plan-toggle active" onclick="window.app.setPlanDuration(60)">
+            ⚡ 60 Dias (Intensivo)
+          </button>
+          <button type="button" id="btnPlan90" class="btn-plan-toggle" onclick="window.app.setPlanDuration(90)">
+            📚 90 Dias (Extensivo)
+          </button>
+        </div>
+
+        <div class="overall-progress-bar-wrap">
+          <div class="progress-labels">
+            <span id="overallProgressCount">0 de 60 dias concluídos</span>
+            <span>Meta: 40+ Acertos</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="overallProgressBarFill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Contagem Regressiva para a Prova -->
+      <div class="dashboard-card">
+        <div class="card-accent-border"></div>
+        <div class="card-title-muted">Rumo à Aprovação OAB</div>
+        <div class="countdown-display">
+          <span class="countdown-big-num" id="examCountdownNumber">--</span>
+          <span class="countdown-label-unit">dias até o exame</span>
+        </div>
+        <div class="countdown-subtext">Cada dia de estudo com questões e lei seca aproxima você da carteira vermelha!</div>
+      </div>
+
+      <!-- Card 3: Timer de Foco Pomodoro -->
+      <div class="dashboard-card">
+        <div class="card-accent-border"></div>
+        <div class="card-title-muted">Sessão de Foco (Pomodoro)</div>
+        <div class="pomodoro-box">
+          <div class="pomodoro-time" id="pomodoroTimerDisplay">25:00</div>
+          <div class="pomodoro-controls">
+            <button type="button" class="btn-pomodoro btn-pomodoro-start" id="btnTogglePomodoro">Iniciar Foco</button>
+            <button type="button" class="btn-pomodoro btn-pomodoro-reset" id="btnResetPomodoro">Zerar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         NAVEGAÇÃO PRINCIPAL EM ABAS
+         ========================================================================== -->
+    <nav class="main-navigation-tabs" aria-label="Abas Principais">
+      <button type="button" class="nav-tab-btn active" data-tab="cronograma">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        Cronograma Diário
+      </button>
+
+      <button type="button" class="nav-tab-btn" data-tab="simulador">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path><circle cx="12" cy="12" r="4"></circle></svg>
+        Simulador dos 40 Pontos
+      </button>
+
+      <button type="button" class="nav-tab-btn" data-tab="raiox">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        Raio-X & Artigos de Ouro
+      </button>
+
+      <button type="button" class="nav-tab-btn" data-tab="simulados">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        Histórico de Simulados
+      </button>
+
+      <button type="button" class="nav-tab-btn" data-tab="estrategia">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        Metodologia dos 3 Grupos
+      </button>
+    </nav>
+
+    <!-- ==========================================================================
+         ABA 1: CRONOGRAMA DIÁRIO DE ESTUDOS
+         ========================================================================== -->
+    <main class="tab-content-section active" id="tab-cronograma">
+      <!-- Barra de Filtros -->
+      <div class="schedule-filters-toolbar">
+        <div class="filters-left">
+          <span class="filter-label">Grupos:</span>
+          <button type="button" class="btn-group-filter active" data-group="ALL" onclick="window.app.filterByGroup('ALL')">Todos</button>
+          <button type="button" class="btn-group-filter" data-group="A" onclick="window.app.filterByGroup('A')">Grupo A (53q)</button>
+          <button type="button" class="btn-group-filter" data-group="B" onclick="window.app.filterByGroup('B')">Grupo B (9q)</button>
+          <button type="button" class="btn-group-filter" data-group="C" onclick="window.app.filterByGroup('C')">Grupo C (18q)</button>
+        </div>
+
+        <div class="filters-right">
+          <span class="filter-label">Status:</span>
+          <button type="button" class="btn-status-filter active" data-status="ALL" onclick="window.app.filterByStatus('ALL')">Todos</button>
+          <button type="button" class="btn-status-filter" data-status="PENDING" onclick="window.app.filterByStatus('PENDING')">Pendentes</button>
+          <button type="button" class="btn-status-filter" data-status="DONE" onclick="window.app.filterByStatus('DONE')">Concluídos</button>
+
+          <select class="select-week-filter" id="weekFilterSelect" onchange="window.app.filterByWeek(this.value)">
+            <option value="ALL">Todas as Semanas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Container de Semanas e Dias -->
+      <div id="scheduleWeeksContainer"></div>
+    </main>
+
+    <!-- ==========================================================================
+         ABA 2: SIMULADOR INTELIGENTE DOS 40 PONTOS
+         ========================================================================== -->
+    <section class="tab-content-section" id="tab-simulador">
+      <div class="sim-intro-box">
+        <div class="sim-intro-text">
+          <h3>Simulador Interativo da 1ª Fase OAB</h3>
+          <p>Ajuste os acertos esperados para cada uma das 20 disciplinas da prova e descubra a estratégia mais eficiente para atingir 40+ acertos.</p>
+        </div>
+
+        <div class="sim-presets-group" id="simulatorPresetsList"></div>
+      </div>
+
+      <!-- Painel Sticky com Placar Geral -->
+      <div class="sim-score-board">
+        <div class="sim-board-grid">
+          <div class="sim-total-display">
+            <span class="sim-score-huge" id="simTotalScore">0</span>
+            <span class="sim-total-meta">de 80 questões</span>
+          </div>
+
+          <div class="sim-feedback-col">
+            <span class="sim-status-pill" id="simStatusPill">Calculando...</span>
+            <p class="sim-tip-desc" id="simTipText"></p>
+          </div>
+
+          <div class="sim-groups-pills">
+            <div class="group-pill-stat">
+              <span class="group-stat-badge badge-group-a">Grupo A (Coração):</span>
+              <span class="group-stat-val" id="simGroupAScore">0/53</span>
+            </div>
+            <div class="group-pill-stat">
+              <span class="group-stat-badge badge-group-b">Grupo B (Estrutural):</span>
+              <span class="group-stat-val" id="simGroupBScore">0/9</span>
+            </div>
+            <div class="group-pill-stat">
+              <span class="group-stat-badge badge-group-c">Grupo C (Eficiência):</span>
+              <span class="group-stat-val" id="simGroupCScore">0/18</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sim-progress-track" title="Meta de corte: 40 pontos no centro">
+          <div class="sim-progress-fill" id="simProgressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Lista das 20 Disciplinas -->
+      <div class="sim-disciplines-list" id="simulatorDisciplinesList"></div>
+    </section>
+
+    <!-- ==========================================================================
+         ABA 3: RAIO-X DA FGV & ARTIGOS DE OURO
+         ========================================================================== -->
+    <section class="tab-content-section" id="tab-raiox">
+      <div class="strategy-guide-wrapper" style="margin-bottom: 24px;">
+        <div class="guide-hero-banner">
+          <h2>Raio-X da FGV: O Que Realmente Cai na Prova</h2>
+          <p>Mais de 80% das questões de 1ª Fase são extraídas literalmente da legislação e súmulas. Abaixo está o compêndio cirúrgico dos artigos imperdíveis para cada uma das 20 matérias.</p>
+        </div>
+      </div>
+
+      <div class="raiox-grid" id="raioxCardsGrid"></div>
+    </section>
+
+    <!-- ==========================================================================
+         ABA 4: CONTROLE DE SIMULADOS & BANCO DE ERROS
+         ========================================================================== -->
+    <section class="tab-content-section" id="tab-simulados">
+      <div class="simulados-overview-grid">
+        <div class="stat-metric-card">
+          <div class="stat-metric-val" id="statSimTotal">0</div>
+          <div class="stat-metric-label">Simulados Realizados</div>
+        </div>
+        <div class="stat-metric-card">
+          <div class="stat-metric-val" id="statSimAvg">0/80</div>
+          <div class="stat-metric-label">Média de Acertos</div>
+        </div>
+        <div class="stat-metric-card">
+          <div class="stat-metric-val" id="statSimRate">0%</div>
+          <div class="stat-metric-label">Taxa de Aprovação (≥ 40)</div>
+        </div>
+      </div>
+
+      <div class="simulados-action-bar">
+        <h3 style="font-size: 18px; font-weight: 700;">Histórico de Provas e Simulados</h3>
+        <button type="button" class="btn-header btn-primary-gold" onclick="window.app.openModal('modalAddSimulado')">
+          + Registrar Novo Simulado
+        </button>
+      </div>
+
+      <div class="simulados-history-list" id="simuladosHistoryList"></div>
+    </section>
+
+    <!-- ==========================================================================
+         ABA 5: METODOLOGIA & ESTRATÉGIA DOS 3 GRUPOS
+         ========================================================================== -->
+    <section class="tab-content-section" id="tab-estrategia">
+      <div class="strategy-guide-wrapper">
+        <div class="guide-hero-banner">
+          <h2>A Estratégia dos 3 Grupos de Relevância (Pareto OAB)</h2>
+          <p>O maior erro de quem estuda para a OAB é querer ler todos os livros de Direito. Na 1ª Fase você não precisa tirar 10; você precisa de <strong>40 pontos</strong>. O segredo é alocar seu tempo onde há maior concentração de questões e alto índice de acerto.</p>
+        </div>
+
+        <div class="guide-groups-grid">
+          <!-- Grupo A -->
+          <div class="guide-group-box" style="border-top: 4px solid var(--group-a-color);">
+            <div class="guide-group-header">
+              <span class="guide-group-badge badge-group-a">Prioridade Máxima</span>
+              <h3 class="guide-group-title">Grupo A: O Coração</h3>
+            </div>
+            <div class="guide-group-questions">53 de 80 Questões (66% da Prova)</div>
+            <p class="guide-group-strategy">
+              Dedique 65% a 70% do seu tempo de estudo aqui. Ética Profissional possui apenas 3 normas curtas e representa 8 pontos fundamentais. Somando Ética, Constitucional, Civil, Processo Civil, Penal, Processo Penal, Administrativo, Trabalho e Processo do Trabalho, você já ultrapassa a nota de corte com folga!
+            </p>
+            <div class="guide-discs-tags">
+              <span class="disc-tag">Ética (8)</span>
+              <span class="disc-tag">Constitucional (6)</span>
+              <span class="disc-tag">Civil (6)</span>
+              <span class="disc-tag">Proc. Civil (6)</span>
+              <span class="disc-tag">Penal (6)</span>
+              <span class="disc-tag">Proc. Penal (6)</span>
+              <span class="disc-tag">Administrativo (5)</span>
+              <span class="disc-tag">Trabalho (5)</span>
+              <span class="disc-tag">Proc. Trabalho (5)</span>
+            </div>
+          </div>
+
+          <!-- Grupo B -->
+          <div class="guide-group-box" style="border-top: 4px solid var(--group-b-color);">
+            <div class="guide-group-header">
+              <span class="guide-group-badge badge-group-b">Alta Previsibilidade</span>
+              <h3 class="guide-group-title">Grupo B: Estruturais</h3>
+            </div>
+            <div class="guide-group-questions">9 de 80 Questões (11% da Prova)</div>
+            <p class="guide-group-strategy">
+              Tributário e Empresarial são disciplinas temidas por muitos, mas que na FGV repetem exatamente os mesmos temas: Imunidades Tributárias, Crédito Tributário, Sociedade Limitada, Títulos de Crédito e Falência. Dominando essas súmulas, você garante de 6 a 8 pontos certeiros.
+            </p>
+            <div class="guide-discs-tags">
+              <span class="disc-tag">Tributário (5)</span>
+              <span class="disc-tag">Empresarial (4)</span>
+            </div>
+          </div>
+
+          <!-- Grupo C -->
+          <div class="guide-group-box" style="border-top: 4px solid var(--group-c-color);">
+            <div class="guide-group-header">
+              <span class="guide-group-badge badge-group-c">Custo-Benefício Cirúrgico</span>
+              <h3 class="guide-group-title">Grupo C: Leis Rápidas</h3>
+            </div>
+            <div class="guide-group-questions">18 de 80 Questões (23% da Prova)</div>
+            <p class="guide-group-strategy">
+              Aqui está o grande "pulo do gato": <strong>ECA</strong> e <strong>Consumidor</strong> têm leis curtas onde a mera leitura atenta da lei seca garante 4 pontos fáceis! Nas outras matérias de 2 questões, estude cirurgicamente apenas os temas mais frequentes, sem perder tempo com teorias doutrinárias densas.
+            </p>
+            <div class="guide-discs-tags">
+              <span class="disc-tag">ECA (2)</span>
+              <span class="disc-tag">Consumidor (2)</span>
+              <span class="disc-tag">Humanos (2)</span>
+              <span class="disc-tag">Ambiental (2)</span>
+              <span class="disc-tag">Previdenciário (2)</span>
+              <span class="disc-tag">Eleitoral (2)</span>
+              <span class="disc-tag">Financeiro (2)</span>
+              <span class="disc-tag">Internacional (2)</span>
+              <span class="disc-tag">Filosofia (2)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- O Tripé da Aprovação FGV -->
+        <div class="guide-hero-banner" style="background: rgba(255, 255, 255, 0.02); border-color: var(--border-color);">
+          <h3 style="font-size: 20px; font-weight: 700; color: var(--gold-primary); margin-bottom: 12px;">
+            O Tripé Diário da Aprovação FGV
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 16px;">
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 16px; border-radius: 8px;">
+              <h4 style="color: var(--group-a-color); font-weight: 700; margin-bottom: 6px;">1. 60% Resolução de Questões FGV</h4>
+              <p style="font-size: 13px; color: var(--text-muted);">A banca FGV sempre conta histórias (casos práticos). Fazer de 25 a 40 questões por dia treina o cérebro a identificar a pegadinha e a tese jurídica correta.</p>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 16px; border-radius: 8px;">
+              <h4 style="color: var(--gold-primary); font-weight: 700; margin-bottom: 6px;">2. 30% Leitura da Lei Seca</h4>
+              <p style="font-size: 13px; color: var(--text-muted);">Mais de 80% das alternativas corretas da FGV são cópia do texto de lei ou de súmulas vinculantes/STJ/STF. Ler os artigos de ouro do cronograma é indispensável.</p>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 16px; border-radius: 8px;">
+              <h4 style="color: var(--group-c-color); font-weight: 700; margin-bottom: 6px;">3. 10% Revisão & Simulados</h4>
+              <p style="font-size: 13px; color: var(--text-muted);">Revisar ativamente todo sábado os erros cometidos na semana e fazer simulados cronometrados aos domingos para dominar as 5 horas de prova.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Caixa de Compromisso Faleiro (Página 26 do PDF Oficial) -->
+        <div class="faleiro-quote-box">
+          <p class="faleiro-quote-text">
+            “O futuro está em construção — e este cronograma é a planta. Quem ergue a obra é você.”
+          </p>
+          <div class="faleiro-quote-author">
+            ⚔️ Preparem os cavalos para o dia da batalha.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==========================================================================
+       MODAL DE ADICIONAR SIMULADO
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modalAddSimulado" onclick="if(event.target === this) window.app.closeModal('modalAddSimulado')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Registrar Resultado de Simulado</h3>
+        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalAddSimulado')">✕</button>
+      </div>
+
+      <form id="formNewSimulado" onsubmit="event.preventDefault(); window.app.addSimulado(document.getElementById('simTitle').value, document.getElementById('simDate').value, document.getElementById('simScore').value, document.getElementById('simNotes').value);">
+        <div class="form-group">
+          <label for="simTitle">Nome do Simulado</label>
+          <input type="text" id="simTitle" class="form-input" placeholder="Ex: Simulado Geral FGV - 40º Exame" required>
+        </div>
+
+        <div class="form-group">
+          <label for="simDate">Data de Realização</label>
+          <input type="date" id="simDate" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="simScore">Total de Acertos (0 a 80)</label>
+          <input type="number" id="simScore" class="form-input" min="0" max="80" placeholder="Ex: 43" required>
+        </div>
+
+        <div class="form-group">
+          <label for="simNotes">Observações / Pontos de Melhoria</label>
+          <input type="text" id="simNotes" class="form-input" placeholder="Ex: Preciso reforçar prazos de recursos trabalhistas">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-header" style="flex: 1;" onclick="window.app.closeModal('modalAddSimulado')">Cancelar</button>
+          <button type="submit" class="btn-header btn-primary-gold" style="flex: 1;">Salvar Simulado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/simulator.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

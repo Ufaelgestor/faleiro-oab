@@ -1311,7 +1311,7 @@ body {
   }
 
   .vitrine-week-card {
-    min-height: 310px;
+    min-height: 195px;
     border-radius: 12px;
   }
 
@@ -3101,7 +3101,7 @@ body {
   }
 
   .app-left-stripe {
-    width: 3px;
+    display: none !important;
   }
 
   /* Header e Branding no Celular */
@@ -3256,22 +3256,60 @@ body {
     line-height: 1.3;
   }
   .coach-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
     width: 100%;
   }
   .coach-card {
-    padding: 12px 12px;
-    width: 100%;
+    padding: 8px 6px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     box-sizing: border-box;
+  }
+  .coach-card-label {
+    font-size: 8px !important;
+    letter-spacing: 0.2px;
+    margin-bottom: 2px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    color: var(--gold-primary);
+  }
+  .coach-metric-val {
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .coach-metric-val .metric-big {
+    font-size: 19px !important;
+    line-height: 1.1;
+  }
+  .coach-metric-val .metric-unit {
+    font-size: 8.5px !important;
+    line-height: 1.1;
+    white-space: nowrap;
+    color: var(--text-dim);
+  }
+  .coach-progress-track {
+    margin: 4px 0 0 0 !important;
+    width: 100%;
+    height: 3px !important;
+  }
+  .coach-card-desc {
+    display: none !important;
   }
 
   /* Spotlight "Sua Missão de Hoje" no Celular */
   .spotlight-card {
     flex-direction: column;
     align-items: stretch;
-    padding: 14px 14px;
-    gap: 12px;
+    padding: 12px 12px !important;
+    gap: 10px !important;
     width: 100%;
     box-sizing: border-box;
   }
@@ -3280,62 +3318,79 @@ body {
     width: 100%;
   }
   .spotlight-theme-title {
-    font-size: 14.5px;
+    font-size: 14px !important;
     line-height: 1.35;
   }
   .spotlight-actions {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
   }
   .btn-spotlight-jump,
   .btn-spotlight-complete {
     width: 100%;
     justify-content: center;
-    min-height: 42px;
-    font-size: 12.5px;
+    min-height: 38px !important;
+    font-size: 11.5px !important;
+    padding: 8px 6px !important;
+    white-space: nowrap;
   }
 
   /* Barra de Filtros da Agenda no Celular */
   .schedule-filters-toolbar {
     flex-direction: column;
     align-items: stretch;
-    padding: 10px 12px;
-    gap: 10px;
+    padding: 8px 10px !important;
+    gap: 6px !important;
     width: 100%;
     box-sizing: border-box;
-  }
-  .filters-left,
-  .filters-right {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-  }
-  .filter-group-sep {
-    display: none;
+    border-radius: 12px;
   }
   .view-mode-toggle-group {
     width: 100%;
     display: flex;
+    margin-bottom: 2px;
   }
   .btn-view-toggle {
     flex: 1;
     justify-content: center;
-    padding: 7px 6px;
-    font-size: 11px;
+    padding: 6px 4px !important;
+    font-size: 11px !important;
+  }
+  .filters-left,
+  .filters-right {
+    width: 100%;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: center;
+    gap: 5px !important;
+    padding: 2px 0 !important;
+  }
+  .filters-left::-webkit-scrollbar,
+  .filters-right::-webkit-scrollbar {
+    display: none !important;
+  }
+  .filter-label {
+    font-size: 10px !important;
+    white-space: nowrap;
+    color: var(--text-dim);
+    flex-shrink: 0;
   }
   .btn-group-filter,
   .btn-status-filter {
-    padding: 4px 7px;
-    font-size: 10.5px;
+    padding: 4px 8px !important;
+    font-size: 10.5px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
   }
   .select-week-filter {
     width: 100%;
-    padding: 8px 10px;
-    font-size: 12px;
+    padding: 7px 9px !important;
+    font-size: 11.5px !important;
   }
 
   /* Vitrine em 2 Colunas Limpas e Modernas no Celular */
@@ -3347,16 +3402,16 @@ body {
     box-sizing: border-box;
   }
   .vitrine-week-card {
-    min-height: 310px !important;
+    min-height: 195px !important;
     border-radius: 12px !important;
     width: 100%;
     box-sizing: border-box;
   }
   .module-cover-content {
-    padding: 10px 8px 8px !important;
+    padding: 10px 10px 10px !important;
   }
   .module-cover-top {
-    margin-bottom: 6px !important;
+    margin-bottom: 4px !important;
   }
   .module-cover-number {
     font-size: 8.5px !important;
@@ -3367,19 +3422,30 @@ body {
     font-size: 8px !important;
     padding: 2px 4px !important;
   }
+  .module-cover-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: auto 0 !important;
+    padding: 6px 4px !important;
+  }
   .module-cover-emblem {
-    width: 34px !important;
-    height: 34px !important;
+    width: 38px !important;
+    height: 38px !important;
     margin-bottom: 6px !important;
   }
   .module-cover-emblem svg {
-    width: 16px !important;
-    height: 16px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
   .module-cover-title {
-    font-size: 11.5px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
     line-height: 1.3 !important;
-    margin-bottom: 4px !important;
+    margin: 0 !important;
+    text-align: center !important;
   }
   .module-cover-focus,
   .module-cover-disciplines {
@@ -3387,17 +3453,18 @@ body {
   }
   .module-cover-bottom {
     padding-top: 6px !important;
+    margin-top: auto !important;
   }
   .module-cover-progress-row {
-    font-size: 9px !important;
+    font-size: 8.5px !important;
     margin-bottom: 3px !important;
   }
   .module-cover-progress-track {
-    height: 4px !important;
-    margin-bottom: 6px !important;
+    height: 3px !important;
+    margin-bottom: 5px !important;
   }
   .module-cover-action {
-    font-size: 10px !important;
+    font-size: 9.5px !important;
   }
   .module-cover-action-arrow {
     width: 18px !important;

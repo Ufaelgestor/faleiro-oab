@@ -1,282 +1,288 @@
 /* ==========================================================================
-   FALEIRO OAB - Estilos Oficiais de Impressão e PDF (Padrão Apostila Faleiro)
-   Baseado na diagramação oficial dos materiais do Professor Faleiro
+   FALEIRO OAB - Estilos Oficiais de Impressão e PDF
+   Diagramação Executiva, Simples e Otimizada para Economia de Tinta
    ========================================================================== */
 
 @media print {
   @page {
     size: A4 portrait;
-    margin: 14mm 10mm 14mm 14mm;
+    margin: 10mm 12mm 12mm 12mm;
   }
 
-  body {
+  /* Reset e Base de Impressão */
+  html, body {
     background: #ffffff !important;
     background-image: none !important;
     color: #0f172a !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 10.5pt !important;
-    line-height: 1.4 !important;
-  }
-
-  body::before {
-    display: none !important;
-  }
-
-  /* Faixa Amarela/Dourada no canto esquerdo da página (Idêntica ao PDF do Professor) */
-  .app-left-stripe {
-    position: fixed !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 6mm !important;
-    height: 100% !important;
-    background: #c89b3c !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 8.5pt !important;
+    line-height: 1.35 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    z-index: 1000 !important;
   }
 
-  /* Esconder elementos de tela / interativos */
-  .header-actions,
-  .hero-dashboard-grid,
-  .faleiro-battle-banner,
-  .main-navigation-tabs,
-  .schedule-filters-toolbar,
-  .day-checkbox-label,
-  .btn-toggle-notes,
-  .day-notes-area,
-  .sim-presets-group,
-  .sim-slider-wrap,
-  .btn-step,
-  .simulados-action-bar,
-  .btn-delete-sim,
+  body::before,
+  .app-left-stripe,
+  .app-wrapper,
   .modal-backdrop,
   .app-toast {
     display: none !important;
   }
 
-  /* Header Oficial da Apostila */
-  .app-header {
-    border-bottom: 2.5pt solid #0a192f !important;
-    padding-bottom: 10px !important;
-    margin-bottom: 16px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .brand-logo-img {
-    width: 48px !important;
-    height: 48px !important;
-  }
-
-  .brand-eyebrow {
-    color: #c89b3c !important;
-    font-size: 8.5pt !important;
-    font-weight: 800 !important;
-    letter-spacing: 1.5px !important;
-  }
-
-  .brand-title {
-    font-size: 16pt !important;
-    color: #0a192f !important;
-    font-weight: 900 !important;
-  }
-
-  .brand-title span {
-    color: #c89b3c !important;
-  }
-
-  .brand-subtitle {
-    color: #475569 !important;
-    font-size: 9pt !important;
-  }
-
-  /* Exibição das Seções */
-  .tab-content-section {
+  /* Exibir exclusivamente o container de cronograma diagramado */
+  #printScheduleSection,
+  .print-only-schedule {
     display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
   }
 
-  /* Cards de Semana com quebra de página limpa */
-  .schedule-week-card {
-    background: #ffffff !important;
-    border: 1px solid #cbd5e1 !important;
-    box-shadow: none !important;
-    padding: 12px !important;
-    margin-bottom: 18px !important;
+  /* ==========================================================================
+     CABEÇALHO DO DOCUMENTO
+     ========================================================================== */
+  .print-doc-header {
+    border-bottom: 2pt solid #0f172a;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .print-doc-brand {
+    margin-bottom: 8px;
+  }
+
+  .print-doc-sup {
+    font-size: 8pt;
+    font-weight: 800;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .print-doc-title {
+    font-size: 15pt;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 2px 0 3px 0;
+    letter-spacing: -0.3px;
+  }
+
+  .print-doc-sub {
+    font-size: 8.5pt;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  .print-student-meta {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-size: 8pt;
+    color: #1e293b;
+    margin-top: 6px;
+  }
+
+  .print-meta-field {
+    margin-bottom: 5px;
+    font-size: 8.5pt;
+  }
+
+  .print-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: #475569;
+    border-top: 1px dashed #cbd5e1;
+    padding-top: 4px;
+  }
+
+  /* ==========================================================================
+     BLOCO DE CADA SEMANA (MÓDULO)
+     ========================================================================== */
+  .print-week-block {
+    margin-bottom: 16px;
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  .week-header {
-    border-bottom: 1.5pt solid #0a192f !important;
-    padding-bottom: 6px !important;
-    margin-bottom: 10px !important;
+  .print-week-header {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-left: 4.5pt solid #0f172a;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+    break-after: avoid;
   }
 
-  .week-pill {
-    background: #fef3c7 !important;
-    color: #92400e !important;
-    border: 1px solid #fde68a !important;
-    font-size: 8pt !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  .print-week-title {
+    font-size: 9.5pt;
+    font-weight: 800;
+    color: #0f172a;
   }
 
-  .week-title {
-    font-family: 'Montserrat', sans-serif !important;
-    font-size: 12pt !important;
-    color: #0a192f !important;
-    font-weight: 800 !important;
+  .print-week-focus {
+    font-size: 8pt;
+    color: #334155;
+    margin-top: 2px;
   }
 
-  .week-focus-desc {
-    font-size: 8.5pt !important;
-    color: #334155 !important;
+  /* ==========================================================================
+     TABELA DIAGRAMADA DO CRONOGRAMA
+     ========================================================================== */
+  .print-week-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8pt;
+    border: 1px solid #cbd5e1;
   }
 
-  .focus-label {
-    color: #b45309 !important;
+  .print-week-table thead {
+    display: table-header-group;
   }
 
-  .week-progress-area {
-    display: none !important;
+  .print-week-table th {
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 7.5pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 5px 6px;
+    border: 1px solid #cbd5e1;
+    border-bottom: 1.5pt solid #0f172a;
+    text-align: left;
   }
 
-  /* Grid de Missões / Dias */
-  .week-days-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
+  .print-week-table td {
+    padding: 5px 6px;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+    color: #1e293b;
+    line-height: 1.3;
   }
 
-  .day-card {
-    background: #f8fafc !important;
-    border: 1px solid #cbd5e1 !important;
-    box-shadow: none !important;
-    padding: 9px !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .day-number-badge {
-    font-size: 9.5pt !important;
-    background: #fef3c7 !important;
-    color: #92400e !important;
-    border: 1px solid #fde68a !important;
-    font-weight: 900 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .disc-tag {
-    font-size: 7.5pt !important;
-    background: #e2e8f0 !important;
-    color: #0f172a !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .day-theme-title {
-    font-family: 'Montserrat', sans-serif !important;
-    font-size: 9.5pt !important;
-    font-weight: 800 !important;
-    color: #0a192f !important;
-    margin: 5px 0 !important;
-  }
-
-  .day-task-block {
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    border-left: 3px solid #c89b3c !important;
-    padding: 5px 7px !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  .task-title {
-    font-size: 8pt !important;
-    color: #92400e !important;
-    font-weight: 800 !important;
-  }
-
-  .task-content {
-    font-size: 8.5pt !important;
-    color: #1e293b !important;
-  }
-
-  .day-footer-meta {
-    font-size: 8pt !important;
-    color: #475569 !important;
-    border-top: 1px solid #e2e8f0 !important;
-    padding-top: 5px !important;
-  }
-
-  /* Simulador de Notas na Impressão */
-  .sim-score-board {
-    position: static !important;
-    background: #ffffff !important;
-    border: 2px solid #c89b3c !important;
-    box-shadow: none !important;
-    padding: 12px !important;
-    margin-bottom: 16px !important;
-    page-break-inside: avoid;
-  }
-
-  .sim-score-huge {
-    color: #c89b3c !important;
-    font-size: 32pt !important;
-  }
-
-  .sim-discipline-row {
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    padding: 6px 10px !important;
-    page-break-inside: avoid;
-  }
-
-  .sim-discipline-name {
-    font-size: 10pt !important;
-    color: #0a192f !important;
-  }
-
-  .sim-score-control {
-    background: transparent !important;
-    border: none !important;
-  }
-
-  .sim-score-val {
-    font-size: 11pt !important;
-    color: #0a192f !important;
-    font-weight: 800 !important;
-  }
-
-  /* Raio-X das 20 Matérias */
-  .raiox-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-  }
-
-  .raiox-card {
-    background: #ffffff !important;
-    border: 1px solid #cbd5e1 !important;
-    box-shadow: none !important;
-    padding: 10px !important;
+  .print-week-table tr {
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  .raiox-title {
-    color: #0a192f !important;
-    font-size: 11pt !important;
+  .print-week-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
   }
 
-  .raiox-list {
-    color: #334155 !important;
-    font-size: 8.5pt !important;
+  /* Largura e Alinhamento das Colunas */
+  .col-day {
+    width: 8%;
+    white-space: nowrap;
+  }
+
+  .col-disc {
+    width: 20%;
+  }
+
+  .col-theme {
+    width: 32%;
+  }
+
+  .col-law {
+    width: 26%;
+  }
+
+  .col-quest {
+    width: 8%;
+    white-space: nowrap;
+  }
+
+  .col-check {
+    width: 6%;
+    white-space: nowrap;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .print-group-tag {
+    display: inline-block;
+    font-size: 7pt;
+    font-weight: 700;
+    color: #475569;
+    margin-top: 2px;
+  }
+
+  .print-theme-title {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .print-review-notes {
+    font-size: 7.5pt;
+    color: #475569;
+    margin-top: 3px;
+    font-style: italic;
+    background: #f8fafc;
+    padding: 2px 4px;
+    border-radius: 2px;
+    border-left: 2px solid #cbd5e1;
+  }
+
+  .print-check-box {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid #64748b;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  .print-check-done {
+    font-size: 7.5pt;
+    font-weight: 800;
+    color: #15803d;
+    background: #dcfce7;
+    border: 1px solid #86efac;
+    padding: 1px 4px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* Linha Especial do Simulado */
+  tr.row-simulado {
+    background-color: #fefce8 !important;
+    border-top: 1.5pt solid #ca8a04;
+    border-bottom: 1.5pt solid #ca8a04;
+  }
+
+  .print-sim-time {
+    font-size: 7pt;
+    color: #854d0e;
+    font-weight: 600;
+  }
+
+  .print-sim-score-box {
+    font-size: 7.5pt;
+    font-weight: 700;
+    color: #854d0e;
+    border: 1px dashed #ca8a04;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: #fffbeb;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  /* Linha de Missão Concluída no App */
+  tr.row-done td {
+    color: #64748b;
   }
 }

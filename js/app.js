@@ -132,6 +132,7 @@ class FaleiroOABApp {
     this.renderCoachTatico();
     this.renderTodaySpotlight();
     this.renderSchedule();
+    this.renderPrintSchedule();
     this.renderRaioX();
     this.renderSimulados();
     this.updateGlobalProgress();
@@ -148,6 +149,11 @@ class FaleiroOABApp {
     // Sincronizar input da data da prova no modal
     const inputExamDate = document.getElementById("inputExamDate");
     if (inputExamDate) inputExamDate.value = this.examDate;
+
+    // Sincronizar impressão diagramada para atalhos do navegador (Ctrl+P / Cmd+P)
+    window.addEventListener("beforeprint", () => {
+      this.renderPrintSchedule();
+    });
   }
 
   // --- NAVEGAÇÃO ENTRE ABAS ---
@@ -186,6 +192,7 @@ class FaleiroOABApp {
     this.renderCoachTatico();
     this.renderTodaySpotlight();
     this.renderSchedule();
+    this.renderPrintSchedule();
     this.updateGlobalProgress();
     window.showToast(`Plano alterado para ${days} Dias com sucesso!`);
   }
@@ -809,6 +816,7 @@ class FaleiroOABApp {
     this.renderCoachTatico();
     this.renderTodaySpotlight();
     this.renderSchedule();
+    this.renderPrintSchedule();
   }
 
   // Construtor do Card de Semana com suas Missões
@@ -1071,6 +1079,7 @@ class FaleiroOABApp {
     this.renderCoachTatico();
     this.renderTodaySpotlight();
     this.renderSchedule();
+    this.renderPrintSchedule();
   }
 
   toggleNotesArea(dayNumber) {
@@ -1506,26 +1515,112 @@ class FaleiroOABApp {
     localStorage.removeItem("faleiro_oab_theme");
   }
 
+  // --- RENDERIZAÇÃO DO CRONOGRAMA DIAGRAMADO PARA IMPRESSÃO / PDF ---
+  renderPrintSchedule() {
+    const printContainer = document.getElementById("printScheduleSection");
+    if (!printContainer) return;
+
+    const schedule = this.getCurrentScheduleData();
+    const totalDays = schedule.reduce((acc, w) => acc + w.days.length, 0);
+    const completedCount = Array.from(this.completedDays).filter(dayNum => {
+      return schedule.some(w => w.days.some(d => d.day === dayNum));
+    }).length;
+    const pct = totalDays > 0 ? Math.round((completedCount / totalDays) * 100) : 0;
+
+    let html = `
+      <div class="print-doc-header">
+        <div class="print-doc-brand">
+          <div class="print-doc-sup">PROFESSOR FALEIRO • 48º EXAME DE ORDEM UNIFICADO (FGV)</div>
+          <h1 class="print-doc-title">CRONOGRAMA ESTRATÉGICO DE ESTUDOS (1ª FASE OAB)</h1>
+          <div class="print-doc-sub">Plano Diário ${this.planDuration} Dias • Prova Oficial em 20 de Dezembro de 2026 • Meta: 40+ Acertos</div>
+        </div>
+        <div class="print-student-meta">
+          <div class="print-meta-field"><strong>Aluno(a):</strong> ____________________________________________________________________</div>
+          <div class="print-meta-row">
+            <span><strong>Data de Início:</strong> ____/____/________</span>
+            <span><strong>Data da Prova:</strong> 20/12/2026</span>
+            <span><strong>Progresso Atual:</strong> ${completedCount} de ${totalDays} missões concluídas (${pct}%)</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    schedule.forEach(weekData => {
+      const cleanTitle = weekData.title.replace(/^Semana\s*\d+\s*:\s*/i, "").trim();
+      html += `
+        <div class="print-week-block">
+          <div class="print-week-header">
+            <div class="print-week-title">
+              SEMANA ${String(weekData.week).padStart(2, '0')}: ${cleanTitle.toUpperCase()}
+            </div>
+            ${weekData.focus ? `<div class="print-week-focus"><strong>Foco Estratégico FGV:</strong> ${weekData.focus}</div>` : ''}
+          </div>
+
+          <table class="print-week-table">
+            <thead>
+              <tr>
+                <th class="col-day">Dia</th>
+                <th class="col-disc">Disciplina</th>
+                <th class="col-theme">Tema / Assunto Tático</th>
+                <th class="col-law">Legislação & Artigos (Lei Seca)</th>
+                <th class="col-quest text-center">Meta FGV</th>
+                <th class="col-check text-center">Check</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      weekData.days.forEach(d => {
+        const isDone = this.completedDays.has(d.day);
+        const disciplinesStr = d.disciplines ? d.disciplines.join(" + ") : "";
+        const groupStr = d.group && d.group !== "ALL" ? `Grupo ${d.group}` : "";
+        const isSimulado = (d.disciplines && d.disciplines.includes("Simulado")) || (d.theme && d.theme.toLowerCase().includes("simulado"));
+
+        html += `
+          <tr class="${isDone ? 'row-done' : ''} ${isSimulado ? 'row-simulado' : ''}">
+            <td class="col-day text-center">
+              <strong>Dia ${String(d.day).padStart(2, '0')}</strong>
+            </td>
+            <td class="col-disc">
+              <strong>${disciplinesStr}</strong>
+              ${groupStr ? `<br><span class="print-group-tag">${groupStr}</span>` : ''}
+            </td>
+            <td class="col-theme">
+              <div class="print-theme-title">${d.theme}</div>
+              ${d.reviewNotes ? `<div class="print-review-notes">💡 ${d.reviewNotes}</div>` : ''}
+            </td>
+            <td class="col-law">
+              ${d.lawReading || 'Resolução prática e revisão de questões'}
+            </td>
+            <td class="col-quest text-center">
+              ${isSimulado ? '<strong>80 Qs</strong><div class="print-sim-time">5 Horas</div>' : `<strong>${d.questionsGoal}</strong> Qs`}
+            </td>
+            <td class="col-check text-center">
+              ${isDone 
+                ? '<span class="print-check-done">✓ Feito</span>' 
+                : (isSimulado ? '<div class="print-sim-score-box">Nota: ___/80</div>' : '<span class="print-check-box"></span>')
+              }
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+    });
+
+    printContainer.innerHTML = html;
+  }
+
   // --- EXPORTAR / IMPRIMIR EM PDF ---
   printPDF() {
-    const prevWeekFilter = this.selectedWeekFilter;
-    const prevGroupFilter = this.selectedGroupFilter;
-    const prevStatusFilter = this.selectedStatusFilter;
-
-    this.selectedWeekFilter = "ALL";
-    this.selectedGroupFilter = "ALL";
-    this.selectedStatusFilter = "ALL";
-    this.renderSchedule();
-
+    this.renderPrintSchedule();
     setTimeout(() => {
       window.print();
-      setTimeout(() => {
-        this.selectedWeekFilter = prevWeekFilter;
-        this.selectedGroupFilter = prevGroupFilter;
-        this.selectedStatusFilter = prevStatusFilter;
-        this.renderSchedule();
-      }, 1000);
-    }, 300);
+    }, 150);
   }
 
   // --- RESETAR PROGRESSO ---
@@ -1546,6 +1641,7 @@ class FaleiroOABApp {
       this.renderCoachTatico();
       this.renderTodaySpotlight();
       this.renderSchedule();
+      this.renderPrintSchedule();
       this.updateGlobalProgress();
       window.showToast("Progresso resetado com sucesso.");
     }

@@ -3558,3 +3558,9 @@ body {
     padding: 12px;
   }
 }
+
+/* Container de impressão limpo (exibido exclusivamente na impressão) */
+#printScheduleSection,
+.print-only-schedule {
+  display: none !important;
+}

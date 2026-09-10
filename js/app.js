@@ -7,7 +7,7 @@
 class FaleiroOABApp {
   constructor() {
     this.currentTab = "cronograma";
-    this.planDuration = 60; // 60 ou 90 dias
+    this.planDuration = 90; // Padrão 90 dias (13 semanas), perfeito para os 101 dias até 20/dez/2026
     this.completedDays = new Set();
     this.daySubtasks = {}; // { [day]: { law: boolean, questions: boolean } }
     this.dayNotes = {};
@@ -63,6 +63,8 @@ class FaleiroOABApp {
     const savedDuration = localStorage.getItem("faleiro_oab_plan_duration");
     if (savedDuration && (savedDuration === "60" || savedDuration === "90")) {
       this.planDuration = parseInt(savedDuration, 10);
+    } else {
+      this.planDuration = 90; // Padrão 90 dias ideal para a janela do 48º Exame
     }
 
     // Carregar data da prova
@@ -216,14 +218,14 @@ class FaleiroOABApp {
         if (subtextEl) {
           const weeks = Math.floor(diffDays / 7);
           const remainingDays = diffDays % 7;
-          subtextEl.textContent = `Aproximadamente ${weeks} semanas e ${remainingDays} dias para o grande dia da batalha.`;
+          subtextEl.textContent = `Aproximadamente ${weeks} semanas e ${remainingDays} dias para a prova oficial da 1ª Fase (20/12/2026).`;
         }
       } else if (diffDays === 0) {
         countdownEl.textContent = "0";
-        if (subtextEl) subtextEl.textContent = "🔥 É HOJE! Prepare os cavalos para a aprovação na 1ª Fase!";
+        if (subtextEl) subtextEl.textContent = "🔥 É HOJE! Dia da batalha no 48º Exame de Ordem. Rumo aos 40+!";
       } else {
         countdownEl.textContent = "Concluído";
-        if (subtextEl) subtextEl.textContent = "Exame finalizado. Rumo à 2ª Fase OAB!";
+        if (subtextEl) subtextEl.textContent = "1ª Fase finalizada. Rumo à 2ª Fase OAB!";
       }
     };
 
@@ -269,7 +271,7 @@ class FaleiroOABApp {
       const daysNeeded = Math.ceil(remainingMissions / missionsPerDay);
       if (daysNeeded < diffDays) {
         const margin = diffDays - daysNeeded;
-        paceDescription = `🔥 Ritmo excelente! Você concluirá 100% do edital com ${margin} dias de folga para revisões finais de véspera.`;
+        paceDescription = `🔥 Ritmo excelente! Você concluirá 100% do edital com ${margin} dias de folga para revisões finais antes de 20/dezembro.`;
       } else {
         paceDescription = `Ritmo firme! Faltam ${remainingMissions} missões para cobrir todo o cronograma.`;
       }
@@ -284,20 +286,20 @@ class FaleiroOABApp {
 
     if (diffDays <= 7) {
       phaseBadge = "badge-phase-critical";
-      phaseTitle = "🔥 VÉSPERA DA BATALHA • SEMANA DECISIVA";
+      phaseTitle = "🔥 VÉSPERA DA BATALHA • SEMANA DECISIVA DO 48º EXAME";
       phaseAdvice = "Proibido estudar matéria nova! O cronograma recomenda foco 100% na revisão dos 8 pontos de Ética (Estatuto e CED), súmulas vinculantes e descanso mental.";
     } else if (diffDays <= 20) {
       phaseBadge = "badge-phase-final";
-      phaseTitle = "⚡ MODO RETA FINAL ATIVADO (Últimos 20 Dias)";
-      phaseAdvice = "Fase de fixação cirúrgica: 80% do tempo deve ser direcionado para resolução de questões comentadas da FGV e leitura dos 100 Artigos de Ouro.";
+      phaseTitle = "⚡ RETA FINAL DO 48º EXAME (Últimos 20 Dias)";
+      phaseAdvice = "Fase de fixação cirúrgica: 80% do tempo direcionado para resolução de questões comentadas da FGV e leitura dos Artigos de Ouro do Grupo A.";
     } else if (diffDays <= 45) {
       phaseBadge = "badge-phase-speed";
-      phaseTitle = "🎯 FASE DE ACELERAÇÃO & DOMÍNIO DO GRUPO A";
+      phaseTitle = "🎯 FASE DE ACELERAÇÃO & DOMÍNIO DO GRUPO A (53 PONTOS)";
       phaseAdvice = "Garanta presença total nas matérias do Grupo A (Ética, Constitucional, Civil, Processo Civil, Penal e Trabalho). Elas sozinhas colocam 53 pontos na sua mão!";
     } else {
       phaseBadge = "badge-phase-base";
-      phaseTitle = "📚 FASE DE FUNDAMENTAÇÃO TÁTICA";
-      phaseAdvice = "Construa o hábito inegociável: cumpra 1 missão diária com leitura atenta dos artigos indicados e resolução da meta de 25 questões.";
+      phaseTitle = "📚 RUMO AO 48º EXAME DE ORDEM (20 DE DEZEMBRO)";
+      phaseAdvice = `Você tem ${diffDays} dias até a prova oficial em 20/12/2026. Com o cronograma de 90 dias, você cumpre 1 missão por dia e conclui todo o edital com folga para a reta final!`;
     }
 
     // Diagnóstico do Último Simulado

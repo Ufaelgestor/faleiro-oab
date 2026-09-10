@@ -17,7 +17,7 @@ class FaleiroOABApp {
     this.selectedStatusFilter = "ALL";
     this.viewMode = "vitrine"; // "vitrine" (padrão blocos), "week_detail" (semana aberta), "all" (todas)
     this.activeWeekNumber = 1;
-    this.examDate = "2026-11-22"; // Data aproximada do próximo exame FGV
+    this.examDate = "2026-12-20"; // Data oficial da 1ª Fase do 48º Exame de Ordem Unificado (FGV)
     this.startDate = ""; // Data de início dos estudos
     this.pomodoroInterval = null;
     this.pomodoroTime = 25 * 60; // 25 min em segundos
@@ -68,7 +68,12 @@ class FaleiroOABApp {
     // Carregar data da prova
     const savedDate = localStorage.getItem("faleiro_oab_exam_date");
     if (savedDate) {
-      this.examDate = savedDate;
+      if (savedDate === "2026-11-22") {
+        this.examDate = "2026-12-20";
+        localStorage.setItem("faleiro_oab_exam_date", "2026-12-20");
+      } else {
+        this.examDate = savedDate;
+      }
     }
 
     // Carregar data de início

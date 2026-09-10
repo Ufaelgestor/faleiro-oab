@@ -70,21 +70,7 @@
   --transition: all 0.2s ease-out;
 }
 
-/* Tema Claro (Inspirado no Papel Nobre das Apostilas Faleiro) */
-body.theme-light {
-  --bg-obsidian: #f8fafc;
-  --bg-surface: #f1f5f9;
-  --bg-card: #ffffff;
-  --bg-card-hover: #ffffff;
-  --bg-card-elevated: #ffffff;
-  --border-color: rgba(15, 23, 42, 0.1);
-  --border-color-gold: rgba(200, 155, 60, 0.45);
-  --text-main: #0a0f1d;
-  --text-muted: #334155;
-  --text-dim: #64748b;
-  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
-  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.1);
-}
+
 
 /* Reset e Base - Limpo, Sofisticado e sem Ruído */
 *, *::before, *::after {
@@ -117,10 +103,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body.theme-light {
-  background-color: #f8fafc;
-  background-image: radial-gradient(at 0% 0%, rgba(223, 183, 108, 0.05) 0px, transparent 40%);
-}
 
 /* Faixa lateral dourada nobre */
 .app-left-stripe {
@@ -238,11 +220,6 @@ body.theme-light {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 900;
-}
-
-body.theme-light .brand-title-oab {
-  color: var(--bg-obsidian);
-  -webkit-text-fill-color: var(--bg-obsidian);
 }
 
 .brand-subtitle {
@@ -1363,37 +1340,6 @@ body.theme-light .brand-title-oab {
     width: 16px;
     height: 16px;
   }
-}
-
-/* Tema Claro */
-body.theme-light .vitrine-week-card {
-  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-}
-
-body.theme-light .vitrine-week-card:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), 0 0 16px rgba(223, 183, 108, 0.3);
-}
-
-body.theme-light .module-cover-title {
-  color: #0f172a;
-  text-shadow: none;
-}
-
-body.theme-light .module-cover-bg-glow {
-  background: radial-gradient(circle, rgba(223, 183, 108, 0.22) 0%, rgba(223, 183, 108, 0) 70%);
-}
-
-body.theme-light .module-cover-focus {
-  color: #475569;
-}
-
-body.theme-light .cover-disc-tag {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.08);
-  color: #475569;
 }
 
 /* ==========================================================================

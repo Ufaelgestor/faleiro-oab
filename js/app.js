@@ -107,11 +107,9 @@ class FaleiroOABApp {
       this.simuladosList = [];
     }
 
-    // Carregar tema
-    const savedTheme = localStorage.getItem("faleiro_oab_theme");
-    if (savedTheme === "light") {
-      document.body.classList.add("theme-light");
-    }
+    // Tema escuro fixo oficial (remove resquícios de modo claro)
+    document.body.classList.remove("theme-light");
+    localStorage.removeItem("faleiro_oab_theme");
   }
 
   saveAll() {
@@ -1502,11 +1500,10 @@ class FaleiroOABApp {
     } catch (e) {}
   }
 
-  // --- TEMA DARK / LIGHT ---
+  // --- TEMA ESCURO FIXO OFICIAL ---
   toggleTheme() {
-    const isLight = document.body.classList.toggle("theme-light");
-    localStorage.setItem("faleiro_oab_theme", isLight ? "light" : "dark");
-    window.showToast(isLight ? "Tema Claro ativado" : "Tema Escuro ativado");
+    document.body.classList.remove("theme-light");
+    localStorage.removeItem("faleiro_oab_theme");
   }
 
   // --- EXPORTAR / IMPRIMIR EM PDF ---

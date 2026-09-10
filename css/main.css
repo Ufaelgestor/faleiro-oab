@@ -1745,9 +1745,9 @@ body.theme-light .cover-disc-tag {
   }
 }
 
-/* Card de Simulado/Revisão e Fechamento expande pelas 2 colunas harmoniosamente */
+/* Quando a semana tem número ímpar de missões (ex: 7 missões), apenas a última missão (Simulado) expande pelas 2 colunas */
 @media (min-width: 861px) {
-  .day-card-milestone {
+  .week-days-grid .day-card:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
 }
@@ -1777,6 +1777,7 @@ body.theme-light .cover-disc-tag {
   background: rgba(16, 185, 129, 0.04);
 }
 
+.day-card-simulado,
 .day-card-milestone {
   border: 1px solid rgba(223, 183, 108, 0.45);
   background: linear-gradient(135deg, rgba(223, 183, 108, 0.08) 0%, rgba(16, 25, 46, 0.65) 100%);

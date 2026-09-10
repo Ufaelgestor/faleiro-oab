@@ -921,14 +921,13 @@ class FaleiroOABApp {
       const subtasks = this.daySubtasks[dayItem.day] || { law: isDone, questions: isDone };
       const groupBadgeClass = `badge-group-${dayItem.group.toLowerCase()}`;
 
-      const isMilestone = (
-        dayItem.disciplines.some(d => d.toLowerCase().includes("simulado") || d.toLowerCase().includes("revisão")) ||
-        dayItem.theme.toLowerCase().includes("simulado") ||
-        dayItem.theme.toLowerCase().includes("revisão geral")
+      const isSimulado = (
+        dayItem.disciplines.some(d => d.toLowerCase().includes("simulado")) ||
+        dayItem.theme.toLowerCase().includes("simulado")
       );
 
       const dayCard = document.createElement("div");
-      dayCard.className = `day-card ${isDone ? "completed" : ""} ${isMilestone ? "day-card-milestone" : ""}`;
+      dayCard.className = `day-card ${isDone ? "completed" : ""} ${isSimulado ? "day-card-simulado" : ""}`;
       dayCard.id = `day-card-${dayItem.day}`;
 
       const discTagsHtml = dayItem.disciplines.map(d => {
@@ -937,10 +936,10 @@ class FaleiroOABApp {
       }).join("");
 
       dayCard.innerHTML = `
-        ${isMilestone ? `
+        ${isSimulado ? `
           <div class="milestone-ribbon">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <span>MARCO DE CONSOLIDAÇÃO DO BLOCO</span>
+            <span>SIMULADO DIAGNÓSTICO OFICIAL FGV</span>
           </div>
         ` : ''}
 

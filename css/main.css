@@ -1467,93 +1467,272 @@ body.theme-light .cover-disc-tag {
    ========================================================================== */
 
 .schedule-week-card {
-  background: var(--bg-card);
+  background: rgba(10, 16, 30, 0.65);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  margin-bottom: 24px;
-  padding: 20px 22px;
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  margin-bottom: 28px;
+  padding: 24px;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.45);
 }
 
-.week-header {
+/* Header Executivo do Módulo da Semana (Dashboard Hero) */
+.week-header-dashboard {
+  margin-bottom: 22px;
+}
+
+.week-header-main-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 14px;
+  gap: 20px;
+  flex-wrap: wrap;
   margin-bottom: 18px;
-  gap: 16px;
 }
 
-.week-title-area {
+.week-header-info-col {
   flex: 1;
+  min-width: 290px;
 }
 
-.week-pill-row {
+.week-meta-badges {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.week-pill {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--gold-subtle);
-  border: 1px solid var(--border-color-gold);
+.week-module-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(223, 183, 108, 0.1);
+  border: 1px solid rgba(223, 183, 108, 0.35);
   color: var(--gold-primary);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
-.week-done-badge {
+.module-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-primary);
+  box-shadow: 0 0 8px rgba(223, 183, 108, 0.8);
+}
+
+.week-missions-count-badge {
   font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 4px 9px;
+  border-radius: var(--radius-full);
+}
+
+.week-disciplines-summary {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.disc-summary-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.week-heading-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.week-emblem-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(223, 183, 108, 0.08);
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-primary);
+  flex-shrink: 0;
+}
+
+.week-title-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.week-clean-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+}
+
+.week-subtitle-tag {
+  font-size: 12px;
   color: var(--text-dim);
   font-weight: 500;
 }
 
-.week-title {
-  font-family: var(--font-heading);
-  font-size: 16px;
+.week-header-actions-col {
+  min-width: 270px;
+}
+
+.week-stats-card {
+  background: rgba(6, 10, 18, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.week-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.week-stats-label {
+  font-size: 10px;
   font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 3px;
-  letter-spacing: -0.2px;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  text-transform: uppercase;
 }
 
-.week-focus-desc {
-  font-size: 12.5px;
-  color: var(--text-muted);
-}
-
-.focus-label {
+.week-stats-pct {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
   color: var(--gold-primary);
-  font-weight: 600;
 }
 
-.week-progress-area {
-  min-width: 140px;
-  padding-top: 10px;
+.week-stats-pct.is-complete {
+  color: #34d399;
 }
 
-.week-progress-bar {
-  height: 6px;
+.week-progress-bar-modern {
+  height: 7px;
   background: rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
 
-.week-progress-fill {
+.week-progress-fill-modern {
   height: 100%;
-  background: #34d399;
+  background: linear-gradient(90deg, #dfb76c 0%, #34d399 100%);
   border-radius: var(--radius-full);
-  transition: width 0.3s ease;
+  transition: width 0.35s ease;
 }
 
-/* Grid de Missões: 2 Colunas Respiradas (Muito menos confuso que 3 colunas) */
+.week-progress-fill-modern.glow-success {
+  background: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+}
+
+.week-stats-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.week-count-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.btn-week-batch-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid rgba(223, 183, 108, 0.35);
+  background: rgba(223, 183, 108, 0.08);
+  color: var(--gold-primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-week-batch-toggle:hover {
+  background: var(--gold-primary);
+  color: #060a12;
+  transform: translateY(-1px);
+}
+
+.btn-week-batch-toggle.is-complete {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+}
+
+.btn-week-batch-toggle.is-complete:hover {
+  background: #34d399;
+  color: #060a12;
+}
+
+.week-focus-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(223, 183, 108, 0.05);
+  border: 1px solid rgba(223, 183, 108, 0.22);
+  border-left: 3.5px solid var(--gold-primary);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+}
+
+.week-focus-icon-box {
+  color: var(--gold-primary);
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.week-focus-body {
+  flex: 1;
+}
+
+.week-focus-tag {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.week-focus-text {
+  font-size: 13.5px;
+  color: var(--text-main);
+  line-height: 1.45;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Grid de Missões: 2 Colunas Respiradas */
 .week-days-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -1566,42 +1745,65 @@ body.theme-light .cover-disc-tag {
   }
 }
 
-/* Quando a semana tem 7 missões (ímpar), a 7ª missão de fechamento/simulado expande pelas 2 colunas harmoniosamente */
+/* Card de Simulado/Revisão e Fechamento expande pelas 2 colunas harmoniosamente */
 @media (min-width: 861px) {
-  .week-days-grid .day-card:last-child:nth-child(odd) {
+  .day-card-milestone {
     grid-column: 1 / -1;
   }
 }
 
-/* Card Individual de Missão: Arejado, Elegante e Confortável */
+/* Card Individual de Missão: Arejado, Executivo e Confortável */
 .day-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(16, 25, 46, 0.45);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 16px 18px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
+  gap: 12px;
   transition: var(--transition);
   position: relative;
 }
 
 .day-card:hover {
-  border-color: rgba(223, 183, 108, 0.3);
-  background: rgba(255, 255, 255, 0.035);
-  transform: translateY(-1px);
+  border-color: rgba(223, 183, 108, 0.35);
+  background: rgba(20, 31, 56, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35);
 }
 
 .day-card.completed {
-  border-color: rgba(16, 185, 129, 0.35);
-  background: rgba(16, 185, 129, 0.03);
+  border-color: rgba(52, 211, 153, 0.4);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.day-card-milestone {
+  border: 1px solid rgba(223, 183, 108, 0.45);
+  background: linear-gradient(135deg, rgba(223, 183, 108, 0.08) 0%, rgba(16, 25, 46, 0.65) 100%);
+}
+
+.milestone-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(223, 183, 108, 0.15);
+  border: 1px solid rgba(223, 183, 108, 0.35);
+  color: var(--gold-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  align-self: flex-start;
 }
 
 .day-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
-  gap: 8px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .day-header-left {
@@ -1631,16 +1833,15 @@ body.theme-light .cover-disc-tag {
 .disc-tag {
   font-size: 11px;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2px 7px;
+  padding: 2.5px 8px;
   border-radius: 4px;
-  color: var(--text-main);
+  letter-spacing: -0.1px;
 }
 
 .day-group-tag {
   font-size: 10px;
   font-weight: 700;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
 }
 
@@ -1668,21 +1869,14 @@ body.theme-light .cover-disc-tag {
   gap: 8px;
 }
 
-.status-done-pill {
-  font-size: 10px;
-  font-weight: 700;
-  color: #34d399;
-  background: rgba(52, 211, 153, 0.12);
-  border: 1px solid rgba(52, 211, 153, 0.3);
-  padding: 2px 7px;
-  border-radius: var(--radius-full);
-}
-
 .btn-toggle-mission {
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
   font-family: var(--font-heading);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 600;
   border: 1px solid var(--border-color);
   background: rgba(255, 255, 255, 0.04);
@@ -1693,25 +1887,32 @@ body.theme-light .cover-disc-tag {
 
 .btn-toggle-mission:hover {
   border-color: var(--gold-primary);
-  color: var(--text-main);
+  color: var(--gold-primary);
+  background: var(--gold-subtle);
 }
 
 .btn-toggle-mission.active {
-  background: var(--success);
-  border-color: var(--success);
+  background: #34d399;
+  border-color: #34d399;
   color: #060a12;
   font-weight: 700;
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.35);
+}
+
+.btn-toggle-check {
+  font-size: 12px;
+  font-weight: 800;
 }
 
 /* Título do Tema da Missão: Suave e Sem Agressão */
 .day-theme-title {
   font-family: var(--font-heading);
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-main);
-  margin-bottom: 12px;
   line-height: 1.4;
-  letter-spacing: -0.1px;
+  letter-spacing: -0.15px;
+  margin: 0;
 }
 
 /* Checklist de Micro-tarefas */
@@ -1719,25 +1920,28 @@ body.theme-light .cover-disc-tag {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 12px;
-  flex: 1;
 }
 
 .checklist-item {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  padding: 7px 10px;
+  gap: 10px;
+  padding: 9px 12px;
   border-radius: var(--radius-sm);
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(6, 10, 18, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
   transition: var(--transition);
 }
 
 .checklist-item:hover {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(223, 183, 108, 0.25);
+}
+
+.checklist-item.checked {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(52, 211, 153, 0.25);
 }
 
 .checklist-item input {
@@ -1748,8 +1952,8 @@ body.theme-light .cover-disc-tag {
 }
 
 .checklist-custom-check {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   border-radius: 4px;
   border: 1.5px solid rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.03);
@@ -1764,85 +1968,142 @@ body.theme-light .cover-disc-tag {
 }
 
 .checklist-item.checked .checklist-custom-check {
-  background: var(--success);
-  border-color: var(--success);
+  background: #34d399;
+  border-color: #34d399;
 }
 
 .checklist-item.checked .checklist-custom-check::after {
   content: "";
   position: absolute;
-  left: 4px;
+  left: 4.5px;
   top: 1.5px;
-  width: 4.5px;
-  height: 8px;
+  width: 5px;
+  height: 9px;
   border: solid #060a12;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
 
-.checklist-label-text {
-  font-size: 12.5px;
+.checklist-content-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.checklist-task-type {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+}
+
+.checklist-item.checked .checklist-task-type {
+  color: #34d399;
+}
+
+.checklist-task-desc {
+  font-size: 13px;
   color: var(--text-muted);
   line-height: 1.45;
 }
 
-.checklist-label-text strong {
+.checklist-task-desc strong {
   color: var(--text-main);
   font-weight: 600;
 }
 
-.checklist-item.checked .checklist-label-text {
+.checklist-item.checked .checklist-task-desc {
   color: var(--text-dim);
   text-decoration: line-through;
 }
 
+/* Dica Tática da FGV (Callout Box) */
+.day-tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(223, 183, 108, 0.05);
+  border-left: 3px solid var(--gold-primary);
+  border-top: 1px solid rgba(223, 183, 108, 0.12);
+  border-right: 1px solid rgba(223, 183, 108, 0.12);
+  border-bottom: 1px solid rgba(223, 183, 108, 0.12);
+}
+
+.day-tip-icon {
+  font-size: 14px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.day-tip-content {
+  flex: 1;
+}
+
+.day-tip-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--gold-primary);
+  margin-bottom: 2px;
+}
+
+.day-tip-body {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Footer com Anotações */
 .day-card-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  gap: 8px;
-}
-
-.day-note-preview {
-  flex: 1;
-  overflow: hidden;
-}
-
-.day-tip-text {
-  font-size: 11.5px;
-  color: var(--text-dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .btn-toggle-notes {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   color: var(--text-dim);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
   transition: var(--transition);
 }
 
-.btn-toggle-notes:hover {
+.btn-toggle-notes:hover, .btn-toggle-notes.has-notes {
   color: var(--gold-primary);
   background: var(--gold-subtle);
   border-color: var(--border-color-gold);
 }
 
+.note-saved-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
 .day-notes-area {
   display: none;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .day-notes-area.visible {
@@ -1851,8 +2112,8 @@ body.theme-light .cover-disc-tag {
 
 .day-notes-input {
   width: 100%;
-  height: 64px;
-  background: var(--bg-surface);
+  height: 68px;
+  background: rgba(6, 10, 18, 0.65);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 8px 10px;
@@ -1861,6 +2122,12 @@ body.theme-light .cover-disc-tag {
   font-family: inherit;
   resize: vertical;
   outline: none;
+  transition: var(--transition);
+}
+
+.day-notes-input:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 8px rgba(223, 183, 108, 0.2);
 }
 
 .day-notes-input:focus {
@@ -2970,6 +3237,39 @@ body.theme-light .cover-disc-tag {
     min-height: 38px;
   }
 
+  /* Header do Módulo da Semana no Celular */
+  .schedule-week-card {
+    padding: 16px 14px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+  }
+  .week-header-main-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .week-header-info-col {
+    min-width: 0;
+    width: 100%;
+  }
+  .week-header-actions-col {
+    min-width: 0;
+    width: 100%;
+  }
+  .week-clean-title {
+    font-size: 17px;
+  }
+  .week-emblem-badge {
+    width: 42px;
+    height: 42px;
+  }
+  .week-focus-banner {
+    padding: 10px 12px;
+  }
+  .week-focus-text {
+    font-size: 12.5px;
+  }
+
   /* Cards de Missões Diárias no Celular */
   .week-days-grid {
     grid-template-columns: 1fr;
@@ -2986,17 +3286,15 @@ body.theme-light .cover-disc-tag {
   .day-header-right {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
   }
   .day-theme-title {
     font-size: 14.5px;
     line-height: 1.35;
-    margin-bottom: 12px;
   }
   .day-checklist-block {
     gap: 8px;
-    margin-bottom: 12px;
   }
   .checklist-item {
     padding: 10px 12px;
@@ -3004,13 +3302,22 @@ body.theme-light .cover-disc-tag {
     border-radius: 8px;
   }
   .checklist-custom-check {
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
     flex-shrink: 0;
   }
-  .checklist-label-text {
+  .checklist-task-type {
+    font-size: 9px;
+  }
+  .checklist-task-desc {
     font-size: 13px;
     line-height: 1.4;
+  }
+  .day-tip-card {
+    padding: 10px 12px;
+  }
+  .day-tip-body {
+    font-size: 12px;
   }
   .day-notes-input {
     font-size: 14px; /* Evita zoom forçado da tela no iOS Safari ao focar */

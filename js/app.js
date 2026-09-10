@@ -685,17 +685,17 @@ class FaleiroOABApp {
     navBar.className = "week-detail-top-nav";
     navBar.innerHTML = `
       <button type="button" class="btn-back-to-vitrine" onclick="window.app.backToVitrine()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        Voltar para a Vitrine de Semanas
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Voltar para a Vitrine de Módulos
       </button>
 
       <div class="week-detail-pager">
-        <button type="button" class="btn-pager-prev" onclick="window.app.prevWeek()" ${weekData.week <= 1 ? "disabled" : ""}>
-          ‹ Semana Anterior
+        <button type="button" class="btn-pager-prev" onclick="window.app.prevWeek()" ${weekData.week <= 1 ? "disabled" : ""} title="Módulo Anterior">
+          ‹ Módulo Anterior
         </button>
-        <span class="pager-current-label">Semana ${weekData.week} de ${schedule.length}</span>
-        <button type="button" class="btn-pager-next" onclick="window.app.nextWeek()" ${weekData.week >= schedule.length ? "disabled" : ""}>
-          Próxima Semana ›
+        <span class="pager-current-label">MÓDULO ${String(weekData.week).padStart(2, "0")} DE ${String(schedule.length).padStart(2, "0")}</span>
+        <button type="button" class="btn-pager-next" onclick="window.app.nextWeek()" ${weekData.week >= schedule.length ? "disabled" : ""} title="Próximo Módulo">
+          Próximo Módulo ›
         </button>
       </div>
     `;
@@ -714,6 +714,103 @@ class FaleiroOABApp {
       const weekCard = this.createWeekCardElement(weekData);
       if (weekCard) container.appendChild(weekCard);
     });
+  }
+
+  // Obter cores personalizadas por disciplina
+  getDisciplineColorStyle(disciplineName) {
+    if (!disciplineName) return { bg: "rgba(255, 255, 255, 0.05)", color: "#cbd5e1", border: "rgba(255, 255, 255, 0.12)" };
+    const name = disciplineName.toLowerCase();
+    if (name.includes("ética")) {
+      return { bg: "rgba(234, 179, 8, 0.12)", color: "#facc15", border: "rgba(234, 179, 8, 0.35)" };
+    }
+    if (name.includes("constitucional")) {
+      return { bg: "rgba(56, 189, 248, 0.12)", color: "#38bdf8", border: "rgba(56, 189, 248, 0.35)" };
+    }
+    if (name.includes("processo penal")) {
+      return { bg: "rgba(251, 113, 133, 0.12)", color: "#fb7185", border: "rgba(251, 113, 133, 0.35)" };
+    }
+    if (name.includes("penal")) {
+      return { bg: "rgba(248, 113, 113, 0.12)", color: "#f87171", border: "rgba(248, 113, 113, 0.35)" };
+    }
+    if (name.includes("processo civil")) {
+      return { bg: "rgba(45, 212, 191, 0.12)", color: "#2dd4bf", border: "rgba(45, 212, 191, 0.35)" };
+    }
+    if (name.includes("civil")) {
+      return { bg: "rgba(52, 211, 153, 0.12)", color: "#34d399", border: "rgba(52, 211, 153, 0.35)" };
+    }
+    if (name.includes("processo do trabalho")) {
+      return { bg: "rgba(249, 115, 22, 0.12)", color: "#f97316", border: "rgba(249, 115, 22, 0.35)" };
+    }
+    if (name.includes("trabalho")) {
+      return { bg: "rgba(251, 146, 60, 0.12)", color: "#fb923c", border: "rgba(251, 146, 60, 0.35)" };
+    }
+    if (name.includes("administrativo")) {
+      return { bg: "rgba(167, 139, 250, 0.12)", color: "#a78bfa", border: "rgba(167, 139, 250, 0.35)" };
+    }
+    if (name.includes("tributário") || name.includes("financeiro")) {
+      return { bg: "rgba(250, 204, 21, 0.12)", color: "#facc15", border: "rgba(250, 204, 21, 0.35)" };
+    }
+    if (name.includes("empresarial")) {
+      return { bg: "rgba(99, 102, 241, 0.12)", color: "#818cf8", border: "rgba(99, 102, 241, 0.35)" };
+    }
+    if (name.includes("simulado")) {
+      return { bg: "rgba(223, 183, 108, 0.16)", color: "#dfb76c", border: "rgba(223, 183, 108, 0.5)" };
+    }
+    if (name.includes("revisão")) {
+      return { bg: "rgba(192, 132, 252, 0.12)", color: "#c084fc", border: "rgba(192, 132, 252, 0.35)" };
+    }
+    if (name.includes("humanos") || name.includes("internacional")) {
+      return { bg: "rgba(6, 182, 212, 0.12)", color: "#22d3ee", border: "rgba(6, 182, 212, 0.35)" };
+    }
+    if (name.includes("filosofia")) {
+      return { bg: "rgba(168, 85, 247, 0.12)", color: "#c084fc", border: "rgba(168, 85, 247, 0.35)" };
+    }
+    if (name.includes("eleitoral")) {
+      return { bg: "rgba(16, 185, 129, 0.12)", color: "#34d399", border: "rgba(16, 185, 129, 0.35)" };
+    }
+    if (name.includes("consumidor") || name.includes("eca") || name.includes("ambiental")) {
+      return { bg: "rgba(244, 114, 182, 0.12)", color: "#f472b6", border: "rgba(244, 114, 182, 0.35)" };
+    }
+    return { bg: "rgba(255, 255, 255, 0.05)", color: "#cbd5e1", border: "rgba(255, 255, 255, 0.12)" };
+  }
+
+  // Alternar todas as missões da semana
+  toggleAllDaysInWeek(weekNumber) {
+    const schedule = this.getCurrentScheduleData();
+    const weekData = schedule.find(w => w.week === weekNumber);
+    if (!weekData) return;
+
+    const allDone = weekData.days.every(d => this.completedDays.has(d.day));
+
+    weekData.days.forEach(d => {
+      if (allDone) {
+        this.completedDays.delete(d.day);
+        if (this.daySubtasks[d.day]) {
+          this.daySubtasks[d.day].law = false;
+          this.daySubtasks[d.day].questions = false;
+        }
+      } else {
+        this.completedDays.add(d.day);
+        if (!this.daySubtasks[d.day]) {
+          this.daySubtasks[d.day] = { law: true, questions: true };
+        } else {
+          this.daySubtasks[d.day].law = true;
+          this.daySubtasks[d.day].questions = true;
+        }
+      }
+    });
+
+    if (allDone) {
+      window.showToast(`Semana ${weekNumber} desmarcada.`);
+    } else {
+      window.showToast(`🏆 Parabéns! Todas as missões do Módulo ${weekNumber} concluídas!`);
+    }
+
+    this.saveAll();
+    this.updateGlobalProgress();
+    this.renderCoachTatico();
+    this.renderTodaySpotlight();
+    this.renderSchedule();
   }
 
   // Construtor do Card de Semana com suas Missões
@@ -742,23 +839,75 @@ class FaleiroOABApp {
     const weekDoneCount = weekData.days.filter(d => this.completedDays.has(d.day)).length;
     const weekTotalCount = weekData.days.length;
     const weekPct = Math.round((weekDoneCount / weekTotalCount) * 100);
+    const cleanTitle = weekData.title.replace(/^Semana\s*\d+\s*:\s*/i, "").trim();
+    const emblemSvg = this.getWeekEmblemSvg(weekData.week);
+
+    // Disciplinas presentes no módulo
+    const weekDisciplines = Array.from(new Set(weekData.days.flatMap(d => d.disciplines || [])));
 
     weekCard.innerHTML = `
-      <div class="week-header">
-        <div class="week-title-area">
-          <div class="week-pill-row">
-            <span class="week-pill">Semana ${weekData.week}</span>
-            <span class="week-done-badge">${weekDoneCount}/${weekTotalCount} concluídos (${weekPct}%)</span>
+      <div class="week-header-dashboard">
+        <div class="week-header-main-row">
+          <div class="week-header-info-col">
+            <div class="week-meta-badges">
+              <span class="week-module-pill">
+                <span class="module-pulse-dot"></span>
+                MÓDULO ${String(weekData.week).padStart(2, "0")} • SEMANA ${String(weekData.week).padStart(2, "0")}
+              </span>
+              <span class="week-missions-count-badge">${weekTotalCount} Missões Táticas</span>
+              <div class="week-disciplines-summary">
+                ${weekDisciplines.slice(0, 3).map(disc => {
+                  const st = this.getDisciplineColorStyle(disc);
+                  return `<span class="disc-summary-pill" style="color: ${st.color}; background: ${st.bg}; border: 1px solid ${st.border};">${disc}</span>`;
+                }).join("")}
+              </div>
+            </div>
+
+            <div class="week-heading-with-icon">
+              <div class="week-emblem-badge" title="Módulo ${weekData.week}">
+                ${emblemSvg}
+              </div>
+              <div class="week-title-text-group">
+                <h2 class="week-clean-title">${cleanTitle}</h2>
+                <span class="week-subtitle-tag">Cronograma Tático FGV • 1ª Fase OAB 48</span>
+              </div>
+            </div>
           </div>
-          <h3 class="week-title">${weekData.title}</h3>
-          <p class="week-focus-desc"><span class="focus-label">Foco Estratégico:</span> ${weekData.focus}</p>
+
+          <div class="week-header-actions-col">
+            <div class="week-stats-card">
+              <div class="week-stats-header">
+                <span class="week-stats-label">PROGRESSO DO MÓDULO</span>
+                <span class="week-stats-pct ${weekPct === 100 ? 'is-complete' : ''}">${weekPct}%</span>
+              </div>
+              <div class="week-progress-bar-modern">
+                <div class="week-progress-fill-modern ${weekPct === 100 ? 'glow-success' : ''}" style="width: ${weekPct}%"></div>
+              </div>
+              <div class="week-stats-footer">
+                <span class="week-count-label">${weekDoneCount} de ${weekTotalCount} concluídas</span>
+                <button type="button" 
+                        class="btn-week-batch-toggle ${weekDoneCount === weekTotalCount ? 'is-complete' : ''}" 
+                        onclick="window.app.toggleAllDaysInWeek(${weekData.week})"
+                        title="${weekDoneCount === weekTotalCount ? 'Desmarcar todas as missões da semana' : 'Concluir todas as missões da semana'}">
+                  ${weekDoneCount === weekTotalCount ? '↺ Desmarcar Semana' : '✓ Concluir Semana'}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="week-progress-area">
-          <div class="week-progress-bar">
-            <div class="week-progress-fill" style="width: ${weekPct}%"></div>
+
+        <!-- Foco Estratégico Callout Box -->
+        <div class="week-focus-banner">
+          <div class="week-focus-icon-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </div>
+          <div class="week-focus-body">
+            <span class="week-focus-tag">FOCO ESTRATÉGICO DA FGV PARA ESTE MÓDULO</span>
+            <p class="week-focus-text">${weekData.focus}</p>
           </div>
         </div>
       </div>
+
       <div class="week-days-grid" id="week-grid-${weekData.week}"></div>
     `;
 
@@ -772,27 +921,45 @@ class FaleiroOABApp {
       const subtasks = this.daySubtasks[dayItem.day] || { law: isDone, questions: isDone };
       const groupBadgeClass = `badge-group-${dayItem.group.toLowerCase()}`;
 
+      const isMilestone = (
+        dayItem.disciplines.some(d => d.toLowerCase().includes("simulado") || d.toLowerCase().includes("revisão")) ||
+        dayItem.theme.toLowerCase().includes("simulado") ||
+        dayItem.theme.toLowerCase().includes("revisão geral")
+      );
+
       const dayCard = document.createElement("div");
-      dayCard.className = `day-card ${isDone ? "completed" : ""}`;
+      dayCard.className = `day-card ${isDone ? "completed" : ""} ${isMilestone ? "day-card-milestone" : ""}`;
       dayCard.id = `day-card-${dayItem.day}`;
 
+      const discTagsHtml = dayItem.disciplines.map(d => {
+        const st = this.getDisciplineColorStyle(d);
+        return `<span class="disc-tag" style="background: ${st.bg}; color: ${st.color}; border: 1px solid ${st.border};">${d}</span>`;
+      }).join("");
+
       dayCard.innerHTML = `
+        ${isMilestone ? `
+          <div class="milestone-ribbon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>MARCO DE CONSOLIDAÇÃO DO BLOCO</span>
+          </div>
+        ` : ''}
+
         <div class="day-card-header">
           <div class="day-header-left">
             <span class="day-number-badge">Missão ${String(dayItem.day).padStart(2, "0")}</span>
             <div class="day-disciplines-tags">
-              ${dayItem.disciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
+              ${discTagsHtml}
               <span class="day-group-tag ${groupBadgeClass}">Grupo ${dayItem.group}</span>
             </div>
           </div>
           
           <div class="day-header-right">
-            ${isDone ? '<span class="status-done-pill">✓ Concluída</span>' : ''}
             <button type="button" 
                     class="btn-toggle-mission ${isDone ? 'active' : ''}" 
                     onclick="window.app.toggleDay(${dayItem.day})"
                     title="${isDone ? 'Desmarcar missão' : 'Marcar missão como cumprida'}">
-              ${isDone ? '✓ Cumprida' : 'Concluir'}
+              <span class="btn-toggle-check">${isDone ? '✓' : '○'}</span>
+              <span class="btn-toggle-text">${isDone ? 'Concluída' : 'Concluir'}</span>
             </button>
           </div>
         </div>
@@ -806,9 +973,10 @@ class FaleiroOABApp {
                    ${subtasks.law ? 'checked' : ''} 
                    onchange="window.app.toggleSubtask(${dayItem.day}, 'law', this.checked)">
             <span class="checklist-custom-check"></span>
-            <span class="checklist-label-text">
-              <strong>📖 Legislação:</strong> ${dayItem.lawReading}
-            </span>
+            <div class="checklist-content-col">
+              <span class="checklist-task-type">📖 LEGISLAÇÃO & ARTIGOS-CHAVE</span>
+              <span class="checklist-task-desc">${dayItem.lawReading}</span>
+            </div>
           </label>
 
           <label class="checklist-item ${subtasks.questions ? 'checked' : ''}">
@@ -816,24 +984,34 @@ class FaleiroOABApp {
                    ${subtasks.questions ? 'checked' : ''} 
                    onchange="window.app.toggleSubtask(${dayItem.day}, 'questions', this.checked)">
             <span class="checklist-custom-check"></span>
-            <span class="checklist-label-text">
-              <strong>🎯 Meta Prática:</strong> Resolver ${dayItem.questionsGoal} questões FGV comentadas
-            </span>
+            <div class="checklist-content-col">
+              <span class="checklist-task-type">🎯 META PRÁTICA FGV</span>
+              <span class="checklist-task-desc">Resolver <strong>${dayItem.questionsGoal} questões FGV</strong> comentadas</span>
+            </div>
           </label>
         </div>
 
-        <div class="day-card-footer">
-          <div class="day-note-preview">
-            ${dayItem.reviewNotes ? `<span class="day-tip-text">💡 ${dayItem.reviewNotes}</span>` : ''}
+        <!-- Dica Tática FGV (Ponto de Atenção) -->
+        ${dayItem.reviewNotes ? `
+          <div class="day-tip-card">
+            <div class="day-tip-icon">💡</div>
+            <div class="day-tip-content">
+              <span class="day-tip-label">DICA TÁTICA DA FGV</span>
+              <p class="day-tip-body">${dayItem.reviewNotes}</p>
+            </div>
           </div>
-          <button type="button" class="btn-toggle-notes" onclick="window.app.toggleNotesArea(${dayItem.day})">
+        ` : ''}
+
+        <div class="day-card-footer">
+          <button type="button" class="btn-toggle-notes ${dayNote ? 'has-notes' : ''}" onclick="window.app.toggleNotesArea(${dayItem.day})">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-            ${dayNote ? 'Editar Nota' : 'Anotações'}
+            <span>${dayNote ? 'Ver Anotação' : 'Adicionar Anotações'}</span>
+            ${dayNote ? '<span class="note-saved-badge">Salvo</span>' : ''}
           </button>
         </div>
 
         <div class="day-notes-area ${dayNote ? 'visible' : ''}" id="notes-area-${dayItem.day}">
-          <textarea placeholder="Suas anotações, artigos que mais errou ou pontos de atenção desta missão..." 
+          <textarea placeholder="Suas anotações, mnemônicos ou artigos que errou nesta missão..." 
                     class="day-notes-input" 
                     onblur="window.app.saveDayNote(${dayItem.day}, this.value)">${dayNote}</textarea>
         </div>

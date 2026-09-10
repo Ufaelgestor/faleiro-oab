@@ -464,11 +464,11 @@
   </div>
 
   <!-- Modal de Backup e Sincronização de Dados -->
-  <div class="modal-overlay" id="modalBackup" onclick="if(event.target === this) window.app.closeModal('modalBackup')">
+  <div class="modal-backdrop" id="modalBackup" onclick="if(event.target === this) window.app.closeModal('modalBackup')">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>💾 Sincronização & Backup do Progresso</h3>
-        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalBackup')">&times;</button>
+        <h3 class="modal-title">💾 Sincronização & Backup do Progresso</h3>
+        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalBackup')">✕</button>
       </div>
       
       <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
@@ -510,11 +510,11 @@
   </div>
 
   <!-- Modal de Alteração de Data da Prova -->
-  <div class="modal-overlay" id="modalExamDate" onclick="if(event.target === this) window.app.closeModal('modalExamDate')">
+  <div class="modal-backdrop" id="modalExamDate" onclick="if(event.target === this) window.app.closeModal('modalExamDate')">
     <div class="modal-card" style="max-width: 440px;">
       <div class="modal-header">
-        <h3>📅 Data da sua Prova OAB</h3>
-        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalExamDate')">&times;</button>
+        <h3 class="modal-title">📅 Data da sua Prova OAB</h3>
+        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalExamDate')">✕</button>
       </div>
 
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">

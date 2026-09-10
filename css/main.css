@@ -1587,6 +1587,13 @@ body.theme-light .cover-disc-tag {
   }
 }
 
+/* Quando a semana tem 7 missões (ímpar), a 7ª missão de fechamento/simulado expande pelas 2 colunas harmoniosamente */
+@media (min-width: 861px) {
+  .week-days-grid .day-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
 /* Card Individual de Missão: Arejado, Elegante e Confortável */
 .day-card {
   background: rgba(255, 255, 255, 0.02);
@@ -2679,25 +2686,32 @@ body.theme-light .cover-disc-tag {
    MODAIS & TOAST NOTIFICATION
    ========================================================================== */
 
-.modal-backdrop {
+.modal-backdrop,
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(6, 10, 18, 0.85);
-  backdrop-filter: blur(6px);
+  background: rgba(4, 7, 14, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 99999;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: var(--transition);
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-.modal-backdrop.open {
+.modal-backdrop.open,
+.modal-overlay.open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
@@ -2705,15 +2719,19 @@ body.theme-light .cover-disc-tag {
   background: var(--bg-card-elevated);
   border: 1px solid var(--border-color-gold);
   border-radius: var(--radius-md);
-  width: 90%;
+  width: 92%;
   max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
   padding: 26px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(223, 183, 108, 0.2);
   transform: translateY(20px);
-  transition: var(--transition);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
-.modal-backdrop.open .modal-card {
+.modal-backdrop.open .modal-card,
+.modal-overlay.open .modal-card {
   transform: translateY(0);
 }
 
@@ -2808,10 +2826,14 @@ body.theme-light .cover-disc-tag {
   .app-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
   }
   .header-actions {
     width: 100%;
-    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   .hero-dashboard-grid {
     grid-template-columns: 1fr;
@@ -2845,5 +2867,263 @@ body.theme-light .cover-disc-tag {
   }
   .sim-slider-wrap {
     flex: 1;
+  }
+}
+
+/* Telas de Celular e Tablets Pequenos (< 768px) */
+@media (max-width: 768px) {
+  .app-wrapper {
+    padding: 0 12px 60px 12px;
+  }
+
+  /* Abas com rolagem horizontal fluida por toque */
+  .tabs-nav {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+    gap: 6px;
+  }
+  .tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .tab-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Painel Coach Tático no Celular */
+  .coach-tatico-panel {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+  }
+  .coach-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .coach-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* Spotlight "Sua Missão de Hoje" no Celular */
+  .spotlight-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 14px;
+    gap: 14px;
+  }
+  .spotlight-left {
+    min-width: 0;
+    width: 100%;
+  }
+  .spotlight-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-spotlight-jump,
+  .btn-spotlight-complete {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    font-size: 13px;
+  }
+
+  /* Barra de Filtros da Agenda no Celular */
+  .schedule-filters-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 10px;
+  }
+  .filters-left,
+  .filters-right {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .filter-group-sep {
+    display: none;
+  }
+  .view-mode-toggle-group {
+    width: 100%;
+    display: flex;
+  }
+  .btn-view-toggle {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  .select-week-filter {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  /* Navegação Superior do Detalhe da Semana */
+  .week-detail-top-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+  .btn-back-to-vitrine {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    min-height: 42px;
+  }
+  .week-detail-pager {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .btn-pager-prev,
+  .btn-pager-next {
+    padding: 8px 14px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+
+  /* Cards de Missões Diárias no Celular */
+  .week-days-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .day-card {
+    padding: 14px 12px;
+  }
+  .day-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .day-header-right {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .day-theme-title {
+    font-size: 14.5px;
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+  .day-checklist-block {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .checklist-item {
+    padding: 10px 12px;
+    min-height: 48px;
+    border-radius: 8px;
+  }
+  .checklist-custom-check {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .checklist-label-text {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .day-notes-input {
+    font-size: 14px; /* Evita zoom forçado da tela no iOS Safari ao focar */
+    height: 85px;
+  }
+
+  /* Modais no Celular */
+  .modal-card {
+    width: 95%;
+    padding: 20px 16px;
+    max-height: 90vh;
+  }
+  .backup-actions-grid {
+    gap: 10px;
+  }
+  .backup-action-box {
+    padding: 12px;
+  }
+}
+
+/* Smartphones Compactos (< 480px) */
+@media (max-width: 480px) {
+  .header-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .btn-header {
+    justify-content: center;
+    padding: 7px 6px;
+    font-size: 10.5px;
+  }
+
+  /* Vitrine em 2 Colunas Limpas e Modernas no Celular */
+  .vitrine-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 22px;
+  }
+  .vitrine-week-card {
+    min-height: 310px !important;
+    border-radius: 12px !important;
+  }
+  .module-cover-content {
+    padding: 10px 8px 8px !important;
+  }
+  .module-cover-top {
+    margin-bottom: 6px !important;
+  }
+  .module-cover-number {
+    font-size: 8.5px !important;
+    padding: 2px 5px !important;
+    letter-spacing: 0.5px !important;
+  }
+  .vitrine-status-badge {
+    font-size: 8px !important;
+    padding: 2px 4px !important;
+  }
+  .module-cover-emblem {
+    width: 34px !important;
+    height: 34px !important;
+    margin-bottom: 6px !important;
+  }
+  .module-cover-emblem svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  .module-cover-title {
+    font-size: 11.5px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 4px !important;
+  }
+  .module-cover-focus,
+  .module-cover-disciplines {
+    display: none !important;
+  }
+  .module-cover-bottom {
+    padding-top: 6px !important;
+  }
+  .module-cover-progress-row {
+    font-size: 9px !important;
+    margin-bottom: 3px !important;
+  }
+  .module-cover-progress-track {
+    height: 4px !important;
+    margin-bottom: 6px !important;
+  }
+  .module-cover-action {
+    font-size: 10px !important;
+  }
+  .module-cover-action-arrow {
+    width: 18px !important;
+    height: 18px !important;
   }
 }

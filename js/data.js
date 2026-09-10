@@ -1254,76 +1254,911 @@ const SIMULATOR_PRESETS = [
   }
 ];
 
-// Função geradora do Cronograma de 90 Dias (Extensivo Completo)
+// Função geradora do Cronograma de 90 Dias (Extensivo Completo e Cirúrgico)
 function getSchedule90Days() {
-  const weeks = [];
-  const topics = [
-    { week: 1, title: "Semana 1: Fundamentos de Ética e Constitucional I", disc: "Ética Profissional e Dir. Constitucional", group: "A", focus: "Estatuto da OAB Arts. 1-14 e CF Art. 5º" },
-    { week: 2, title: "Semana 2: Prerrogativas da Advocacia & CF Remédios", disc: "Ética Profissional e Dir. Constitucional", group: "A", focus: "Prerrogativas Art. 7º e Controle de Constitucionalidade" },
-    { week: 3, title: "Semana 3: Direito Penal - Teoria Geral do Crime", disc: "Direito Penal", group: "A", focus: "CP Arts. 1 a 25 (Ilicitude, Culpabilidade, Tentativa/Consumação)" },
-    { week: 4, title: "Semana 4: Processo Penal - Inquérito, Ação e Prisões", disc: "Processo Penal", group: "A", focus: "CPP Arts. 4 a 62 e Prisão Preventiva / Cautelares" },
-    { week: 5, title: "Semana 5: Direito Civil - Parte Geral e Obrigações", disc: "Direito Civil", group: "A", focus: "CC Arts. 1 a 184 e Defeitos do Negócio Jurídico" },
-    { week: 6, title: "Semana 6: Processo Civil - Petição Inicial e Tutelas", disc: "Processo Civil", group: "A", focus: "CPC Arts. 294 a 346 (Tutelas de Urgência/Evidência)" },
-    { week: 7, title: "Semana 7: Direito do Trabalho & Reforma Trabalhista", disc: "Direito do Trabalho", group: "A", focus: "CLT Arts. 2, 3, 58 a 75 e Rescisão Contratual" },
-    { week: 8, title: "Semana 8: Processo do Trabalho & Audiência / Recursos", disc: "Processo do Trabalho", group: "A", focus: "CLT Arts. 843 a 902 e Súmulas do TST" },
-    { week: 9, title: "Semana 9: Direito Administrativo - Licitações e Improbidade", disc: "Direito Administrativo", group: "A", focus: "Lei 14.133/21, Lei 14.230/21 e CF Art. 37" },
-    { week: 10, title: "Semana 10: O Bloco Tributário e Empresarial", disc: "Tributário e Empresarial", group: "B", focus: "Imunidades, Crédito Tributário, Títulos e Falência" },
-    { week: 11, title: "Semana 11: Leis Rápidas de Ouro (ECA, CDC, Humanos, Ambiental)", disc: "ECA, Consumidor, DDHH e Ambiental", group: "C", focus: "Adoção, Responsabilidade CDC, CADH e Art. 225 CF" },
-    { week: 12, title: "Semana 12: Complementares (Previdenciário, Eleitoral, Financeiro, Internacional, Filosofia)", disc: "Matérias Complementares Grupo C", group: "C", focus: "Artigos cirúrgicos de maior recorrência na FGV" },
-    { week: 13, title: "Semana 13: Reta Final de Revisão e Véspera", disc: "Mega Revisão Grupo A + Ética", group: "A", focus: "Simulados oficiais, súmulas vinculantes e descanso estratégico" }
-  ];
-
-  let currentDay = 1;
-  topics.forEach((top, wIndex) => {
-    const days = [];
-    for (let d = 1; d <= 7; d++) {
-      if (currentDay > 90) break;
-      const isSunday = d === 7;
-      const isSaturday = d === 6;
-
-      if (isSunday) {
-        days.push({
-          day: currentDay,
-          disciplines: ["Simulado Geral"],
-          group: "ALL",
-          theme: `Simulado Extensivo ${wIndex + 1} (80 Questões da FGV) + Análise de Desempenho`,
-          lawReading: "Gestão do tempo e treino de preenchimento do gabarito.",
-          questionsGoal: 80,
-          reviewNotes: "Revisar cada questão errada e alimentar o caderno de erros."
-        });
-      } else if (isSaturday) {
-        days.push({
-          day: currentDay,
+  return [
+    {
+      week: 1,
+      title: "Semana 1: Fundamentos de Ética & Constitucional I",
+      focus: "Construir a base sólida com Estatuto da OAB e CF Art. 5º",
+      days: [
+        {
+          day: 1,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Atividade de Advocacia e Inscrição na OAB",
+          lawReading: "Estatuto da OAB (Lei 8.906/94): Arts. 1º a 14",
+          questionsGoal: 25,
+          reviewNotes: "Fixar quem pode e quem não pode postular em juízo sem advogado."
+        },
+        {
+          day: 2,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Direitos e Prerrogativas do Advogado (Tema nº 1 FGV)",
+          lawReading: "Estatuto da OAB: Arts. 6º a 7º-B (Inviolabilidade de escritório, comunicação com preso)",
+          questionsGoal: 30,
+          reviewNotes: "Revisar as hipóteses em que o advogado pode se retirar da audiência."
+        },
+        {
+          day: 3,
+          disciplines: ["Direito Constitucional"],
+          group: "A",
+          theme: "Direitos Fundamentais e Remédios Constitucionais",
+          lawReading: "CF/88 Art. 5º (Incisos I a XL) + Remédios Constitucionais (HC, MS)",
+          questionsGoal: 25,
+          reviewNotes: "Distinção entre Mandado de Segurança Individual e Coletivo."
+        },
+        {
+          day: 4,
+          disciplines: ["Direito Constitucional"],
+          group: "A",
+          theme: "Direitos Sociais, Nacionalidade e Direitos Políticos",
+          lawReading: "CF/88 Arts. 6º, 12, 14 a 16 + Inelegibilidade reflexa",
+          questionsGoal: 25,
+          reviewNotes: "Prazos de desincompatibilização e idades mínimas."
+        },
+        {
+          day: 5,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Honorários Advocatícios e Sociedade de Advogados",
+          lawReading: "Estatuto OAB Arts. 15 a 26 (Honorários sucumbenciais e contratuais)",
+          questionsGoal: 25,
+          reviewNotes: "Sociedade Unipessoal e cumulação de honorários."
+        },
+        {
+          day: 6,
           disciplines: ["Revisão Semanal", "Ética Profissional"],
           group: "A",
-          theme: `Revisão de Ética da Semana + Caderno de Erros`,
-          lawReading: "Leitura do CED e Estatuto da OAB (fixação permanente).",
+          theme: "Super Revisão de Ética da Semana + Caderno de Erros",
+          lawReading: "Revisão dos artigos lidos de Ética + Leitura do CED Arts. 1º a 7º",
           questionsGoal: 35,
-          reviewNotes: "Ética deve ser revisada religiosamente todo sábado!"
-        });
-      } else {
-        days.push({
-          day: currentDay,
-          disciplines: [top.disc],
-          group: top.group,
-          theme: `${top.focus} - Bloco Prático`,
-          lawReading: `Leitura detalhada dos dispositivos recomendados da FGV para ${top.disc}.`,
+          reviewNotes: "Refazer todas as questões que errou durante a semana."
+        },
+        {
+          day: 7,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Diagnóstico Extensivo 1 (80 Questões) + Descanso",
+          lawReading: "Treinar gestão do tempo: 5 horas para 80 questões.",
+          questionsGoal: 80,
+          reviewNotes: "Anotar o placar e identificar quais matérias ficaram abaixo de 50%."
+        }
+      ]
+    },
+    {
+      week: 2,
+      title: "Semana 2: Ética & Constitucional II (Poderes e Controle)",
+      focus: "Dominar Incompatibilidades da OAB e Controle de Constitucionalidade",
+      days: [
+        {
+          day: 8,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Incompatibilidades e Impedimentos na Advocacia",
+          lawReading: "Estatuto da OAB Arts. 27 a 30 (Tema obrigatório de toda prova)",
+          questionsGoal: 30,
+          reviewNotes: "Diferenciar proibição total (incompatibilidade) de parcial (impedimento)."
+        },
+        {
+          day: 9,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Infrações e Sanções Disciplinares na OAB",
+          lawReading: "Estatuto da OAB Arts. 34 a 43 (Censura, Suspensão, Exclusão, Multa)",
+          questionsGoal: 30,
+          reviewNotes: "Quórum qualificado de 2/3 para exclusão de advogado."
+        },
+        {
+          day: 10,
+          disciplines: ["Direito Constitucional"],
+          group: "A",
+          theme: "Controle Concentrado de Constitucionalidade (ADI, ADC, ADO, ADPF)",
+          lawReading: "CF/88 Arts. 102 e 103 + Lei 9.868/99 e Lei 9.882/99",
           questionsGoal: 25,
-          reviewNotes: `Fazer 25 questões anteriores da FGV com foco nos comentários.`
-        });
-      }
-      currentDay++;
+          reviewNotes: "Legitimados universais e especiais do Art. 103 CF."
+        },
+        {
+          day: 11,
+          disciplines: ["Direito Constitucional"],
+          group: "A",
+          theme: "Organização do Estado e Repartição de Competências",
+          lawReading: "CF/88 Arts. 18 a 31 (Competência Privativa da União vs Concorrente)",
+          questionsGoal: 25,
+          reviewNotes: "Macete FGV: Legislar sobre Direito Civil, Penal, Processual = Privativa da União."
+        },
+        {
+          day: 12,
+          disciplines: ["Direito Constitucional"],
+          group: "A",
+          theme: "Processo Legislativo e Emendas à Constituição",
+          lawReading: "CF/88 Arts. 59 a 69 (Limitações materiais, circunstanciais e formais da PEC)",
+          questionsGoal: 30,
+          reviewNotes: "Cláusulas pétreas do Art. 60, § 4º da CF."
+        },
+        {
+          day: 13,
+          disciplines: ["Revisão Semanal"],
+          group: "A",
+          theme: "Revisão Geral do Bloco Constitucional + Caderno de Erros",
+          lawReading: "Revisão dos artigos-chave de CF e CED.",
+          questionsGoal: 35,
+          reviewNotes: "Fixar súmulas vinculantes sobre prerrogativas e constitucional."
+        },
+        {
+          day: 14,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 2 (80 Questões) + Autoanálise",
+          lawReading: "Avaliar evolução em Ética e Constitucional.",
+          questionsGoal: 80,
+          reviewNotes: "Meta: atingir 11+ pontos na soma de Ética e Constitucional."
+        }
+      ]
+    },
+    {
+      week: 3,
+      title: "Semana 3: Direito Penal - Teoria Geral do Crime & Delitos",
+      focus: "Consolidar os 6 pontos de Direito Penal na 1ª Fase",
+      days: [
+        {
+          day: 15,
+          disciplines: ["Direito Penal"],
+          group: "A",
+          theme: "Aplicação da Lei Penal no Tempo e Espaço & Teoria do Delito",
+          lawReading: "Código Penal Arts. 1º a 25 (Princípio da Legalidade, Ilicitude e Legítima Defesa)",
+          questionsGoal: 25,
+          reviewNotes: "Diferença de tempo do crime (atividade) e lugar do crime (ubiquidade)."
+        },
+        {
+          day: 16,
+          disciplines: ["Direito Penal"],
+          group: "A",
+          theme: "Tipicidade, Erro de Tipo e Erro de Proibição",
+          lawReading: "CP Arts. 20 e 21 (Efeitos do Erro Escusável e Inescusável)",
+          questionsGoal: 30,
+          reviewNotes: "Erro de tipo exclui o dolo; erro de proibição exclui a culpabilidade."
+        },
+        {
+          day: 17,
+          disciplines: ["Direito Penal"],
+          group: "A",
+          theme: "Culpabilidade, Imputabilidade e Concurso de Pessoas",
+          lawReading: "CP Arts. 26 a 31 (Embriaguez, Menoridade e Concurso de Pessoas)",
+          questionsGoal: 25,
+          reviewNotes: "Teoria Monista/Unitária no concurso de pessoas e cooperação dolosamente distinta."
+        },
+        {
+          day: 18,
+          disciplines: ["Direito Penal"],
+          group: "A",
+          theme: "Crimes Contra a Vida: Homicídio, Feminicídio e Infanticídio",
+          lawReading: "CP Arts. 121 a 128 (Qualificadoras subjetivas vs objetivas)",
+          questionsGoal: 30,
+          reviewNotes: "Compatibilidade do dolo eventual com o feminicídio."
+        },
+        {
+          day: 19,
+          disciplines: ["Direito Penal"],
+          group: "A",
+          theme: "Crimes Contra o Patrimônio: Furto, Roubo, Extorsão e Estelionato",
+          lawReading: "CP Arts. 155 a 171 (Majorantes do roubo e requisitos do estelionato)",
+          questionsGoal: 30,
+          reviewNotes: "Súmula 582 do STJ: Consumação do roubo com a posse mansa e pacífica desnecessária."
+        },
+        {
+          day: 20,
+          disciplines: ["Revisão Semanal", "Ética Profissional"],
+          group: "A",
+          theme: "Revisão Ativa de Penal + Revisão de Ética Semanal",
+          lawReading: "CP Arts. 121 a 180 + Revisão EAOAB Arts. 1º a 10",
+          questionsGoal: 35,
+          reviewNotes: "Todo sábado é dia de revisar Ética Profissional!"
+        },
+        {
+          day: 21,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 3 (80 Questões) + Mapeamento de Erros",
+          lawReading: "Gestão emocional e ritmo de 3 minutos por questão.",
+          questionsGoal: 80,
+          reviewNotes: "Cadastrar pontuação e anotar disciplinas que exigem reforço."
+        }
+      ]
+    },
+    {
+      week: 4,
+      title: "Semana 4: Processo Penal - Inquérito, Ação e Prisões",
+      focus: "Garantir os 6 pontos de Processo Penal na prova",
+      days: [
+        {
+          day: 22,
+          disciplines: ["Processo Penal"],
+          group: "A",
+          theme: "Inquérito Policial, Notitia Criminis e ANPP",
+          lawReading: "CPP Arts. 4º a 23 e Art. 28-A (Requisitos e vedações do ANPP)",
+          questionsGoal: 25,
+          reviewNotes: "Características do IP: sigiloso, inquisitivo, dispensável e indisponível."
+        },
+        {
+          day: 23,
+          disciplines: ["Processo Penal"],
+          group: "A",
+          theme: "Ação Penal Pública e Privada & Competência Penal",
+          lawReading: "CPP Arts. 24 a 62 e Arts. 69 a 91",
+          questionsGoal: 25,
+          reviewNotes: "Prazo decadencial de 6 meses na ação penal privada."
+        },
+        {
+          day: 24,
+          disciplines: ["Processo Penal"],
+          group: "A",
+          theme: "Teoria Geral das Provas e Provas Ilícitas",
+          lawReading: "CPP Arts. 155 a 250 (Teoria dos Frutos da Árvore Envenenada)",
+          questionsGoal: 30,
+          reviewNotes: "Cadeia de custódia (Art. 158-A a 158-F) e reconhecimento de pessoas (Art. 226)."
+        },
+        {
+          day: 25,
+          disciplines: ["Processo Penal"],
+          group: "A",
+          theme: "Prisões Cautelares, Flagrante e Audiência de Custódia",
+          lawReading: "CPP Arts. 282 a 350 + Lei 7.960/89 (Prisão Temporária)",
+          questionsGoal: 30,
+          reviewNotes: "Requisitos da Prisão Preventiva: fumus comissi delicti e periculum libertatis."
+        },
+        {
+          day: 26,
+          disciplines: ["Processo Penal"],
+          group: "A",
+          theme: "Procedimento Comum Ordinário e Tribunal do Júri",
+          lawReading: "CPP Arts. 394 a 405 e Arts. 406 a 497 (Primeira e Segunda Fase do Júri)",
+          questionsGoal: 30,
+          reviewNotes: "Decisões da 1ª fase do júri: Pronúncia, Impronúncia, Absolvição Sumária e Desclassificação."
+        },
+        {
+          day: 27,
+          disciplines: ["Revisão Semanal"],
+          group: "A",
+          theme: "Recursos em Processo Penal (Apelação e RESE) + Revisão de Ética",
+          lawReading: "CPP Art. 581 (Rol do RESE) e Art. 593 (Apelação)",
+          questionsGoal: 35,
+          reviewNotes: "Prazos de interposição e de razões recursais."
+        },
+        {
+          day: 28,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 4 (80 Questões)",
+          lawReading: "Consolidação da Dupla Penal (Penal + Processo Penal = 12 questões).",
+          questionsGoal: 80,
+          reviewNotes: "Meta: atingir 8+ pontos no bloco criminal."
+        }
+      ]
+    },
+    {
+      week: 5,
+      title: "Semana 5: Direito Civil - Da Parte Geral à Família",
+      focus: "Mapear o maior código do edital com foco seletivo (6 questões)",
+      days: [
+        {
+          day: 29,
+          disciplines: ["Direito Civil"],
+          group: "A",
+          theme: "Pessoas Naturais, Personalidade, Capacidade e Bens",
+          lawReading: "Código Civil Arts. 1º a 103 (Estatuto da Pessoa com Deficiência)",
+          questionsGoal: 25,
+          reviewNotes: "Apenas menores de 16 anos são absolutamente incapazes (Art. 3º CC)."
+        },
+        {
+          day: 30,
+          disciplines: ["Direito Civil"],
+          group: "A",
+          theme: "Defeitos do Negócio Jurídico e Invalidade",
+          lawReading: "CC Arts. 138 a 184 (Erro, Dolo, Coação, Estado de Perigo, Lesão, Fraude)",
+          questionsGoal: 30,
+          reviewNotes: "Simulação é causa de nulidade absoluta (não convalesce com o tempo)."
+        },
+        {
+          day: 31,
+          disciplines: ["Direito Civil"],
+          group: "A",
+          theme: "Teoria Geral das Obrigações e Adimplemento",
+          lawReading: "CC Arts. 233 a 420 (Obrigações de dar, fazer, solidárias e pagamento)",
+          questionsGoal: 25,
+          reviewNotes: "Solidariedade não se presume: decorre da lei ou da vontade das partes."
+        },
+        {
+          day: 32,
+          disciplines: ["Direito Civil"],
+          group: "A",
+          theme: "Contratos em Espécie e Responsabilidade Civil",
+          lawReading: "CC Arts. 421 a 480 (Função social e boa-fé) e Arts. 927 a 954",
+          questionsGoal: 30,
+          reviewNotes: "Responsabilidade objetiva do Art. 927, parágrafo único (atividade de risco)."
+        },
+        {
+          day: 33,
+          disciplines: ["Direito Civil"],
+          group: "A",
+          theme: "Direito das Coisas: Posse, Propriedade e Usucapião",
+          lawReading: "CC Arts. 1.196 a 1.250 (Usucapião extraordinária, ordinária e especial urbana)",
+          questionsGoal: 25,
+          reviewNotes: "Posse de boa-fé e direito à indenização por benfeitorias necessárias e úteis."
+        },
+        {
+          day: 34,
+          disciplines: ["Revisão Semanal", "Ética Profissional"],
+          group: "A",
+          theme: "Família e Sucessões + Revisão de Ética Semanal",
+          lawReading: "CC Arts. 1.511 a 1.856 (Regimes de bens e ordem de vocação hereditária)",
+          questionsGoal: 35,
+          reviewNotes: "Concorrência do cônjuge sobrevivente com os descendentes."
+        },
+        {
+          day: 35,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 5 (80 Questões)",
+          lawReading: "Verificar rendimento em Direito Civil.",
+          questionsGoal: 80,
+          reviewNotes: "Alimentar o caderno de erros com questões de contratos e família."
+        }
+      ]
+    },
+    {
+      week: 6,
+      title: "Semana 6: Processo Civil - Petição Inicial, Tutelas e Recursos",
+      focus: "Garantir os 6 pontos de Processo Civil na FGV",
+      days: [
+        {
+          day: 36,
+          disciplines: ["Processo Civil"],
+          group: "A",
+          theme: "Normas Fundamentais, Competência e Cooperação",
+          lawReading: "CPC/15 Arts. 1º a 69 (Competência absoluta vs relativa, prorrogação)",
+          questionsGoal: 25,
+          reviewNotes: "Princípio da Não Surpresa e cooperação intersubjetiva."
+        },
+        {
+          day: 37,
+          disciplines: ["Processo Civil"],
+          group: "A",
+          theme: "Tutelas Provisórias de Urgência e Evidência",
+          lawReading: "CPC/15 Arts. 294 a 311 (Requisitos da Urgência vs Hipóteses da Evidência)",
+          questionsGoal: 30,
+          reviewNotes: "Tutela de evidência dispensa demonstração de perigo de dano (Art. 311)."
+        },
+        {
+          day: 38,
+          disciplines: ["Processo Civil"],
+          group: "A",
+          theme: "Petição Inicial, Respostas do Réu e Revelia",
+          lawReading: "CPC/15 Arts. 319 a 346 (Contestação, Reconvenção e Efeitos da Revelia)",
+          questionsGoal: 25,
+          reviewNotes: "Princípio da eventualidade na contestação (todas as matérias de defesa)."
+        },
+        {
+          day: 39,
+          disciplines: ["Processo Civil"],
+          group: "A",
+          theme: "Teoria Geral das Provas e Sentença Cível",
+          lawReading: "CPC/15 Arts. 369 a 484 (Ônus da prova e elementos essenciais da sentença)",
+          questionsGoal: 25,
+          reviewNotes: "Diferença entre coisa julgada formal e material."
+        },
+        {
+          day: 40,
+          disciplines: ["Processo Civil"],
+          group: "A",
+          theme: "Sistema Recursal: Apelação, Agravo de Instrumento e Embargos",
+          lawReading: "CPC/15 Arts. 994 a 1.026 + Rol do Art. 1.015 (Agravo de Instrumento)",
+          questionsGoal: 35,
+          reviewNotes: "Tema repetitivo 988 do STJ: taxatividade mitigada do Art. 1.015 CPC."
+        },
+        {
+          day: 41,
+          disciplines: ["Revisão Semanal", "Processo Civil"],
+          group: "A",
+          theme: "Cumprimento de Sentença e Execução de Título Extrajudicial",
+          lawReading: "CPC Arts. 513 a 538 e Arts. 771 a 830 (Impugnação vs Embargos à Execução)",
+          questionsGoal: 35,
+          reviewNotes: "Garantia do juízo é necessária nos embargos à execução? (Regra geral: não!)."
+        },
+        {
+          day: 42,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 6 (80 Questões)",
+          lawReading: "Consolidação do Bloco Civil (Civil + Processo Civil = 12 questões).",
+          questionsGoal: 80,
+          reviewNotes: "Calcular percentual de acertos nas duas matérias."
+        }
+      ]
+    },
+    {
+      week: 7,
+      title: "Semana 7: Direito do Trabalho & Processo do Trabalho",
+      focus: "Alcançar os 10 pontos da dobradinha trabalhista (5 + 5 questões)",
+      days: [
+        {
+          day: 43,
+          disciplines: ["Direito do Trabalho"],
+          group: "A",
+          theme: "Contrato de Trabalho, Grupo Econômico e Terceirização",
+          lawReading: "CLT Arts. 2º a 10 e Lei 6.019/74 reformada (Terceirização de atividade-fim)",
+          questionsGoal: 25,
+          reviewNotes: "Reforma Trabalhista: grupo econômico por simples coordenação requer interesse comum."
+        },
+        {
+          day: 44,
+          disciplines: ["Direito do Trabalho"],
+          group: "A",
+          theme: "Duração do Trabalho, Horas Extras, Intervalos e Teletrabalho",
+          lawReading: "CLT Arts. 58 a 75-E (Banco de horas individual de 6 meses)",
+          questionsGoal: 30,
+          reviewNotes: "Supressão do intervalo intrajornada gera apenas pagamento do período suprimido."
+        },
+        {
+          day: 45,
+          disciplines: ["Direito do Trabalho"],
+          group: "A",
+          theme: "Rescisão Contratual, Estabilidades e Acordo Mútuo",
+          lawReading: "CLT Arts. 477 a 484-A (Rescisão por acordo mútuo) e CF Art. 10 ADCT (Gestante)",
+          questionsGoal: 30,
+          reviewNotes: "Verbas no acordo do Art. 484-A: metade do aviso prévio e metade da multa do FGTS (20%)."
+        },
+        {
+          day: 46,
+          disciplines: ["Processo do Trabalho"],
+          group: "A",
+          theme: "Competência da Justiça do Trabalho, Audiência e Revelia",
+          lawReading: "CF Art. 114 e CLT Arts. 843 a 852 (Jus postulandi e Súmula 425 TST)",
+          questionsGoal: 25,
+          reviewNotes: "Ausência do reclamante: arquivamento; ausência do reclamado: revelia e confissão ficta."
+        },
+        {
+          day: 47,
+          disciplines: ["Processo do Trabalho"],
+          group: "A",
+          theme: "Recursos Trabalhistas: RO, Agravo de Petição e Depósito Recursal",
+          lawReading: "CLT Arts. 893 a 902 (Prazo unificado de 8 dias úteis para recursos)",
+          questionsGoal: 30,
+          reviewNotes: "Depósito recursal não é exigido de entidades filantrópicas e beneficiários da justiça gratuita."
+        },
+        {
+          day: 48,
+          disciplines: ["Revisão Semanal", "Ética Profissional"],
+          group: "A",
+          theme: "Revisão Trabalhista + Súmulas do TST + Revisão de Ética",
+          lawReading: "Súmulas 214, 219 e 425 do TST + Estatuto OAB",
+          questionsGoal: 35,
+          reviewNotes: "Trabalho + Processo do Trabalho somam 10 pontos decisivos."
+        },
+        {
+          day: 49,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 7 (80 Questões)",
+          lawReading: "Medir evolução no bloco trabalhista.",
+          questionsGoal: 80,
+          reviewNotes: "Meta: cravar 8 de 10 nas matérias de trabalho."
+        }
+      ]
+    },
+    {
+      week: 8,
+      title: "Semana 8: Direito Administrativo - Licitações e Improbidade",
+      focus: "Conquistar os 5 pontos de Direito Administrativo na 1ª Fase",
+      days: [
+        {
+          day: 50,
+          disciplines: ["Direito Administrativo"],
+          group: "A",
+          theme: "Regime Jurídico Administrativo e Organização Administrativa",
+          lawReading: "CF Art. 37 (LIMPE) e Decreto-Lei 200/67 (Autarquias, Fundações, Empresas Públicas, SEM)",
+          questionsGoal: 25,
+          reviewNotes: "Criação de autarquia exige lei específica; as demais exigem lei autorizadora."
+        },
+        {
+          day: 51,
+          disciplines: ["Direito Administrativo"],
+          group: "A",
+          theme: "Atos Administrativos: Elementos, Atributos e Extinção",
+          lawReading: "COFIFOMOB (Competência, Finalidade, Forma, Motivo, Objeto) e Atributos (PATI)",
+          questionsGoal: 30,
+          reviewNotes: "Anulação de ato ilegal produz efeitos ex tunc; revogação de ato inconveniente produz ex nunc."
+        },
+        {
+          day: 52,
+          disciplines: ["Direito Administrativo"],
+          group: "A",
+          theme: "Nova Lei de Licitações (Lei 14.133/21): Modalidades e Contratação Direta",
+          lawReading: "Lei 14.133/21 Arts. 28 a 32 (Pregão, Concorrência, Concurso, Leilão, Diálogo Competitivo) e Arts. 74-75",
+          questionsGoal: 30,
+          reviewNotes: "Inexigibilidade (inviabilidade de competição) vs Dispensa (rol taxativo de conveniência)."
+        },
+        {
+          day: 53,
+          disciplines: ["Direito Administrativo"],
+          group: "A",
+          theme: "Servidores Públicos e Responsabilidade Civil do Estado",
+          lawReading: "CF Art. 37, § 6º (Responsabilidade objetiva da Adm.) e Lei 8.112/90",
+          questionsGoal: 25,
+          reviewNotes: "Teoria do Risco Administrativo admite causas excludentes (culpa exclusiva da vítima, caso fortuito)."
+        },
+        {
+          day: 54,
+          disciplines: ["Direito Administrativo"],
+          group: "A",
+          theme: "Improbidade Administrativa Reformada (Lei 14.230/21)",
+          lawReading: "Lei 8.429/92 Arts. 9º a 12 (Exigência de DOLO específico em todos os atos)",
+          questionsGoal: 30,
+          reviewNotes: "Atenção máxima: Não existe mais improbidade culposa na ordem jurídica brasileira!"
+        },
+        {
+          day: 55,
+          disciplines: ["Revisão Semanal", "Ética Profissional"],
+          group: "A",
+          theme: "Revisão Geral do Grupo A (Todas as 53 Questões Mapeadas)",
+          lawReading: "Revisão dos 5 principais artigos de cada matéria do Grupo A.",
+          questionsGoal: 40,
+          reviewNotes: "O Grupo A sozinho garante a aprovação (53 questões de 80)."
+        },
+        {
+          day: 56,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 8 (80 Questões) - O Teste do Grupo A",
+          lawReading: "Verificar se você já atinge 35+ pontos apenas com o Grupo A.",
+          questionsGoal: 80,
+          reviewNotes: "Se atingir 35 pontos no Grupo A, você está praticamente aprovado!"
+        }
+      ]
+    },
+    {
+      week: 9,
+      title: "Semana 9: Direito Tributário & Direito Financeiro",
+      focus: "Dominar os 5 pontos de Tributário e os 2 pontos de Financeiro",
+      days: [
+        {
+          day: 57,
+          disciplines: ["Direito Tributário"],
+          group: "B",
+          theme: "Princípios Constitucionais Tributários (Legalidade, Anterioridade)",
+          lawReading: "CF/88 Arts. 145 a 152 (Exceções à anterioridade nonagesimal e de exercício)",
+          questionsGoal: 25,
+          reviewNotes: "Tributos que podem ser alterados por decreto presidencial (II, IE, IPI, IOF)."
+        },
+        {
+          day: 58,
+          disciplines: ["Direito Tributário"],
+          group: "B",
+          theme: "Imunidades Tributárias Constitucionais (Art. 150, VI CF)",
+          lawReading: "CF Art. 150, VI (Imunidade recíproca, templos, livros, jornais, partidos e sindicatos)",
+          questionsGoal: 30,
+          reviewNotes: "Súmula Vinculante 57: A imunidade do livro se aplica ao leitor eletrônico (e-reader)."
+        },
+        {
+          day: 59,
+          disciplines: ["Direito Tributário"],
+          group: "B",
+          theme: "Crédito Tributário: Suspensão, Extinção e Exclusão",
+          lawReading: "CTN Arts. 151 (MODELOPRO), Art. 156 (Extinção) e Art. 175 (Isenção e Anistia)",
+          questionsGoal: 30,
+          reviewNotes: "Memorizar MODELOPRO: Moratória, Depósito, Recursos, Liminar, Parcelamento, Provisória."
+        },
+        {
+          day: 60,
+          disciplines: ["Direito Tributário"],
+          group: "B",
+          theme: "Responsabilidade Tributária e Execução Fiscal",
+          lawReading: "CTN Arts. 134 e 135 (Redirecionamento contra sócio-administrador com excesso de mandato)",
+          questionsGoal: 25,
+          reviewNotes: "Súmula 430 STJ: O mero inadimplemento da obrigação tributária não gera responsabilidade do sócio."
+        },
+        {
+          day: 61,
+          disciplines: ["Direito Financeiro"],
+          group: "C",
+          theme: "Direito Financeiro: Orçamento Público, PPA, LDO, LOA e LRF",
+          lawReading: "CF/88 Arts. 165 a 169 + LC 101/2000 (Lei de Responsabilidade Fiscal)",
+          questionsGoal: 25,
+          reviewNotes: "LDO define metas e prioridades e orienta a elaboração da LOA."
+        },
+        {
+          day: 62,
+          disciplines: ["Revisão Semanal", "Ética Profissional"],
+          group: "B",
+          theme: "Revisão de Tributário/Financeiro + Ética Semanal",
+          lawReading: "Revisão dos artigos-chave de CTN e CF.",
+          questionsGoal: 35,
+          reviewNotes: "Fixar a lista de causas de suspensão da exigibilidade do crédito."
+        },
+        {
+          day: 63,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 9 (80 Questões)",
+          lawReading: "Avaliar o impacto de Tributário e Financeiro na nota global.",
+          questionsGoal: 80,
+          reviewNotes: "Meta: somar +4 pontos com Tributário e Financeiro."
+        }
+      ]
+    },
+    {
+      week: 10,
+      title: "Semana 10: Direito Empresarial & Previdenciário",
+      focus: "Conquistar 6 pontos cirúrgicos (Empresarial 4 + Previdenciário 2)",
+      days: [
+        {
+          day: 64,
+          disciplines: ["Direito Empresarial"],
+          group: "B",
+          theme: "Teoria da Empresa, Registro e Estabelecimento",
+          lawReading: "Código Civil Arts. 966 a 980 (Conceito de empresário e profissão intelectual)",
+          questionsGoal: 25,
+          reviewNotes: "Quem exerce profissão intelectual (médico, advogado) não é empresário, salvo se constituir elemento de empresa."
+        },
+        {
+          day: 65,
+          disciplines: ["Direito Empresarial"],
+          group: "B",
+          theme: "Sociedade Limitada e Sociedade Anônima",
+          lawReading: "CC Arts. 1.052 a 1.087 (Responsabilidade dos sócios na LTDA) e Lei 6.404/76",
+          questionsGoal: 30,
+          reviewNotes: "Na sociedade limitada, a responsabilidade dos sócios é restrita ao valor de suas quotas, mas respondem solidariamente pela integralização do capital social."
+        },
+        {
+          day: 66,
+          disciplines: ["Direito Empresarial"],
+          group: "B",
+          theme: "Títulos de Crédito: Princípios, Cheque, Duplicata e Nota Promissória",
+          lawReading: "CC Arts. 887 a 926 + Lei do Cheque (Lei 7.357/85)",
+          questionsGoal: 25,
+          reviewNotes: "Cartularidade, literalidade e autonomia (abstração e inoponibilidade das exceções pessoais)."
+        },
+        {
+          day: 67,
+          disciplines: ["Direito Empresarial"],
+          group: "B",
+          theme: "Recuperação Judicial e Falência (Lei 11.101/05 reformada)",
+          lawReading: "Lei 11.101/05 Arts. 47 a 74 e Art. 83 (Ordem de classificação dos créditos)",
+          questionsGoal: 30,
+          reviewNotes: "Ordem da falência: Trabalhistas (até 150 SM) -> Garantia real -> Tributários -> Quirografários."
+        },
+        {
+          day: 68,
+          disciplines: ["Direito Previdenciário"],
+          group: "C",
+          theme: "Segurados Obrigatórios, Benefícios e Período de Graça",
+          lawReading: "Lei 8.213/91 Arts. 11 a 15 (Empregado, avulso, contribuinte individual) e Art. 15 (Período de Graça)",
+          questionsGoal: 25,
+          reviewNotes: "Segurado desempregado mantém a qualidade de segurado por até 24 ou 36 meses."
+        },
+        {
+          day: 69,
+          disciplines: ["Revisão Semanal", "Ética Profissional"],
+          group: "B",
+          theme: "Revisão de Empresarial/Previdenciário + Ética Semanal",
+          lawReading: "Revisão dos artigos-chave de Lei de Falências e Lei 8.213/91.",
+          questionsGoal: 35,
+          reviewNotes: "Garantir os acertos nas disciplinas do Grupo B."
+        },
+        {
+          day: 70,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 10 (80 Questões)",
+          lawReading: "Reta de aproximação: controle do cansaço mental.",
+          questionsGoal: 80,
+          reviewNotes: "Meta: consolidar 42+ pontos com margem segura."
+        }
+      ]
+    },
+    {
+      week: 11,
+      title: "Semana 11: Leis Especiais de Alto Retorno (ECA, CDC, Ambiental, Humanos)",
+      focus: "Garantir 8 pontos de ouro estudando poucas páginas de lei",
+      days: [
+        {
+          day: 71,
+          disciplines: ["ECA"],
+          group: "C",
+          theme: "Adoção, Medidas Protetivas e Medidas Socioeducativas",
+          lawReading: "ECA (Lei 8.069/90): Arts. 39 a 52 e Arts. 98 a 125 (Internação e prazo máx. de 3 anos)",
+          questionsGoal: 25,
+          reviewNotes: "Diferença mínima de 16 anos entre adotante e adotado."
+        },
+        {
+          day: 72,
+          disciplines: ["Direito do Consumidor"],
+          group: "C",
+          theme: "Responsabilidade Civil no CDC: Vício vs Fato do Produto",
+          lawReading: "CDC (Lei 8.078/90): Arts. 12 a 28 (Fato = acidente de consumo / dano; Vício = problema de funcionamento)",
+          questionsGoal: 30,
+          reviewNotes: "Prazo prescricional de 5 anos para reparação de danos causados por fato do produto (Art. 27)."
+        },
+        {
+          day: 73,
+          disciplines: ["Direito Ambiental"],
+          group: "C",
+          theme: "Princípios Ambientais e Responsabilidade Tríplice (CF Art. 225)",
+          lawReading: "CF Art. 225 + Lei 6.938/81 (PNMA) e Lei 9.605/98 (Crimes Ambientais)",
+          questionsGoal: 25,
+          reviewNotes: "Responsabilidade administrativa, civil e penal são independentes e cumulativas."
+        },
+        {
+          day: 74,
+          disciplines: ["Direitos Humanos"],
+          group: "C",
+          theme: "Pacto de San José da Costa Rica e Sistema Interamericano",
+          lawReading: "CF Art. 5º, § 2º e § 3º + Convenção Americana de Direitos Humanos (CADH)",
+          questionsGoal: 25,
+          reviewNotes: "Súmula Vinculante 25: É ilícita a prisão civil de depositário infiel, qualquer que seja a modalidade do depósito."
+        },
+        {
+          day: 75,
+          disciplines: ["Direito Internacional"],
+          group: "C",
+          theme: "LINDB: Aplicação da Lei no Espaço, Sucessão e Cooperação",
+          lawReading: "LINDB (Decreto-Lei 4.657/42): Arts. 7º ao 19 e CPC Arts. 21 a 41",
+          questionsGoal: 25,
+          reviewNotes: "Estatuto pessoal: rege-se pela lei do domicílio da pessoa."
+        },
+        {
+          day: 76,
+          disciplines: ["Revisão Semanal"],
+          group: "C",
+          theme: "Super Revisão de Leis Curtas (ECA + CDC + Ambiental + Humanos)",
+          lawReading: "Revisão dos artigos-chave de ECA, CDC e CADH.",
+          questionsGoal: 35,
+          reviewNotes: "Essas matérias são as que mais rendem pontos por hora investida na OAB!"
+        },
+        {
+          day: 77,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Extensivo 11 (80 Questões)",
+          lawReading: "Simulação de fechamento de blocos da prova.",
+          questionsGoal: 80,
+          reviewNotes: "Meta: pontuar alto em ECA, Consumidor e Ambiental."
+        }
+      ]
+    },
+    {
+      week: 12,
+      title: "Semana 12: Complementares & Consolidação Pré-Véspera",
+      focus: "Fechar Filosofia, Eleitoral e revisar as matérias mais cobradas",
+      days: [
+        {
+          day: 78,
+          disciplines: ["Filosofia do Direito"],
+          group: "C",
+          theme: "Filosofia: Jusnaturalismo vs Positivismo Jurídico e Teoria da Justiça",
+          lawReading: "Autores clássicos da FGV: Kant (imperativo categórico), Kelsen, Bobbio, Hart e Dworkin",
+          questionsGoal: 20,
+          reviewNotes: "Kant: Dignidade humana e vedação a tratar o ser humano como mero meio."
+        },
+        {
+          day: 79,
+          disciplines: ["Direito Eleitoral"],
+          group: "C",
+          theme: "Condições de Elegibilidade e Inelegibilidades Reflexas",
+          lawReading: "CF/88 Art. 14 + LC 64/90 (Lei das Inelegibilidades e Ficha Limpa)",
+          questionsGoal: 25,
+          reviewNotes: "Idades mínimas: 35 anos (Presidente/Senador), 30 (Governador), 21 (Deputados/Prefeito), 18 (Vereador)."
+        },
+        {
+          day: 80,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Revisão Completa e Implacável de Ética (Os 8 Pontos)",
+          lawReading: "Estatuto da OAB Arts. 1º a 43 + Regulamento Geral",
+          questionsGoal: 40,
+          reviewNotes: "Ética é o pilar da sua aprovação. Sem 7 ou 8 acertos aqui a vida fica muito mais difícil."
+        },
+        {
+          day: 81,
+          disciplines: ["Direito Constitucional"],
+          group: "A",
+          theme: "Mega Revisão de Constitucional (Remédios, Controle e Direitos)",
+          lawReading: "CF Art. 5º + Arts. 102 e 103",
+          questionsGoal: 35,
+          reviewNotes: "Remédios gratuitos na CF: HC e HD (além dos atos necessários ao exercício da cidadania)."
+        },
+        {
+          day: 82,
+          disciplines: ["Direito Penal", "Processo Penal"],
+          group: "A",
+          theme: "Mega Revisão Penal e Processual Penal (Crimes e Prisões)",
+          lawReading: "CP Arts. 121, 155, 157, 171 + CPP Arts. 282 a 313",
+          questionsGoal: 40,
+          reviewNotes: "Causas de extinção da punibilidade (Art. 107 CP) e prescrição."
+        },
+        {
+          day: 83,
+          disciplines: ["Civil e Processo Civil"],
+          group: "A",
+          theme: "Mega Revisão Civil e Processual Civil (Contratos e Recursos)",
+          lawReading: "CC Art. 186/927 + CPC Art. 1.015",
+          questionsGoal: 40,
+          reviewNotes: "Fixar rol do Agravo de Instrumento e hipóteses de tutela de urgência."
+        },
+        {
+          day: 84,
+          disciplines: ["Simulado Geral"],
+          group: "ALL",
+          theme: "Simulado Geral Oficial de Véspera (Condições Reais FGV)",
+          lawReading: "Treino de 5 horas ininterruptas, sem consulta, com máscara/água/caneta preta.",
+          questionsGoal: 80,
+          reviewNotes: "Treinar a ordem de resolução: começar por Ética -> Grupo C -> Constitucional -> demais."
+        }
+      ]
+    },
+    {
+      week: 13,
+      title: "Semana 13: Reta Final de Véspera • O Dia da Batalha",
+      focus: "Revisão cirúrgica de véspera, súmulas vinculantes e preparação mental",
+      days: [
+        {
+          day: 85,
+          disciplines: ["Artigos de Ouro"],
+          group: "A",
+          theme: "Revisão dos 50 Artigos mais cobrados da História da OAB",
+          lawReading: "Leitura rápida dos artigos marcados com selo de ouro nas disciplinas do Grupo A.",
+          questionsGoal: 30,
+          reviewNotes: "Não estude matéria nova! Apenas reforce o que você já construiu."
+        },
+        {
+          day: 86,
+          disciplines: ["Súmulas Vinculantes"],
+          group: "A",
+          theme: "Todas as Súmulas Vinculantes do STF com Incidência OAB",
+          lawReading: "Súmulas Vinculantes 11 (Uso de algemas), 14 (Acesso a autos por advogado) e 25 (Prisão civil).",
+          questionsGoal: 25,
+          reviewNotes: "A FGV adora cobrar a literalidade de súmulas vinculantes!"
+        },
+        {
+          day: 87,
+          disciplines: ["Ética Profissional"],
+          group: "A",
+          theme: "Check-in Final de Ética Profissional (Leitura Completa do CED)",
+          lawReading: "Código de Ética e Disciplina da OAB (Arts. 1º a 73)",
+          questionsGoal: 30,
+          reviewNotes: "Garantir a fixação de sigilo profissional e honorários."
+        },
+        {
+          day: 88,
+          disciplines: ["Estratégia de Prova"],
+          group: "ALL",
+          theme: "Técnica de Prova: Gestão do Tempo e Eliminação de Alternativas",
+          lawReading: "Revisar as regras do edital FGV: caneta esferográfica preta em material transparente.",
+          questionsGoal: 20,
+          reviewNotes: "Não gaste mais de 3 minutos em nenhuma questão. Se travar, marque para revisar depois."
+        },
+        {
+          day: 89,
+          disciplines: ["Descanso Estratégico"],
+          group: "ALL",
+          theme: "Véspera da Prova: Descanso Mental e Separação de Documentos",
+          lawReading: "Separar documento oficial com foto, canetas pretas transparentes, comprovante e água.",
+          questionsGoal: 0,
+          reviewNotes: "Durma cedo. Sua mente precisa estar descansada para processar 80 questões no domingo."
+        },
+        {
+          day: 90,
+          disciplines: ["O DIA DA BATALHA"],
+          group: "ALL",
+          theme: "1ª FASE OAB: Preparem os cavalos para o dia da batalha!",
+          lawReading: "Confie na sua preparação. 40 pontos colocam sua carteira vermelha na mão!",
+          questionsGoal: 80,
+          reviewNotes: "Você treinou, você cumpriu cada missão. A vaga na 2ª Fase é sua!"
+        }
+      ]
     }
-
-    weeks.push({
-      week: top.week,
-      title: top.title,
-      focus: top.focus,
-      days: days
-    });
-  });
-
-  return weeks;
+  ];
 }
 
 const SCHEDULE_90_DAYS = getSchedule90Days();

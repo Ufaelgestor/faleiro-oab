@@ -1,6 +1,7 @@
 /**
  * FALEIRO OAB - Aplicação Principal
- * Gerenciamento de Estado, Cronograma Diário, Persistência Local, Filtros e Temas
+ * Gerenciamento de Estado, Cronograma Diário, Persistência Local,
+ * Coach Tático & Insights em Tempo Real, Filtros e Temas
  */
 
 class FaleiroOABApp {
@@ -8,12 +9,14 @@ class FaleiroOABApp {
     this.currentTab = "cronograma";
     this.planDuration = 60; // 60 ou 90 dias
     this.completedDays = new Set();
+    this.daySubtasks = {}; // { [day]: { law: boolean, questions: boolean } }
     this.dayNotes = {};
     this.simuladosList = [];
     this.selectedGroupFilter = "ALL";
     this.selectedWeekFilter = "ALL";
     this.selectedStatusFilter = "ALL";
-    this.examDate = "2026-11-22"; // Data aproximada do exame de ordem ou customizável
+    this.examDate = "2026-11-22"; // Data aproximada do próximo exame FGV
+    this.startDate = ""; // Data de início dos estudos
     this.pomodoroInterval = null;
     this.pomodoroTime = 25 * 60; // 25 min em segundos
     this.isPomodoroRunning = false;
@@ -32,6 +35,18 @@ class FaleiroOABApp {
       this.completedDays = new Set();
     }
 
+    // Carregar subtarefas individuais (lei seca / questões)
+    try {
+      const savedSubtasks = localStorage.getItem("faleiro_oab_day_subtasks");
+      if (savedSubtasks) {
+        this.daySubtasks = JSON.parse(savedSubtasks);
+      } else {
+        this.daySubtasks = {};
+      }
+    } catch (e) {
+      this.daySubtasks = {};
+    }
+
     // Carregar anotações
     try {
       const savedNotes = localStorage.getItem("faleiro_oab_day_notes");
@@ -48,20 +63,34 @@ class FaleiroOABApp {
       this.planDuration = parseInt(savedDuration, 10);
     }
 
+    // Carregar data da prova
+    const savedDate = localStorage.getItem("faleiro_oab_exam_date");
+    if (savedDate) {
+      this.examDate = savedDate;
+    }
+
+    // Carregar data de início
+    const savedStart = localStorage.getItem("faleiro_oab_start_date");
+    if (savedStart) {
+      this.startDate = savedStart;
+    } else {
+      this.startDate = new Date().toISOString().split("T")[0];
+      localStorage.setItem("faleiro_oab_start_date", this.startDate);
+    }
+
     // Carregar simulados
     try {
       const savedSims = localStorage.getItem("faleiro_oab_simulados");
       if (savedSims) {
         this.simuladosList = JSON.parse(savedSims);
       } else {
-        // Mock inicial de boas-vindas
         this.simuladosList = [
           {
             id: 1,
             title: "Simulado Diagnóstico Inicial",
-            date: "2026-09-01",
+            date: this.startDate,
             score: 36,
-            notes: "Identificada necessidade urgente de reforçar Ética e Processo Civil."
+            notes: "Identificada necessidade urgente de reforçar Ética Profissional e Processo Civil."
           }
         ];
       }
@@ -76,9 +105,25 @@ class FaleiroOABApp {
     }
   }
 
+  saveAll() {
+    try {
+      localStorage.setItem("faleiro_oab_completed_days", JSON.stringify(Array.from(this.completedDays)));
+      localStorage.setItem("faleiro_oab_day_subtasks", JSON.stringify(this.daySubtasks));
+      localStorage.setItem("faleiro_oab_day_notes", JSON.stringify(this.dayNotes));
+      localStorage.setItem("faleiro_oab_plan_duration", this.planDuration.toString());
+      localStorage.setItem("faleiro_oab_simulados", JSON.stringify(this.simuladosList));
+      localStorage.setItem("faleiro_oab_exam_date", this.examDate);
+      localStorage.setItem("faleiro_oab_start_date", this.startDate);
+    } catch (e) {
+      console.warn("Erro ao gravar dados no LocalStorage", e);
+    }
+  }
+
   init() {
     this.setupTabs();
     this.setupCountdown();
+    this.renderCoachTatico();
+    this.renderTodaySpotlight();
     this.renderSchedule();
     this.renderRaioX();
     this.renderSimulados();
@@ -92,6 +137,10 @@ class FaleiroOABApp {
 
     // Atualizar botões de duração
     this.updateDurationButtons();
+
+    // Sincronizar input da data da prova no modal
+    const inputExamDate = document.getElementById("inputExamDate");
+    if (inputExamDate) inputExamDate.value = this.examDate;
   }
 
   // --- NAVEGAÇÃO ENTRE ABAS ---
@@ -127,6 +176,8 @@ class FaleiroOABApp {
     localStorage.setItem("faleiro_oab_plan_duration", days.toString());
     this.updateDurationButtons();
     this.selectedWeekFilter = "ALL";
+    this.renderCoachTatico();
+    this.renderTodaySpotlight();
     this.renderSchedule();
     this.updateGlobalProgress();
     window.showToast(`Plano alterado para ${days} Dias com sucesso!`);
@@ -144,25 +195,257 @@ class FaleiroOABApp {
   // --- CRONÔMETRO REGRESSIVO DA PROVA ---
   setupCountdown() {
     const countdownEl = document.getElementById("examCountdownNumber");
+    const subtextEl = document.getElementById("countdownSubtext");
     if (!countdownEl) return;
 
     const calculateDays = () => {
       const now = new Date();
-      const target = new Date(this.examDate);
+      const target = new Date(this.examDate + "T00:00:00");
       const diffTime = target - now;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      countdownEl.textContent = diffDays > 0 ? diffDays : "Hoje!";
+      
+      if (diffDays > 0) {
+        countdownEl.textContent = diffDays;
+        if (subtextEl) {
+          const weeks = Math.floor(diffDays / 7);
+          const remainingDays = diffDays % 7;
+          subtextEl.textContent = `Aproximadamente ${weeks} semanas e ${remainingDays} dias para o grande dia da batalha.`;
+        }
+      } else if (diffDays === 0) {
+        countdownEl.textContent = "0";
+        if (subtextEl) subtextEl.textContent = "🔥 É HOJE! Prepare os cavalos para a aprovação na 1ª Fase!";
+      } else {
+        countdownEl.textContent = "Concluído";
+        if (subtextEl) subtextEl.textContent = "Exame finalizado. Rumo à 2ª Fase OAB!";
+      }
     };
 
     calculateDays();
     setInterval(calculateDays, 60000);
   }
 
-  // --- RENDERIZAÇÃO DO CRONOGRAMA ---
   getCurrentScheduleData() {
     return this.planDuration === 60 ? window.SCHEDULE_60_DAYS : window.SCHEDULE_90_DAYS;
   }
 
+  // --- COACH TÁTICO & INSIGHTS EM TEMPO REAL ---
+  renderCoachTatico() {
+    const container = document.getElementById("coachTaticoContainer");
+    if (!container) return;
+
+    const schedule = this.getCurrentScheduleData();
+    const allDays = schedule.flatMap(w => w.days);
+    const totalDays = allDays.length;
+    const completedCount = allDays.filter(d => this.completedDays.has(d.day)).length;
+    const progressPct = totalDays > 0 ? Math.round((completedCount / totalDays) * 100) : 0;
+
+    // Estatísticas do Grupo A (as 53 questões mais importantes)
+    const groupADays = allDays.filter(d => d.group === "A");
+    const groupADone = groupADays.filter(d => this.completedDays.has(d.day)).length;
+    const groupAPct = groupADays.length > 0 ? Math.round((groupADone / groupADays.length) * 100) : 0;
+
+    // Dias até a prova
+    const now = new Date();
+    const target = new Date(this.examDate + "T00:00:00");
+    const diffDays = Math.max(0, Math.ceil((target - now) / (1000 * 60 * 60 * 24)));
+
+    // Cálculo de Ritmo de Estudos
+    const start = new Date(this.startDate + "T00:00:00");
+    const daysSinceStart = Math.max(1, Math.ceil((now - start) / (1000 * 60 * 60 * 24)));
+    const missionsPerDay = completedCount / daysSinceStart;
+    const remainingMissions = totalDays - completedCount;
+    
+    let paceDescription = "";
+    if (completedCount === 0) {
+      paceDescription = "Comece sua 1ª missão hoje mesmo para calibrar o seu ritmo de batalha.";
+    } else if (missionsPerDay >= 0.8) {
+      const daysNeeded = Math.ceil(remainingMissions / missionsPerDay);
+      if (daysNeeded < diffDays) {
+        const margin = diffDays - daysNeeded;
+        paceDescription = `🔥 Ritmo excelente! Você concluirá 100% do edital com ${margin} dias de folga para revisões finais de véspera.`;
+      } else {
+        paceDescription = `Ritmo firme! Faltam ${remainingMissions} missões para cobrir todo o cronograma.`;
+      }
+    } else {
+      paceDescription = `Você concluiu ${completedCount} missões. Aumente a constância para 1 missão por dia para blindar os 40 pontos.`;
+    }
+
+    // Identificação da Fase de Preparação (Insights Adaptativos por Proximidade da Prova)
+    let phaseBadge = "";
+    let phaseTitle = "";
+    let phaseAdvice = "";
+
+    if (diffDays <= 7) {
+      phaseBadge = "badge-phase-critical";
+      phaseTitle = "🔥 VÉSPERA DA BATALHA • SEMANA DECISIVA";
+      phaseAdvice = "Proibido estudar matéria nova! O cronograma recomenda foco 100% na revisão dos 8 pontos de Ética (Estatuto e CED), súmulas vinculantes e descanso mental.";
+    } else if (diffDays <= 20) {
+      phaseBadge = "badge-phase-final";
+      phaseTitle = "⚡ MODO RETA FINAL ATIVADO (Últimos 20 Dias)";
+      phaseAdvice = "Fase de fixação cirúrgica: 80% do tempo deve ser direcionado para resolução de questões comentadas da FGV e leitura dos 100 Artigos de Ouro.";
+    } else if (diffDays <= 45) {
+      phaseBadge = "badge-phase-speed";
+      phaseTitle = "🎯 FASE DE ACELERAÇÃO & DOMÍNIO DO GRUPO A";
+      phaseAdvice = "Garanta presença total nas matérias do Grupo A (Ética, Constitucional, Civil, Processo Civil, Penal e Trabalho). Elas sozinhas colocam 53 pontos na sua mão!";
+    } else {
+      phaseBadge = "badge-phase-base";
+      phaseTitle = "📚 FASE DE FUNDAMENTAÇÃO TÁTICA";
+      phaseAdvice = "Construa o hábito inegociável: cumpra 1 missão diária com leitura atenta dos artigos indicados e resolução da meta de 25 questões.";
+    }
+
+    // Diagnóstico do Último Simulado
+    let simInsight = "";
+    if (this.simuladosList.length > 0) {
+      const lastSim = this.simuladosList[0];
+      if (lastSim.score >= 40) {
+        simInsight = `🎯 <strong>Último Simulado: ${lastSim.score}/80 (Aprovado!)</strong> — Mantenha a consistência semanal para não oscilar emocionalmente.`;
+      } else {
+        const gap = 40 - lastSim.score;
+        simInsight = `⚠️ <strong>Último Simulado: ${lastSim.score}/80</strong> — Faltam apenas <strong>${gap} pontos</strong> para os 40. Reforce Ética (+3 pts) e Administrativo (+2 pts) para cruzar a linha de corte.`;
+      }
+    } else {
+      simInsight = "💡 Realize seu 1º Simulado Diagnóstico para mapear seus pontos fortes e fracos.";
+    }
+
+    container.innerHTML = `
+      <div class="coach-header">
+        <div class="coach-title-area">
+          <div class="coach-badge-live">
+            <span class="pulse-dot"></span>
+            COACH TÁTICO FALEIRO • INSIGHTS EM TEMPO REAL
+          </div>
+          <h3 class="coach-main-heading">${phaseTitle}</h3>
+        </div>
+        <div class="coach-save-status">
+          <span class="save-status-pill">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Salvo automaticamente
+          </span>
+        </div>
+      </div>
+
+      <div class="coach-grid">
+        <!-- Card 1: Fase & Proximidade -->
+        <div class="coach-card">
+          <div class="coach-card-label">TEMPO ATÉ A BATALHA</div>
+          <div class="coach-metric-val">
+            <span class="metric-big">${diffDays}</span>
+            <span class="metric-unit">dias restantes</span>
+          </div>
+          <p class="coach-card-desc">${phaseAdvice}</p>
+        </div>
+
+        <!-- Card 2: Grupo A (Pareto 80/20) -->
+        <div class="coach-card">
+          <div class="coach-card-label">DOMÍNIO DO GRUPO A (53 QUESTÕES)</div>
+          <div class="coach-metric-val">
+            <span class="metric-big">${groupAPct}%</span>
+            <span class="metric-unit">${groupADone}/${groupADays.length} missões concluídas</span>
+          </div>
+          <div class="coach-progress-track">
+            <div class="coach-progress-fill" style="width: ${groupAPct}%"></div>
+          </div>
+          <p class="coach-card-desc">O Grupo A concentra 66% de toda a prova. Quem domina o Grupo A não depende de sorte.</p>
+        </div>
+
+        <!-- Card 3: Ritmo & Previsão -->
+        <div class="coach-card">
+          <div class="coach-card-label">RITMO & PREVISÃO DE CONCLUSÃO</div>
+          <div class="coach-metric-val">
+            <span class="metric-big">${progressPct}%</span>
+            <span class="metric-unit">${completedCount}/${totalDays} missões cumpridas</span>
+          </div>
+          <p class="coach-card-desc">${paceDescription}</p>
+        </div>
+      </div>
+
+      <div class="coach-footer-note">
+        <div class="coach-sim-insight">${simInsight}</div>
+        <div class="coach-motto">
+          <span>⚔️</span>
+          <em>"Preparem os cavalos para o dia da batalha." — Faleiro</em>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- SPOTLIGHT: SUA PRÓXIMA MISSÃO ---
+  renderTodaySpotlight() {
+    const spotlightEl = document.getElementById("missionTodaySpotlight");
+    if (!spotlightEl) return;
+
+    const schedule = this.getCurrentScheduleData();
+    const allDays = schedule.flatMap(w => w.days);
+    
+    // Encontrar primeira missão não concluída
+    const nextMission = allDays.find(d => !this.completedDays.has(d.day));
+
+    if (!nextMission) {
+      spotlightEl.innerHTML = `
+        <div class="spotlight-card all-completed">
+          <div class="spotlight-congrats-icon">🏆</div>
+          <div class="spotlight-content">
+            <h4 class="spotlight-title">Parabéns, Guerreiro(a)! Você cumpriu 100% das missões!</h4>
+            <p class="spotlight-subtitle">Seu cavalo está pronto para a batalha. Agora faça revisões ativas e simulados até o domingo da prova!</p>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const groupBadgeClass = `badge-group-${nextMission.group.toLowerCase()}`;
+    const isSubtaskLawDone = this.daySubtasks[nextMission.day]?.law || false;
+    const isSubtaskQuestionsDone = this.daySubtasks[nextMission.day]?.questions || false;
+
+    spotlightEl.innerHTML = `
+      <div class="spotlight-card">
+        <div class="spotlight-left">
+          <div class="spotlight-pill">
+            <span class="gold-square-mark"></span>
+            SUA MISSÃO DE HOJE • MISSÃO ${String(nextMission.day).padStart(2, "0")}
+          </div>
+          <h3 class="spotlight-theme-title">${nextMission.theme}</h3>
+          <div class="spotlight-meta-row">
+            <span class="disc-tag">${nextMission.disciplines.join(" • ")}</span>
+            <span class="day-group-tag ${groupBadgeClass}">Grupo ${nextMission.group}</span>
+            <span class="spotlight-reading-preview">📖 ${nextMission.lawReading}</span>
+          </div>
+        </div>
+
+        <div class="spotlight-actions">
+          <button type="button" class="btn-spotlight-jump" onclick="window.app.scrollToMission(${nextMission.day})">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            Abrir Missão
+          </button>
+          <button type="button" class="btn-spotlight-complete" onclick="window.app.toggleDay(${nextMission.day})">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Concluir Missão Agora
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  scrollToMission(dayNumber) {
+    // Se estiver filtrado de forma que o card não apareça, resetar filtros
+    if (this.selectedStatusFilter === "DONE") {
+      this.filterByStatus("ALL");
+    }
+    if (this.selectedGroupFilter !== "ALL") {
+      this.filterByGroup("ALL");
+    }
+
+    setTimeout(() => {
+      const el = document.getElementById(`day-card-${dayNumber}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.classList.add("highlight-pulse");
+        setTimeout(() => el.classList.remove("highlight-pulse"), 2500);
+      }
+    }, 150);
+  }
+
+  // --- RENDERIZAÇÃO DO CRONOGRAMA ---
   renderSchedule() {
     const container = document.getElementById("scheduleWeeksContainer");
     if (!container) return;
@@ -220,12 +503,14 @@ class FaleiroOABApp {
       weekCard.innerHTML = `
         <div class="week-header">
           <div class="week-title-area">
-            <span class="week-pill">Semana ${weekData.week}</span>
+            <div class="week-pill-row">
+              <span class="week-pill">Semana ${weekData.week}</span>
+              <span class="week-done-badge">${weekDoneCount}/${weekTotalCount} concluídos (${weekPct}%)</span>
+            </div>
             <h3 class="week-title">${weekData.title}</h3>
             <p class="week-focus-desc"><span class="focus-label">Foco Estratégico:</span> ${weekData.focus}</p>
           </div>
           <div class="week-progress-area">
-            <span class="week-progress-label">${weekDoneCount}/${weekTotalCount} concluídos (${weekPct}%)</span>
             <div class="week-progress-bar">
               <div class="week-progress-fill" style="width: ${weekPct}%"></div>
             </div>
@@ -237,11 +522,11 @@ class FaleiroOABApp {
       const grid = weekCard.querySelector(`#week-grid-${weekData.week}`);
 
       weekData.days.forEach(dayItem => {
-        // Se estiver filtrado, pula
         if (!visibleDays.includes(dayItem)) return;
 
         const isDone = this.completedDays.has(dayItem.day);
         const dayNote = this.dayNotes[dayItem.day] || "";
+        const subtasks = this.daySubtasks[dayItem.day] || { law: isDone, questions: isDone };
         const groupBadgeClass = `badge-group-${dayItem.group.toLowerCase()}`;
 
         const dayCard = document.createElement("div");
@@ -250,43 +535,62 @@ class FaleiroOABApp {
 
         dayCard.innerHTML = `
           <div class="day-card-header">
-            <div class="day-number-badge">Missão ${String(dayItem.day).padStart(2, "0")}</div>
-            <div class="day-disciplines-tags">
-              ${dayItem.disciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
-              <span class="day-group-tag ${groupBadgeClass}">Grupo ${dayItem.group}</span>
+            <div class="day-header-left">
+              <span class="day-number-badge">Missão ${String(dayItem.day).padStart(2, "0")}</span>
+              <div class="day-disciplines-tags">
+                ${dayItem.disciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
+                <span class="day-group-tag ${groupBadgeClass}">Grupo ${dayItem.group}</span>
+              </div>
             </div>
-            <label class="day-checkbox-label" title="Marcar missão como cumprida">
+            
+            <div class="day-header-right">
+              ${isDone ? '<span class="status-done-pill">✓ Concluída</span>' : ''}
+              <button type="button" 
+                      class="btn-toggle-mission ${isDone ? 'active' : ''}" 
+                      onclick="window.app.toggleDay(${dayItem.day})"
+                      title="${isDone ? 'Desmarcar missão' : 'Marcar missão como cumprida'}">
+                ${isDone ? '✓ Cumprida' : 'Concluir'}
+              </button>
+            </div>
+          </div>
+
+          <h4 class="day-theme-title">${dayItem.theme}</h4>
+
+          <!-- Checklist de Ação Objetiva (Micro-tarefas) -->
+          <div class="day-checklist-block">
+            <label class="checklist-item ${subtasks.law ? 'checked' : ''}">
               <input type="checkbox" 
-                     class="day-checkbox" 
-                     ${isDone ? "checked" : ""} 
-                     onchange="window.app.toggleDay(${dayItem.day})">
-              <span class="custom-checkmark"></span>
+                     ${subtasks.law ? 'checked' : ''} 
+                     onchange="window.app.toggleSubtask(${dayItem.day}, 'law', this.checked)">
+              <span class="checklist-custom-check"></span>
+              <span class="checklist-label-text">
+                <strong>📖 Legislação:</strong> ${dayItem.lawReading}
+              </span>
+            </label>
+
+            <label class="checklist-item ${subtasks.questions ? 'checked' : ''}">
+              <input type="checkbox" 
+                     ${subtasks.questions ? 'checked' : ''} 
+                     onchange="window.app.toggleSubtask(${dayItem.day}, 'questions', this.checked)">
+              <span class="checklist-custom-check"></span>
+              <span class="checklist-label-text">
+                <strong>🎯 Meta Prática:</strong> Resolver ${dayItem.questionsGoal} questões FGV comentadas
+              </span>
             </label>
           </div>
 
-          <div class="day-theme-title">${dayItem.theme}</div>
-
-          <div class="day-task-block">
-            <div class="task-title">
-              <span class="gold-square-mark"></span>
-              Legislação e Lei Seca Obrigatória:
-            </div>
-            <div class="task-content law-content">${dayItem.lawReading}</div>
-          </div>
-
-          <div class="day-footer-meta">
-            <div class="meta-goal">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Meta: <strong>${dayItem.questionsGoal} questões FGV</strong>
+          <div class="day-card-footer">
+            <div class="day-note-preview">
+              ${dayItem.reviewNotes ? `<span class="day-tip-text">💡 ${dayItem.reviewNotes}</span>` : ''}
             </div>
             <button type="button" class="btn-toggle-notes" onclick="window.app.toggleNotesArea(${dayItem.day})">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-              Anotações
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              ${dayNote ? 'Editar Nota' : 'Anotações'}
             </button>
           </div>
 
-          <div class="day-notes-area ${dayNote ? "visible" : ""}" id="notes-area-${dayItem.day}">
-            <textarea placeholder="Suas anotações, pontos de dúvida ou acertos desta missão..." 
+          <div class="day-notes-area ${dayNote ? 'visible' : ''}" id="notes-area-${dayItem.day}">
+            <textarea placeholder="Suas anotações, artigos que mais errou ou pontos de atenção desta missão..." 
                       class="day-notes-input" 
                       onblur="window.app.saveDayNote(${dayItem.day}, this.value)">${dayNote}</textarea>
           </div>
@@ -299,23 +603,57 @@ class FaleiroOABApp {
     });
   }
 
+  // Alternar micro-tarefa individual (Lei Seca ou Questões)
+  toggleSubtask(dayNumber, taskKey, isChecked) {
+    if (!this.daySubtasks[dayNumber]) {
+      this.daySubtasks[dayNumber] = { law: false, questions: false };
+    }
+    this.daySubtasks[dayNumber][taskKey] = isChecked;
+
+    // Se marcou ambas as tarefas, conclui a missão automaticamente!
+    if (this.daySubtasks[dayNumber].law && this.daySubtasks[dayNumber].questions) {
+      if (!this.completedDays.has(dayNumber)) {
+        this.completedDays.add(dayNumber);
+        window.showToast(`⚔️ Ambas as metas cumpridas! Missão ${dayNumber} finalizada!`);
+      }
+    } else {
+      // Se desmarcou uma e a missão estava concluída, remove a conclusão total
+      if (this.completedDays.has(dayNumber)) {
+        this.completedDays.delete(dayNumber);
+      }
+    }
+
+    this.saveAll();
+    this.updateGlobalProgress();
+    this.renderCoachTatico();
+    this.renderTodaySpotlight();
+    this.renderSchedule();
+  }
+
   toggleDay(dayNumber) {
     if (this.completedDays.has(dayNumber)) {
       this.completedDays.delete(dayNumber);
+      if (this.daySubtasks[dayNumber]) {
+        this.daySubtasks[dayNumber].law = false;
+        this.daySubtasks[dayNumber].questions = false;
+      }
       window.showToast(`Missão ${dayNumber} desmarcada.`);
     } else {
       this.completedDays.add(dayNumber);
+      if (!this.daySubtasks[dayNumber]) {
+        this.daySubtasks[dayNumber] = { law: true, questions: true };
+      } else {
+        this.daySubtasks[dayNumber].law = true;
+        this.daySubtasks[dayNumber].questions = true;
+      }
       window.showToast(`⚔️ Parabéns! Missão ${dayNumber} cumprida!`);
     }
 
-    localStorage.setItem("faleiro_oab_completed_days", JSON.stringify(Array.from(this.completedDays)));
+    this.saveAll();
     this.updateGlobalProgress();
-
-    // Atualizar classe do card
-    const card = document.getElementById(`day-card-${dayNumber}`);
-    if (card) {
-      card.classList.toggle("completed", this.completedDays.has(dayNumber));
-    }
+    this.renderCoachTatico();
+    this.renderTodaySpotlight();
+    this.renderSchedule();
   }
 
   toggleNotesArea(dayNumber) {
@@ -335,7 +673,7 @@ class FaleiroOABApp {
     } else {
       delete this.dayNotes[dayNumber];
     }
-    localStorage.setItem("faleiro_oab_day_notes", JSON.stringify(this.dayNotes));
+    this.saveAll();
   }
 
   // --- FILTROS DO CRONOGRAMA ---
@@ -360,25 +698,27 @@ class FaleiroOABApp {
     this.renderSchedule();
   }
 
-  // --- PROGRESSO GERAL ---
+  // --- ATUALIZAÇÃO DO PROGRESSO GLOBAL ---
   updateGlobalProgress() {
-    const totalDays = this.planDuration;
-    const doneCount = Array.from(this.completedDays).filter(d => d <= totalDays).length;
-    const pct = Math.min(100, Math.round((doneCount / totalDays) * 100));
+    const schedule = this.getCurrentScheduleData();
+    const allDays = schedule.flatMap(w => w.days);
+    const totalDays = allDays.length;
+    const completedCount = allDays.filter(d => this.completedDays.has(d.day)).length;
+    const pct = totalDays > 0 ? Math.round((completedCount / totalDays) * 100) : 0;
 
-    const pctText = document.getElementById("overallProgressPct");
-    const countText = document.getElementById("overallProgressCount");
-    const barFill = document.getElementById("overallProgressBarFill");
+    const pctEl = document.getElementById("overallProgressPct");
+    const countEl = document.getElementById("overallProgressCount");
+    const barEl = document.getElementById("overallProgressBarFill");
 
-    if (pctText) pctText.textContent = `${pct}%`;
-    if (countText) countText.textContent = `${doneCount} de ${totalDays} missões cumpridas`;
-    if (barFill) barFill.style.width = `${pct}%`;
+    if (pctEl) pctEl.textContent = `${pct}%`;
+    if (countEl) countEl.textContent = `${completedCount} de ${totalDays} missões concluídas`;
+    if (barEl) barEl.style.width = `${pct}%`;
   }
 
-  // --- RAIO-X DA FGV: ARTIGOS DE OURO ---
+  // --- RAIO-X & ARTIGOS DE OURO ---
   renderRaioX() {
-    const container = document.getElementById("raioxCardsGrid");
-    if (!container) return;
+    const container = document.getElementById("raioXDisciplinesList");
+    if (!container || !window.DISCIPLINES_DATA) return;
 
     container.innerHTML = "";
 
@@ -388,39 +728,37 @@ class FaleiroOABApp {
       card.id = `raiox-${disc.id}`;
 
       card.innerHTML = `
-        <div class="raiox-card-header">
+        <div class="raiox-header">
           <div class="raiox-header-left">
-            <span class="sim-order-badge">${disc.order}</span>
-            <div>
-              <h4 class="raiox-title">${disc.name}</h4>
-              <span class="sim-badge badge-group-${disc.group.toLowerCase()}">Grupo ${disc.group} • ${disc.questions} questões</span>
-            </div>
+            <span class="raiox-order-pill">Questões ${disc.order}</span>
+            <h4 class="raiox-title">${disc.name}</h4>
           </div>
-          <div class="raiox-target-pill" title="Meta sugerida para aprovação">
-            Meta: <strong>${disc.targetRecommended}/${disc.questions}</strong>
+          <div class="raiox-header-right">
+            <span class="day-group-tag badge-group-${disc.group.toLowerCase()}">Grupo ${disc.group}</span>
+            <span class="raiox-q-count">${disc.questions} questões</span>
           </div>
         </div>
 
         <p class="raiox-desc">${disc.description}</p>
 
         <div class="raiox-section">
-          <h5>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            Temas Mais Recorrentes na FGV:
-          </h5>
-          <ul class="raiox-list top-themes">
-            ${disc.topThemes.map(t => `<li><span class="theme-dot"></span>${t}</li>`).join("")}
+          <div class="raiox-section-label">
+            <span class="gold-square-mark"></span>
+            Artigos de Ouro Mais Recorrentes na FGV:
+          </div>
+          <ul class="raiox-articles-list">
+            ${disc.goldArticles.map(art => `<li>${art}</li>`).join("")}
           </ul>
         </div>
 
-        <div class="raiox-section gold-section">
-          <h5>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-            Artigos de Ouro (Leitura Obrigatória):
-          </h5>
-          <ul class="raiox-list gold-articles">
-            ${disc.goldArticles.map(a => `<li><span class="gold-icon">📜</span>${a}</li>`).join("")}
-          </ul>
+        <div class="raiox-section">
+          <div class="raiox-section-label">
+            <span class="gold-square-mark"></span>
+            Temas com Maior Incidência Histórica:
+          </div>
+          <div class="raiox-themes-tags">
+            ${disc.topThemes.map(th => `<span class="raiox-theme-pill">${th}</span>`).join("")}
+          </div>
         </div>
       `;
 
@@ -428,7 +766,7 @@ class FaleiroOABApp {
     });
   }
 
-  // --- CONTROLE DE SIMULADOS ---
+  // --- HISTÓRICO DE SIMULADOS ---
   renderSimulados() {
     const listContainer = document.getElementById("simuladosHistoryList");
     if (!listContainer) return;
@@ -436,7 +774,14 @@ class FaleiroOABApp {
     listContainer.innerHTML = "";
 
     if (this.simuladosList.length === 0) {
-      listContainer.innerHTML = `<div class="empty-simulados-msg">Nenhum simulado registrado ainda. Clique no botão abaixo para registrar seu primeiro simulado!</div>`;
+      listContainer.innerHTML = `
+        <div class="empty-simulados-notice">
+          <p>Nenhum simulado cadastrado ainda.</p>
+          <button type="button" class="btn-header btn-primary-gold" onclick="window.app.openModal('modalAddSimulado')">
+            + Cadastrar Meu Primeiro Simulado
+          </button>
+        </div>
+      `;
       this.updateSimuladosStats(0, 0, 0);
       return;
     }
@@ -507,8 +852,9 @@ class FaleiroOABApp {
       notes: notes || ""
     });
 
-    localStorage.setItem("faleiro_oab_simulados", JSON.stringify(this.simuladosList));
+    this.saveAll();
     this.renderSimulados();
+    this.renderCoachTatico();
     window.showToast("Simulado registrado com sucesso!");
     this.closeModal("modalAddSimulado");
   }
@@ -516,13 +862,14 @@ class FaleiroOABApp {
   deleteSimulado(idx) {
     if (confirm("Deseja realmente remover este simulado do histórico?")) {
       this.simuladosList.splice(idx, 1);
-      localStorage.setItem("faleiro_oab_simulados", JSON.stringify(this.simuladosList));
+      this.saveAll();
       this.renderSimulados();
+      this.renderCoachTatico();
       window.showToast("Simulado excluído.");
     }
   }
 
-  // --- MODAL CONTROLS ---
+  // --- MODAIS & BACKUP ---
   openModal(modalId) {
     const m = document.getElementById(modalId);
     if (m) m.classList.add("open");
@@ -531,6 +878,140 @@ class FaleiroOABApp {
   closeModal(modalId) {
     const m = document.getElementById(modalId);
     if (m) m.classList.remove("open");
+  }
+
+  openBackupModal() {
+    this.openModal("modalBackup");
+  }
+
+  openDateModal() {
+    const inputExamDate = document.getElementById("inputExamDate");
+    if (inputExamDate) inputExamDate.value = this.examDate;
+    this.openModal("modalExamDate");
+  }
+
+  saveExamDate(e) {
+    if (e) e.preventDefault();
+    const inputExamDate = document.getElementById("inputExamDate");
+    if (inputExamDate && inputExamDate.value) {
+      this.examDate = inputExamDate.value;
+      localStorage.setItem("faleiro_oab_exam_date", this.examDate);
+      this.setupCountdown();
+      this.renderCoachTatico();
+      this.closeModal("modalExamDate");
+      window.showToast("Data da prova atualizada com sucesso!");
+    }
+  }
+
+  // Geração de Objeto de Backup Completo
+  getBackupPayload() {
+    return {
+      version: "2.0",
+      product: "Cronograma Estratégico OAB • Prof Faleiro",
+      completedDays: Array.from(this.completedDays),
+      daySubtasks: this.daySubtasks,
+      dayNotes: this.dayNotes,
+      planDuration: this.planDuration,
+      examDate: this.examDate,
+      startDate: this.startDate,
+      simuladosList: this.simuladosList,
+      simScores: localStorage.getItem("faleiro_oab_sim_scores") || null,
+      exportedAt: new Date().toISOString()
+    };
+  }
+
+  downloadBackupFile() {
+    const data = this.getBackupPayload();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `faleiro-oab-backup-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    window.showToast("Backup baixado com sucesso!");
+  }
+
+  copyBackupCode() {
+    const data = this.getBackupPayload();
+    const jsonStr = JSON.stringify(data);
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      window.showToast("Código de backup copiado para a área de transferência!");
+    }).catch(() => {
+      window.showToast("Não foi possível copiar. Tente baixar o arquivo.");
+    });
+  }
+
+  importBackupFromTextarea() {
+    const textarea = document.getElementById("importBackupTextarea");
+    if (!textarea || !textarea.value.trim()) {
+      alert("Por favor, cole o código do backup na caixa de texto.");
+      return;
+    }
+    this.applyBackupJson(textarea.value.trim());
+  }
+
+  handleBackupFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.applyBackupJson(e.target.result);
+    };
+    reader.readAsText(file);
+  }
+
+  applyBackupJson(jsonString) {
+    try {
+      const data = JSON.parse(jsonString);
+      if (!data || (!data.completedDays && !data.version)) {
+        alert("Arquivo de backup inválido.");
+        return;
+      }
+
+      if (Array.isArray(data.completedDays)) {
+        this.completedDays = new Set(data.completedDays);
+      }
+      if (data.daySubtasks) {
+        this.daySubtasks = data.daySubtasks;
+      }
+      if (data.dayNotes) {
+        this.dayNotes = data.dayNotes;
+      }
+      if (data.planDuration === 60 || data.planDuration === 90) {
+        this.planDuration = data.planDuration;
+      }
+      if (data.examDate) {
+        this.examDate = data.examDate;
+      }
+      if (data.startDate) {
+        this.startDate = data.startDate;
+      }
+      if (Array.isArray(data.simuladosList)) {
+        this.simuladosList = data.simuladosList;
+      }
+      if (data.simScores) {
+        localStorage.setItem("faleiro_oab_sim_scores", data.simScores);
+      }
+
+      this.saveAll();
+      this.updateDurationButtons();
+      this.setupCountdown();
+      this.renderCoachTatico();
+      this.renderTodaySpotlight();
+      this.renderSchedule();
+      this.renderSimulados();
+      this.updateGlobalProgress();
+      if (window.simulator) window.simulator.render();
+
+      this.closeModal("modalBackup");
+      window.showToast("🎉 Backup restaurado com sucesso em 100%!");
+    } catch (err) {
+      alert("Erro ao ler o backup. Verifique se o formato é válido.");
+    }
   }
 
   // --- POMODORO DE FOCO ---
@@ -611,7 +1092,6 @@ class FaleiroOABApp {
 
   // --- EXPORTAR / IMPRIMIR EM PDF ---
   printPDF() {
-    // Expandir temporariamente todas as semanas para garantir impressão completa
     const prevWeekFilter = this.selectedWeekFilter;
     const prevGroupFilter = this.selectedGroupFilter;
     const prevStatusFilter = this.selectedStatusFilter;
@@ -623,7 +1103,6 @@ class FaleiroOABApp {
 
     setTimeout(() => {
       window.print();
-      // Restaurar filtros do usuário após abrir a caixa de diálogo
       setTimeout(() => {
         this.selectedWeekFilter = prevWeekFilter;
         this.selectedGroupFilter = prevGroupFilter;
@@ -637,15 +1116,19 @@ class FaleiroOABApp {
   resetAllProgress() {
     if (confirm("Tem certeza que deseja resetar todo o progresso dos dias concluídos e simulador? Esta ação não pode ser desfeita.")) {
       localStorage.removeItem("faleiro_oab_completed_days");
+      localStorage.removeItem("faleiro_oab_day_subtasks");
       localStorage.removeItem("faleiro_oab_day_notes");
       localStorage.removeItem("faleiro_oab_sim_scores");
       this.completedDays = new Set();
+      this.daySubtasks = {};
       this.dayNotes = {};
       if (window.simulator) {
         window.simulator.loadDefaultScores();
         window.simulator.saveScores();
         window.simulator.render();
       }
+      this.renderCoachTatico();
+      this.renderTodaySpotlight();
       this.renderSchedule();
       this.updateGlobalProgress();
       window.showToast("Progresso resetado com sucesso.");

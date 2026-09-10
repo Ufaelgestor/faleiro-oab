@@ -43,6 +43,11 @@
           80 Questões • Meta 40+
         </span>
 
+        <button type="button" class="btn-header" onclick="window.app.openBackupModal()" title="Salvar e restaurar backup dos seus dados">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          Backup / Salvar
+        </button>
+
         <button type="button" class="btn-header" onclick="window.app.toggleTheme()" title="Alternar Modo Claro / Escuro">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
           Tema
@@ -108,12 +113,18 @@
       <!-- Card 2: Contagem Regressiva para a Prova -->
       <div class="dashboard-card">
         <div class="card-accent-border"></div>
-        <div class="card-title-muted">Rumo à Aprovação OAB</div>
+        <div class="card-title-muted">
+          <span>Rumo à Aprovação OAB</span>
+          <button type="button" class="btn-edit-exam-date" onclick="window.app.openDateModal()" title="Alterar data da sua prova">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Editar data
+          </button>
+        </div>
         <div class="countdown-display">
           <span class="countdown-big-num" id="examCountdownNumber">--</span>
           <span class="countdown-label-unit">dias até o exame</span>
         </div>
-        <div class="countdown-subtext">Cada dia de estudo com questões e lei seca aproxima você da carteira vermelha!</div>
+        <div class="countdown-subtext" id="countdownSubtext">Cada dia de estudo com questões e lei seca aproxima você da carteira vermelha!</div>
       </div>
 
       <!-- Card 3: Timer de Foco Pomodoro -->
@@ -164,6 +175,12 @@
          ABA 1: CRONOGRAMA DIÁRIO DE ESTUDOS
          ========================================================================== -->
     <main class="tab-content-section active" id="tab-cronograma">
+      <!-- Painel Inteligente: Coach Tático OAB & Diagnóstico em Tempo Real -->
+      <section class="coach-tatico-panel" id="coachTaticoContainer"></section>
+
+      <!-- Spotlight: Missão de Hoje / Onde Você Parou -->
+      <div class="mission-today-spotlight" id="missionTodaySpotlight"></div>
+
       <!-- Barra de Filtros -->
       <div class="schedule-filters-toolbar">
         <div class="filters-left">
@@ -428,6 +445,86 @@
         <div style="display: flex; gap: 10px; margin-top: 20px;">
           <button type="button" class="btn-header" style="flex: 1;" onclick="window.app.closeModal('modalAddSimulado')">Cancelar</button>
           <button type="submit" class="btn-header btn-primary-gold" style="flex: 1;">Salvar Simulado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de Backup e Sincronização de Dados -->
+  <div class="modal-overlay" id="modalBackup" onclick="if(event.target === this) window.app.closeModal('modalBackup')">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>💾 Sincronização & Backup do Progresso</h3>
+        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalBackup')">&times;</button>
+      </div>
+      
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
+        Seu progresso (missões concluídas, anotações, simulados e metas) é <strong>salvo automaticamente no seu navegador em tempo real</strong>. 
+        Se você for estudar em outro celular ou computador, use as opções abaixo para exportar e importar seus dados:
+      </p>
+
+      <div class="backup-actions-grid">
+        <div class="backup-action-box">
+          <div class="backup-box-title">1. Exportar Meu Progresso</div>
+          <p class="backup-box-desc">Baixe um arquivo leve com todo o seu histórico ou copie o código de sincronização.</p>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button type="button" class="btn-header btn-primary-gold" style="flex: 1;" onclick="window.app.downloadBackupFile()">
+              📥 Baixar Arquivo .json
+            </button>
+            <button type="button" class="btn-header" style="flex: 1;" onclick="window.app.copyBackupCode()">
+              📋 Copiar Código
+            </button>
+          </div>
+        </div>
+
+        <div class="backup-action-box" style="margin-top: 14px;">
+          <div class="backup-box-title">2. Restaurar Progresso em Outro Dispositivo</div>
+          <p class="backup-box-desc">Cole o código do seu backup salvo ou selecione o arquivo baixado anteriormente:</p>
+          <textarea id="importBackupTextarea" class="form-input" style="height: 70px; margin-top: 8px; font-family: monospace; font-size: 11px;" placeholder="Cole o código do seu backup aqui..."></textarea>
+          
+          <div style="display: flex; gap: 8px; margin-top: 10px; align-items: center;">
+            <input type="file" id="importBackupFileInput" accept=".json" style="display: none;" onchange="window.app.handleBackupFileUpload(event)">
+            <button type="button" class="btn-header" onclick="document.getElementById('importBackupFileInput').click()">
+              📂 Selecionar Arquivo
+            </button>
+            <button type="button" class="btn-header btn-primary-gold" style="flex: 1;" onclick="window.app.importBackupFromTextarea()">
+              🔄 Restaurar Agora
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Alteração de Data da Prova -->
+  <div class="modal-overlay" id="modalExamDate" onclick="if(event.target === this) window.app.closeModal('modalExamDate')">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>📅 Data da sua Prova OAB</h3>
+        <button type="button" class="btn-close-modal" onclick="window.app.closeModal('modalExamDate')">&times;</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+        Defina a data exata da sua prova para que a contagem regressiva e os insights de ritmo e reta final sejam calibrados automaticamente.
+      </p>
+
+      <form id="formExamDate" onsubmit="window.app.saveExamDate(event)">
+        <div class="form-group">
+          <label for="inputExamDate">Selecione a data da prova:</label>
+          <input type="date" id="inputExamDate" class="form-input" required>
+        </div>
+
+        <div class="exam-date-presets">
+          <span style="font-size: 11px; font-weight: 700; color: var(--gold-primary); text-transform: uppercase;">Atalhos de Exame:</span>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+            <button type="button" class="preset-date-btn" onclick="document.getElementById('inputExamDate').value='2026-11-22'">42º Exame (Nov/26)</button>
+            <button type="button" class="preset-date-btn" onclick="document.getElementById('inputExamDate').value='2027-03-28'">43º Exame (Mar/27)</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-header" style="flex: 1;" onclick="window.app.closeModal('modalExamDate')">Cancelar</button>
+          <button type="submit" class="btn-header btn-primary-gold" style="flex: 1;">Salvar Data</button>
         </div>
       </form>
     </div>

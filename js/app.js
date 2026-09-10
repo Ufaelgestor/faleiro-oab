@@ -127,6 +127,7 @@ class FaleiroOABApp {
   }
 
   init() {
+    this.checkAccessAuthentication();
     this.setupTabs();
     this.setupCountdown();
     this.renderCoachTatico();
@@ -1644,6 +1645,58 @@ class FaleiroOABApp {
       this.renderPrintSchedule();
       this.updateGlobalProgress();
       window.showToast("Progresso resetado com sucesso.");
+    }
+  }
+
+  // --- SISTEMA DE PROTEÇÃO ANTI-PIRATARIA / CONTROLE DE ACESSO ---
+  checkAccessAuthentication() {
+    const VALID_AUTH_KEYS = ["faleiro48", "oab48", "faleiro2026", "turma48", "aprovado48", "faleirooab"];
+
+    // 1. Verificar se veio com chave de liberação na URL (ex: ?acesso=faleiro48 ou ?token=faleiro48)
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get("acesso") || urlParams.get("token") || urlParams.get("auth") || urlParams.get("chave");
+
+    if (tokenParam) {
+      const cleanToken = tokenParam.trim().toLowerCase();
+      if (VALID_AUTH_KEYS.includes(cleanToken)) {
+        localStorage.setItem("faleiro_oab_authenticated", "true");
+        // Remove o parâmetro da barra de endereços para o aluno não copiar o link com a chave
+        const cleanUrl = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    }
+
+    // 2. Verificar estado de autenticação
+    const isAuth = localStorage.getItem("faleiro_oab_authenticated") === "true";
+    const lockModal = document.getElementById("modalAuthLock");
+
+    if (!isAuth) {
+      if (lockModal) lockModal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    } else {
+      if (lockModal) lockModal.style.display = "none";
+      document.body.style.overflow = "";
+    }
+  }
+
+  submitAuthKey(event) {
+    if (event) event.preventDefault();
+    const VALID_AUTH_KEYS = ["faleiro48", "oab48", "faleiro2026", "turma48", "aprovado48", "faleirooab"];
+    const input = document.getElementById("inputAuthKey");
+    const errorEl = document.getElementById("authErrorMessage");
+    if (!input) return;
+
+    const val = input.value.trim().toLowerCase();
+    if (VALID_AUTH_KEYS.includes(val)) {
+      localStorage.setItem("faleiro_oab_authenticated", "true");
+      const lockModal = document.getElementById("modalAuthLock");
+      if (lockModal) lockModal.style.display = "none";
+      if (errorEl) errorEl.style.display = "none";
+      document.body.style.overflow = "";
+      window.showToast("🔓 Acesso liberado com sucesso! Bons estudos, guerreiro(a)!");
+    } else {
+      if (errorEl) errorEl.style.display = "block";
+      input.focus();
     }
   }
 }

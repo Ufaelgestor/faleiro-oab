@@ -541,6 +541,48 @@
   <!-- Container de Impressão Oficial e Diagramada (Apenas Impressão / PDF) -->
   <div id="printScheduleSection" class="print-only-schedule"></div>
 
+  <!-- Modal de Bloqueio Anti-Pirataria (Acesso Exclusivo para Alunos Oficiais) -->
+  <div class="modal-backdrop auth-lock-backdrop" id="modalAuthLock" style="display: none;">
+    <div class="modal-card auth-lock-card">
+      <div class="auth-lock-logo">
+        <img src="assets/logo-faleiro-gold.png" alt="Logo Oficial Faleiro" class="auth-logo-img">
+      </div>
+      <div class="auth-lock-badge">🔒 ACESSO RESTRITO • ALUNOS MATRICULADOS</div>
+      <h2 class="auth-lock-title">Cronograma Estratégico 1ª Fase OAB</h2>
+      <p class="auth-lock-subtitle">Professor Thalisson Faleiro • 48º Exame de Ordem</p>
+
+      <div class="auth-lock-box">
+        <p class="auth-lock-instruction">
+          Este portal é de uso individual e exclusivo dos alunos oficiais. Digite sua <strong>Chave de Acesso</strong> disponibilizada dentro da aula na <strong>Nutror / Eduzz</strong>:
+        </p>
+
+        <form id="formAuthKey" onsubmit="window.app.submitAuthKey(event)">
+          <div class="form-group" style="margin-bottom: 10px;">
+            <input type="text" id="inputAuthKey" class="form-input auth-input" placeholder="Digite sua Chave de Acesso..." required autocomplete="off">
+          </div>
+          <div id="authErrorMessage" class="auth-error-msg" style="display: none;">
+            ⚠️ Chave incorreta. Verifique a chave de acesso informada na aula da Nutror.
+          </div>
+          <button type="submit" class="btn-header btn-primary-gold auth-btn-submit">
+            🔓 Desbloquear Meu Cronograma
+          </button>
+        </form>
+
+        <div class="auth-footer-help">
+          <div class="auth-help-text">
+            💡 <strong>Já comprou o cronograma?</strong> Sua chave é liberada na aula da Nutror. Se você acessar pelo botão oficial da aula, o desbloqueio ocorre automaticamente.
+          </div>
+          <div class="auth-buy-card">
+            <span>Ainda não possui sua vaga garantida?</span>
+            <a href="https://chk.eduzz.com" target="_blank" class="auth-buy-link">
+              Garantir Minha Vaga Oficial na Eduzz →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="js/data.js"></script>
   <script src="js/simulator.js"></script>

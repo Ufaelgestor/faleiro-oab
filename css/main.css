@@ -1024,23 +1024,24 @@ body.theme-light .brand-title-oab {
 
 .vitrine-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+  gap: 20px;
+  margin-bottom: 34px;
 }
 
+/* Card em Formato Vertical (Capa de Módulo tipo Nutror/Streaming) */
 .vitrine-week-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(17, 26, 46, 0.95) 100%);
+  position: relative;
+  background: linear-gradient(180deg, #10192e 0%, #070c17 100%);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 20px 22px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  min-height: 420px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .vitrine-week-card::before {
@@ -1049,20 +1050,23 @@ body.theme-light .brand-title-oab {
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: transparent;
-  transition: var(--transition);
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+  z-index: 3;
 }
 
 .vitrine-week-card:hover {
+  transform: translateY(-6px);
   border-color: var(--border-color-gold);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 18px rgba(223, 183, 108, 0.15);
-  background: linear-gradient(145deg, rgba(223, 183, 108, 0.05) 0%, rgba(20, 31, 54, 0.95) 100%);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 24px rgba(223, 183, 108, 0.25);
+  background: linear-gradient(180deg, #131e36 0%, #091020 100%);
 }
 
 .vitrine-week-card:hover::before {
-  background: var(--gold-laser);
+  opacity: 1;
+  background: var(--gold-gradient);
 }
 
 .vitrine-week-card.status-done {
@@ -1070,30 +1074,91 @@ body.theme-light .brand-title-oab {
 }
 
 .vitrine-week-card.status-in-progress {
-  border-color: rgba(223, 183, 108, 0.3);
+  border-color: rgba(223, 183, 108, 0.4);
 }
 
-.vitrine-card-top {
+/* Iluminação de fundo e Marca D'água da Capa */
+.module-cover-bg-glow {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(223, 183, 108, 0.14) 0%, rgba(223, 183, 108, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: all 0.35s ease;
+}
+
+.vitrine-week-card:hover .module-cover-bg-glow {
+  width: 230px;
+  height: 230px;
+  background: radial-gradient(circle, rgba(223, 183, 108, 0.26) 0%, rgba(223, 183, 108, 0) 75%);
+}
+
+.module-cover-watermark {
+  position: absolute;
+  right: -12px;
+  bottom: 80px;
+  width: 130px;
+  height: 130px;
+  opacity: 0.04;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-primary);
+  transition: all 0.35s ease;
+}
+
+.module-cover-watermark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.vitrine-week-card:hover .module-cover-watermark {
+  opacity: 0.1;
+  transform: scale(1.1) rotate(-6deg);
+}
+
+/* Conteúdo da Capa */
+.module-cover-content {
+  position: relative;
+  z-index: 2;
+  padding: 18px 18px 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+/* Topo da Capa: Número do Módulo e Status */
+.module-cover-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
-.vitrine-week-number {
+.module-cover-number {
   font-family: var(--font-heading);
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--gold-primary);
-  background: var(--gold-subtle);
-  padding: 3px 9px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #060a12;
+  background: var(--gold-gradient);
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color-gold);
+  box-shadow: 0 2px 8px rgba(223, 183, 108, 0.35);
+  display: inline-block;
 }
 
 .vitrine-status-badge {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   padding: 3px 8px;
   border-radius: var(--radius-full);
@@ -1117,89 +1182,221 @@ body.theme-light .brand-title-oab {
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.vitrine-week-title {
+/* Centro da Capa: Emblema Temático + Título da Semana */
+.module-cover-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: auto 0;
+  padding: 10px 0;
+}
+
+.module-cover-emblem {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(223, 183, 108, 0.08);
+  border: 1px solid rgba(223, 183, 108, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-primary);
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.vitrine-week-card:hover .module-cover-emblem {
+  transform: scale(1.12);
+  background: rgba(223, 183, 108, 0.18);
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 18px rgba(223, 183, 108, 0.45);
+}
+
+.module-cover-title {
   font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 6px;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: #ffffff;
   line-height: 1.35;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
   letter-spacing: -0.2px;
 }
 
-.vitrine-focus-text {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-  line-height: 1.45;
-  flex: 1;
-}
-
-.vitrine-disciplines-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 14px;
-}
-
-.vitrine-progress-wrap {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.vitrine-progress-labels {
-  display: flex;
-  justify-content: space-between;
+.module-cover-focus {
   font-size: 11.5px;
-  color: var(--text-dim);
-  margin-bottom: 6px;
-}
-
-.vitrine-progress-labels strong {
-  color: var(--text-main);
-}
-
-.vitrine-progress-track {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   margin-bottom: 12px;
 }
 
-.vitrine-progress-fill {
+.module-cover-disciplines {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cover-disc-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+}
+
+/* Base da Capa: Progresso e Ação de Entrada */
+.module-cover-bottom {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.module-cover-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.module-cover-progress-row strong {
+  color: var(--text-main);
+}
+
+.module-cover-progress-track {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.module-cover-progress-fill {
   height: 100%;
   border-radius: var(--radius-full);
   transition: width 0.3s ease;
 }
 
-.vitrine-progress-fill.done {
+.module-cover-progress-fill.done {
   background: #34d399;
 }
 
-.vitrine-progress-fill.in-progress {
+.module-cover-progress-fill.in-progress {
   background: var(--gold-gradient);
 }
 
-.vitrine-progress-fill.empty {
+.module-cover-progress-fill.empty {
   background: transparent;
 }
 
-.vitrine-card-footer {
+.module-cover-action {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   color: var(--gold-primary);
   font-family: var(--font-heading);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
-  gap: 4px;
-  transition: var(--transition);
+  transition: color 0.2s ease;
 }
 
-.vitrine-week-card:hover .vitrine-card-footer {
+.vitrine-week-card:hover .module-cover-action {
+  color: #ffffff;
+}
+
+.module-cover-action-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(223, 183, 108, 0.12);
+  border: 1px solid rgba(223, 183, 108, 0.3);
+  transition: all 0.2s ease;
+}
+
+.vitrine-week-card:hover .module-cover-action-arrow {
+  background: var(--gold-gradient);
+  color: #060a12;
   transform: translateX(3px);
+}
+
+/* Responsividade da Vitrine Vertical */
+@media (max-width: 768px) {
+  .vitrine-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .vitrine-week-card {
+    min-height: 360px;
+  }
+
+  .module-cover-content {
+    padding: 14px 12px 12px;
+  }
+
+  .module-cover-title {
+    font-size: 13.5px;
+  }
+
+  .module-cover-focus {
+    font-size: 11px;
+    -webkit-line-clamp: 2;
+  }
+
+  .module-cover-emblem {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+  }
+
+  .module-cover-emblem svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Tema Claro */
+body.theme-light .vitrine-week-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+body.theme-light .vitrine-week-card:hover {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), 0 0 16px rgba(223, 183, 108, 0.3);
+}
+
+body.theme-light .module-cover-title {
+  color: #0f172a;
+  text-shadow: none;
+}
+
+body.theme-light .module-cover-bg-glow {
+  background: radial-gradient(circle, rgba(223, 183, 108, 0.22) 0%, rgba(223, 183, 108, 0) 70%);
+}
+
+body.theme-light .module-cover-focus {
+  color: #475569;
+}
+
+body.theme-light .cover-disc-tag {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
 }
 
 /* ==========================================================================

@@ -548,7 +548,40 @@ class FaleiroOABApp {
     }
   }
 
-  // Renderizar Grade Vitrine (Blocos de Semanas)
+  // Obter ícone/emblema temático da semana para a capa do módulo
+  getWeekEmblemSvg(weekNumber) {
+    switch (weekNumber) {
+      case 1: // Ética & Constitucional I - Balança da Justiça
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path><path d="M7 21h10"></path><path d="M12 3v18"></path><path d="M3 7h18"></path></svg>`;
+      case 2: // Ética II & Constitucional II - Templo Constitucional
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"></line><line x1="4" y1="10" x2="20" y2="10"></line><polygon points="12 2 2 7 22 7 12 2"></polygon><line x1="6" y1="10" x2="6" y2="21"></line><line x1="10" y1="10" x2="10" y2="21"></line><line x1="14" y1="10" x2="14" y2="21"></line><line x1="18" y1="10" x2="18" y2="21"></line></svg>`;
+      case 3: // Direito Penal - Escudo da Justiça
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+      case 4: // Processo Penal - Martelo da Justiça
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 13-7.5 7.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0-.83-.83-.83-2.17 0-3L11 10"></path><path d="m16 16 6-6"></path><path d="m8 8 6-6"></path><path d="m9 7 8 8"></path><path d="m21 11-8-8"></path></svg>`;
+      case 5: // Direito Civil - Código Civil / Livro Aberto
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`;
+      case 6: // Processo Civil - Petição & Pena
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>`;
+      case 7: // Trabalho & Proc. Trabalho - Maleta Trabalhista
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`;
+      case 8: // Administrativo - Palácio / Prédio Governamental
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 10a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v11H9V10z"></path></svg>`;
+      case 9: // Tributário & Financeiro - Moeda e Balança
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+      case 10: // Empresarial, Consumidor & ECA - Pessoas e Sociedade
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`;
+      case 11: // Ambiental & DH - Globo Terrestre
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`;
+      case 12: // Reta Final I - Alvo Estratégico
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>`;
+      case 13: // Reta Final II - Troféu de Aprovação
+      default:
+        return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+    }
+  }
+
+  // Renderizar Grade Vitrine (Capas de Módulo em Formato Vertical)
   renderVitrineGrid(container, schedule) {
     const grid = document.createElement("div");
     grid.className = "vitrine-grid";
@@ -575,6 +608,9 @@ class FaleiroOABApp {
         fillClass = "in-progress";
       }
 
+      // Limpar título da semana caso já venha com prefixo "Semana X:"
+      const cleanTitle = weekData.title.replace(/^Semana\s*\d+\s*:\s*/i, "").trim();
+
       // Disciplinas únicas da semana
       const disciplinesSet = new Set();
       weekData.days.forEach(d => d.disciplines.forEach(disc => disciplinesSet.add(disc)));
@@ -585,26 +621,47 @@ class FaleiroOABApp {
       card.onclick = () => window.app.openWeek(weekData.week);
 
       card.innerHTML = `
-        <div class="vitrine-card-top">
-          <span class="vitrine-week-number">SEMANA ${String(weekData.week).padStart(2, "0")}</span>
-          <span class="vitrine-status-badge ${statusBadgeClass}">${statusText}</span>
+        <div class="module-cover-bg-glow"></div>
+        <div class="module-cover-watermark">
+          ${this.getWeekEmblemSvg(weekData.week)}
         </div>
-        <h3 class="vitrine-week-title">${weekData.title}</h3>
-        <p class="vitrine-focus-text">${weekData.focus}</p>
-        <div class="vitrine-disciplines-row">
-          ${uniqueDisciplines.map(d => `<span class="disc-tag">${d}</span>`).join("")}
-        </div>
-        <div class="vitrine-progress-wrap">
-          <div class="vitrine-progress-labels">
-            <span>Progresso da Semana</span>
-            <span><strong>${weekDoneCount}/${totalDays}</strong> missões</span>
+
+        <div class="module-cover-content">
+          <!-- Topo da Capa: Número do Módulo/Semana e Status -->
+          <div class="module-cover-top">
+            <div class="module-cover-number-wrap">
+              <span class="module-cover-number">SEMANA ${String(weekData.week).padStart(2, "0")}</span>
+            </div>
+            <span class="vitrine-status-badge ${statusBadgeClass}">${statusText}</span>
           </div>
-          <div class="vitrine-progress-track">
-            <div class="vitrine-progress-fill ${fillClass}" style="width: ${pct}%"></div>
+
+          <!-- Centro da Capa: Emblema Temático + Título da Semana -->
+          <div class="module-cover-center">
+            <div class="module-cover-emblem">
+              ${this.getWeekEmblemSvg(weekData.week)}
+            </div>
+            <h3 class="module-cover-title">${cleanTitle}</h3>
+            <p class="module-cover-focus">${weekData.focus}</p>
+            <div class="module-cover-disciplines">
+              ${uniqueDisciplines.map(d => `<span class="cover-disc-tag">${d}</span>`).join("")}
+            </div>
           </div>
-          <div class="vitrine-card-footer">
-            <span>Acessar Missões</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+
+          <!-- Base da Capa: Progresso e Ação de Entrada -->
+          <div class="module-cover-bottom">
+            <div class="module-cover-progress-row">
+              <span>Progresso</span>
+              <strong>${weekDoneCount}/${totalDays} missões</strong>
+            </div>
+            <div class="module-cover-progress-track">
+              <div class="module-cover-progress-fill ${fillClass}" style="width: ${pct}%"></div>
+            </div>
+            <div class="module-cover-action">
+              <span>Acessar Módulo</span>
+              <span class="module-cover-action-arrow">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+            </div>
           </div>
         </div>
       `;
